@@ -1,0 +1,18 @@
+# Services for the components
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: apicurio-registry
+    template: apicurio-registry
+  name: apicurio-registry
+spec:
+  selector:
+    app: apicurio-registry
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  sessionAffinity: None
+status:
+  loadBalancer: {}

@@ -1,0 +1,14 @@
+# Routes
+apiVersion: v1
+kind: Route
+metadata:
+  name: apicurio-registry
+  labels:
+    app: apicurio-registry
+    template: apicurio-registry
+spec:
+  to:
+    kind: Service
+    name: apicurio-registry
+    weight: 100
+  wildcardPolicy: None
