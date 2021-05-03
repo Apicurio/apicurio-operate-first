@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/name: apicurio
+bases:
+  - ../base
+resources:
+  - redis-service.yaml # redis is a dependency to speed up limitador
+  - redis-statefulset.yaml
+  - limitador-config-configmap.yaml
+  - limitador-service.yaml
+  - limitador-deployment.yaml
+  - apicurio-envoy-configmap.yaml
+  - apicurio-envoy-service.yaml
+  - apicurio-envoy-routes.yaml
+patchesJson6902:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: apicurio-registry
+    path: envoy-patch.yaml

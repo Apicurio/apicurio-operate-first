@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apicurio-registry
+  labels:
+    app: apicurio-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: registry
+  template:
+    metadata:
+      labels:
+        app: apicurio-registry
+        name: registry
+    spec:
+      containers:
+        - name: apicurio-registry
+          image: quay.io/apicurio/apicurio-registry-mem:latest-snapshot
+          imagePullPolicy: Always
+          ports:
+            - name: web
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: AUTH_ENABLED
+              value: "false"
+            - name: REGISTRY_ENABLE_MULTITENANCY
+              value: "false"
+            - name: REGISTRY_LOG_LEVEL
+              value: DEBUG
+            - name: LOG_LEVEL
+              value: DEBUG
+            - name: QUARKUS_PROFILE
+              value: prod
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1300Mi
+            requests:
+              cpu: 200m
+              memory: 600Mi
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+  strategy:
+    type: Recreate

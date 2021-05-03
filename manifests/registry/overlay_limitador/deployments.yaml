@@ -20,7 +20,8 @@ spec:
           image: quay.io/apicurio/apicurio-registry-mem:latest-snapshot
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - name: web
+              containerPort: 8080
               protocol: TCP
           env:
             - name: AUTH_ENABLED
@@ -61,5 +62,31 @@ spec:
             successThreshold: 1
             failureThreshold: 3
           terminationMessagePath: /dev/termination-log
+        - name: envoy
+          image: envoyproxy/envoy:v1.16.0
+          command: ["envoy"]
+          args: ["-c", "/etc/envoy.yaml", "--service-node", "apicurio", "--service-cluster", "apicurio", "-l", "debug"]
+          ports:
+            - name: envoy-http
+              containerPort: 38080
+              protocol: TCP
+            - name: envoy-metrics
+              containerPort: 9901
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1300Mi
+            requests:
+              cpu: 200m
+              memory: 600Mi
+          volumeMounts:
+          - name: apicurio-envoy-config
+            mountPath: /etc/envoy.yaml
+            subPath: envoy.yaml
+      volumes:
+      - name: apicurio-envoy-config
+        configMap:
+          name: apicurio-envoy-config
   strategy:
     type: Recreate
