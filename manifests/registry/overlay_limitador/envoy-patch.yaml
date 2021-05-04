@@ -24,9 +24,8 @@
       mountPath: /etc/envoy.yaml
       subPath: envoy.yaml
 - op: add
-  path: /spec/template/spec/volumes
+  path: /spec/template/spec/volumes/-
   value: 
-    volumes:
-      - name: apicurio-envoy-config
-        configMap:
-          name: apicurio-envoy-config
+    - name: apicurio-envoy-config
+      configMap:
+        name: apicurio-envoy-config
