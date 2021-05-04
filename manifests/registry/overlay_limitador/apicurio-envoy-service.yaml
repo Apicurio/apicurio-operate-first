@@ -10,4 +10,4 @@ spec:
       port: 80
       targetPort: envoy-http
   selector:
-    app: apicurio-envoy
+    app: apicurio-registry
