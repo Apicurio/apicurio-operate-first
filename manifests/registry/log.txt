@@ -1,0 +1,1413 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    envoy.yaml: "static_resources:\n  clusters:\n  - name: apicurio\n    connect_timeout: 2s\n    type: STRICT_DNS\n    lb_policy: round_robin\n    hosts:\n    - socket_address:\n        address: 127.0.0.1\n        port_value: 8080\n  - name: apicurio_ratelimit\n    type: STRICT_DNS\n    connect_timeout: 1s\n    lb_policy: ROUND_ROBIN\n    http2_protocol_options: {}\n    hosts:\n    - socket_address:\n        address: limitador\n        port_value: 8081\n  listeners:\n  - name: listener_0\n    address:\n      socket_address:\n        address: 0.0.0.0\n        port_value: 38080\n    filter_chains:\n    - filters:\n      - name: envoy.filters.network.http_connection_manager\n        typed_config:\n          \"@type\": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager\n          \n          access_log:\n            - name: envoy.access_loggers.file\n              typed_config:\n                \"@type\": type.googleapis.com/envoy.extensions.access_loggers.file.v3.FileAccessLog\n                path: \"/dev/stdout\"\n          stat_prefix: http\n\n          route_config:\n            name: local_route\n            virtual_hosts:\n              - name: apicurio\n                domains: [\"*\"]\n                routes:\n                  - { route: { cluster: apicurio }, match: { prefix: \"/\" } }\n                rate_limits:\n                  - stage: 0\n                    actions:\n                      - {request_headers: {header_name: \"userid\", descriptor_key: \"user_id\"}}\n                      - {request_headers: {header_name: \":method\", descriptor_key: \"req.method\"}}\n          http_filters:\n            - name: envoy.filters.http.ratelimit\n              typed_config:\n                \"@type\": \"type.googleapis.com/envoy.extensions.filters.http.ratelimit.v3.RateLimit\"\n                domain: apicurio\n                failure_mode_deny: true\n                timeout: 3s\n                rate_limit_service:\n                  transport_api_version: V3\n                  grpc_service:\n                    { envoy_grpc: { cluster_name: apicurio_ratelimit } }\n            - name: envoy.filters.http.router\nadmin:\n  access_log_path: /dev/stdout\n  address:\n    socket_address:\n      address: 0.0.0.0\n      port_value: 9901\n"
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"envoy.yaml":"static_resources:\n  clusters:\n  - name: apicurio\n    connect_timeout: 2s\n    type: STRICT_DNS\n    lb_policy: round_robin\n    hosts:\n    - socket_address:\n        address: 127.0.0.1\n        port_value: 8080\n  - name: apicurio_ratelimit\n    type: STRICT_DNS\n    connect_timeout: 1s\n    lb_policy: ROUND_ROBIN\n    http2_protocol_options: {}\n    hosts:\n    - socket_address:\n        address: limitador\n        port_value: 8081\n  listeners:\n  - name: listener_0\n    address:\n      socket_address:\n        address: 0.0.0.0\n        port_value: 38080\n    filter_chains:\n    - filters:\n      - name: envoy.filters.network.http_connection_manager\n        typed_config:\n          \"@type\": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager\n          \n          access_log:\n            - name: envoy.access_loggers.file\n              typed_config:\n                \"@type\": type.googleapis.com/envoy.extensions.access_loggers.file.v3.FileAccessLog\n                path: \"/dev/stdout\"\n          stat_prefix: http\n\n          route_config:\n            name: local_route\n            virtual_hosts:\n              - name: apicurio\n                domains: [\"*\"]\n                routes:\n                  - { route: { cluster: apicurio }, match: { prefix: \"/\" } }\n                rate_limits:\n                  - stage: 0\n                    actions:\n                      - {request_headers: {header_name: \"userid\", descriptor_key: \"user_id\"}}\n                      - {request_headers: {header_name: \":method\", descriptor_key: \"req.method\"}}\n          http_filters:\n            - name: envoy.filters.http.ratelimit\n              typed_config:\n                \"@type\": \"type.googleapis.com/envoy.extensions.filters.http.ratelimit.v3.RateLimit\"\n                domain: apicurio\n                failure_mode_deny: true\n                timeout: 3s\n                rate_limit_service:\n                  transport_api_version: V3\n                  grpc_service:\n                    { envoy_grpc: { cluster_name: apicurio_ratelimit } }\n            - name: envoy.filters.http.router\nadmin:\n  access_log_path: /dev/stdout\n  address:\n    socket_address:\n      address: 0.0.0.0\n      port_value: 9901\n"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app":"apicurio","app.kubernetes.io/instance":"registry"},"name":"apicurio-envoy-config","namespace":"apicurio-apicurio-registry"}}
+    creationTimestamp: "2021-05-03T12:27:33Z"
+    labels:
+      app: apicurio
+      app.kubernetes.io/instance: registry
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:data:
+          .: {}
+          f:envoy.yaml: {}
+        f:metadata:
+          f:annotations: {}
+          f:labels:
+            .: {}
+            f:app: {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: "2021-05-03T12:27:33Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:labels:
+            f:app.kubernetes.io/instance: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: "2021-05-04T07:53:02Z"
+    name: apicurio-envoy-config
+    namespace: apicurio-apicurio-registry
+    resourceVersion: "204484719"
+    selfLink: /api/v1/namespaces/apicurio-apicurio-registry/configmaps/apicurio-envoy-config
+    uid: 82e7d9c8-2879-4170-9c6b-01a4f8646359
+- apiVersion: v1
+  data:
+    config_path: /mnt/limitador.yaml
+    limitador.yaml: |
+      ---
+      -
+        namespace: apicurio-registry
+        max_value: 1000
+        seconds: 1
+        conditions: []
+        variables:
+          - per_hostname_per_second_burst
+      -
+        namespace: apicurio
+        max_value: 1000
+        seconds: 1
+        conditions: []
+        variables:
+          - per_hostname_per_second_burst
+      -
+        namespace: apicurio-apicurio-registry
+        max_value: 1000
+        seconds: 1
+        conditions: []
+        variables:
+          - per_hostname_per_second_burst
+    limits.yaml: |-
+      ---
+      -
+        namespace: test_namespace
+        max_value: 10
+        seconds: 60
+        conditions:
+          - "req.method == GET"
+        variables:
+          - user_id
+      -
+        namespace: test_namespace
+        max_value: 5
+        seconds: 60
+        conditions:
+          - "req.method == POST"
+        variables:
+          - user_id
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"limits.yaml":"---\n-\n  namespace: test_namespace\n  max_value: 10\n  seconds: 60\n  conditions:\n    - \"req.method == GET\"\n  variables:\n    - user_id\n-\n  namespace: test_namespace\n  max_value: 5\n  seconds: 60\n  conditions:\n    - \"req.method == POST\"\n  variables:\n    - user_id"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app":"limitador","app.kubernetes.io/instance":"registry"},"name":"limitador-config","namespace":"apicurio-apicurio-registry"}}
+    creationTimestamp: "2021-04-29T15:41:49Z"
+    labels:
+      app: limitador
+      app.kubernetes.io/instance: registry
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:data:
+          .: {}
+          f:config_path: {}
+          f:limitador.yaml: {}
+      manager: Mozilla
+      operation: Update
+      time: "2021-04-29T15:58:18Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations: {}
+          f:labels:
+            .: {}
+            f:app: {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: "2021-05-03T12:04:05Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:data:
+          f:limits.yaml: {}
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:labels:
+            f:app.kubernetes.io/instance: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: "2021-05-04T07:53:02Z"
+    name: limitador-config
+    namespace: apicurio-apicurio-registry
+    resourceVersion: "204484722"
+    selfLink: /api/v1/namespaces/apicurio-apicurio-registry/configmaps/limitador-config
+    uid: 683e72a3-f159-4164-8325-6a74a7776f45
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"apicurio-envoy","app.kubernetes.io/instance":"registry"},"name":"apicurio-envoy","namespace":"apicurio-apicurio-registry"},"spec":{"ports":[{"name":"envoy-http","port":80,"targetPort":"envoy-http"}],"selector":{"app":"apicurio-envoy"}}}
+    creationTimestamp: "2021-05-03T12:30:03Z"
+    labels:
+      app: apicurio-envoy
+      app.kubernetes.io/instance: registry
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations: {}
+          f:labels:
+            .: {}
+            f:app: {}
+        f:spec:
+          f:externalTrafficPolicy: {}
+          f:ports:
+            .: {}
+            k:{"port":80,"protocol":"TCP"}:
+              .: {}
+              f:name: {}
+              f:port: {}
+              f:protocol: {}
+              f:targetPort: {}
+          f:selector:
+            .: {}
+            f:app: {}
+          f:sessionAffinity: {}
+          f:type: {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: "2021-05-03T12:42:41Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:labels:
+            f:app.kubernetes.io/instance: {}
+        f:spec:
+          f:selector:
+            f:app: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: "2021-05-04T07:53:04Z"
+    name: apicurio-envoy
+    namespace: apicurio-apicurio-registry
+    resourceVersion: "204484801"
+    selfLink: /api/v1/namespaces/apicurio-apicurio-registry/services/apicurio-envoy
+    uid: 41315447-ccf1-462a-9828-95bfd2385a34
+  spec:
+    clusterIP: 172.30.167.30
+    clusterIPs:
+    - 172.30.167.30
+    ports:
+    - name: envoy-http
+      port: 80
+      protocol: TCP
+      targetPort: envoy-http
+    selector:
+      app: apicurio-envoy
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"apicurio-registry","app.kubernetes.io/instance":"registry","app.kubernetes.io/name":"apicurio","template":"apicurio-registry"},"name":"apicurio-registry","namespace":"apicurio-apicurio-registry"},"spec":{"ports":[{"name":"web","port":8080,"protocol":"TCP","targetPort":"web"}],"selector":{"app":"apicurio-registry","app.kubernetes.io/name":"apicurio"},"sessionAffinity":"None"},"status":{"loadBalancer":{}}}
+    creationTimestamp: "2021-04-29T15:04:51Z"
+    labels:
+      app: apicurio-registry
+      app.kubernetes.io/instance: registry
+      app.kubernetes.io/name: apicurio
+      template: apicurio-registry
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations: {}
+        f:spec:
+          f:ports:
+            k:{"port":8080,"protocol":"TCP"}:
+              f:name: {}
+              f:targetPort: {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: "2021-05-03T12:22:49Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:labels:
+            .: {}
+            f:app: {}
+            f:app.kubernetes.io/instance: {}
+            f:app.kubernetes.io/name: {}
+            f:template: {}
+        f:spec:
+          f:ports:
+            .: {}
+            k:{"port":8080,"protocol":"TCP"}:
+              .: {}
+              f:port: {}
+              f:protocol: {}
+          f:selector:
+            .: {}
+            f:app: {}
+            f:app.kubernetes.io/name: {}
+          f:sessionAffinity: {}
+          f:type: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: "2021-05-04T06:23:51Z"
+    name: apicurio-registry
+    namespace: apicurio-apicurio-registry
+    resourceVersion: "204207290"
+    selfLink: /api/v1/namespaces/apicurio-apicurio-registry/services/apicurio-registry
+    uid: 091fbc20-4c92-4b99-85ea-77f06d075cce
+  spec:
+    clusterIP: 172.30.208.211
+    clusterIPs:
+    - 172.30.208.211
+    ports:
+    - name: web
+      port: 8080
+      protocol: TCP
+      targetPort: web
+    selector:
+      app: apicurio-registry
+      app.kubernetes.io/name: apicurio
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"limitador","app.kubernetes.io/instance":"registry"},"name":"limitador","namespace":"apicurio-apicurio-registry"},"spec":{"ports":[{"name":"http","port":8080,"protocol":"TCP","targetPort":"http"},{"name":"grpc","port":8081,"protocol":"TCP","targetPort":"grpc"}],"selector":{"app":"limitador"}}}
+      openshift.io/generated-by: OpenShiftWebConsole
+    creationTimestamp: "2021-04-29T15:29:10Z"
+    labels:
+      app: limitador
+      app.kubernetes.io/component: limitador
+      app.kubernetes.io/instance: registry
+      app.kubernetes.io/part-of: limitador-app
+      app.openshift.io/runtime-version: latest
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:openshift.io/generated-by: {}
+          f:labels:
+            .: {}
+            f:app: {}
+            f:app.kubernetes.io/component: {}
+            f:app.kubernetes.io/part-of: {}
+            f:app.openshift.io/runtime-version: {}
+        f:spec:
+          f:ports:
+            .: {}
+            k:{"port":8080,"protocol":"TCP"}:
+              .: {}
+              f:port: {}
+              f:protocol: {}
+          f:selector:
+            .: {}
+            f:app: {}
+            f:deploymentconfig: {}
+          f:sessionAffinity: {}
+          f:type: {}
+      manager: Mozilla
+      operation: Update
+      time: "2021-04-29T15:29:10Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:spec:
+          f:ports:
+            k:{"port":8080,"protocol":"TCP"}:
+              f:name: {}
+              f:targetPort: {}
+            k:{"port":8081,"protocol":"TCP"}:
+              .: {}
+              f:name: {}
+              f:port: {}
+              f:protocol: {}
+              f:targetPort: {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: "2021-05-03T12:07:05Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:labels:
+            f:app.kubernetes.io/instance: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: "2021-05-04T07:53:04Z"
+    name: limitador
+    namespace: apicurio-apicurio-registry
+    resourceVersion: "204484802"
+    selfLink: /api/v1/namespaces/apicurio-apicurio-registry/services/limitador
+    uid: 506272f7-d058-4490-89ac-e5670ad20bf1
+  spec:
+    clusterIP: 172.30.160.230
+    clusterIPs:
+    - 172.30.160.230
+    ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: http
+    - name: grpc
+      port: 8081
+      protocol: TCP
+      targetPort: grpc
+    selector:
+      app: limitador
+      deploymentconfig: limitador
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app.kubernetes.io/instance":"registry"},"name":"redis","namespace":"apicurio-apicurio-registry"},"spec":{"ports":[{"name":"redis","port":6379,"protocol":"TCP","targetPort":"redis"}],"selector":{"statefulset":"redis"},"type":"ClusterIP"}}
+    creationTimestamp: "2021-05-03T12:02:28Z"
+    labels:
+      app.kubernetes.io/instance: registry
+    managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations: {}
+        f:spec:
+          f:ports:
+            .: {}
+            k:{"port":6379,"protocol":"TCP"}:
+              .: {}
+              f:name: {}
+              f:port: {}
+              f:protocol: {}
+              f:targetPort: {}
+          f:selector:
+            .: {}
+            f:statefulset: {}
+          f:sessionAffinity: {}
+          f:type: {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: "2021-05-03T12:02:28Z"
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:labels:
+            .: {}
+            f:app.kubernetes.io/instance: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: "2021-05-04T07:53:04Z"
+    name: redis
+    namespace: apicurio-apicurio-registry
+    resourceVersion: "204484812"
+    selfLink: /api/v1/namespaces/apicurio-apicurio-registry/services/redis
+    uid: b01dff12-7ed4-4226-8f0e-8bd39537794f
+  spec:
+    clusterIP: 172.30.7.216
+    clusterIPs:
+    - 172.30.7.216
+    ports:
+    - name: redis
+      port: 6379
+      protocol: TCP
+      targetPort: redis
+    selector:
+      statefulset: redis
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "4"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"apicurio-registry"},"name":"apicurio-registry","namespace":"apicurio-apicurio-registry"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"registry"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"app":"apicurio-registry","name":"registry"}},"spec":{"containers":[{"env":[{"name":"AUTH_ENABLED","value":"false"},{"name":"REGISTRY_ENABLE_MULTITENANCY","value":"false"},{"name":"REGISTRY_LOG_LEVEL","value":"DEBUG"},{"name":"LOG_LEVEL","value":"DEBUG"},{"name":"QUARKUS_PROFILE","value":"prod"}],"image":"quay.io/apicurio/apicurio-registry-mem:latest-snapshot","imagePullPolicy":"Always","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/health/live","port":8080,"scheme":"HTTP"},"initialDelaySeconds":5,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5},"name":"apicurio-registry","ports":[{"containerPort":8080,"name":"web","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/health/ready","port":8080,"scheme":"HTTP"},"initialDelaySeconds":5,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5},"resources":{"limits":{"cpu":"1000m","memory":"1300Mi"},"requests":{"cpu":"200m","memory":"600Mi"}},"terminationMessagePath":"/dev/termination-log"},{"args":["-c","/etc/envoy.yaml","--service-node","apicurio","--service-cluster","apicurio","-l","debug"],"command":["envoy"],"image":"envoyproxy/envoy:v1.16.0","name":"envoy","ports":[{"containerPort":38080,"name":"envoy-http","protocol":"TCP"},{"containerPort":9901,"name":"envoy-metrics","protocol":"TCP"}],"resources":{"limits":{"cpu":"1000m","memory":"1300Mi"},"requests":{"cpu":"200m","memory":"600Mi"}},"volumeMounts":[{"mountPath":"/etc/envoy.yaml","name":"apicurio-envoy-config","subPath":"envoy.yaml"}]}],"volumes":[{"configMap":{"name":"apicurio-envoy-config"},"name":"apicurio-envoy-config"}]}}}}
+    creationTimestamp: "2021-04-29T15:04:51Z"
+    generation: 4
+    labels:
+      app: apicurio-registry
+      app.kubernetes.io/instance: registry
+      app.kubernetes.io/name: apicurio
+    managedFields:
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:labels:
+            .: {}
+            f:app: {}
+            f:app.kubernetes.io/instance: {}
+            f:app.kubernetes.io/name: {}
+        f:spec:
+          f:progressDeadlineSeconds: {}
+          f:replicas: {}
+          f:revisionHistoryLimit: {}
+          f:selector: {}
+          f:strategy:
+            f:type: {}
+          f:template:
+            f:metadata:
+              f:labels:
+                .: {}
+                f:app: {}
+                f:app.kubernetes.io/name: {}
+                f:name: {}
+            f:spec:
+              f:containers:
+                k:{"name":"apicurio-registry"}:
+                  .: {}
+                  f:env:
+                    .: {}
+                    k:{"name":"AUTH_ENABLED"}:
+                      .: {}
+                      f:name: {}
+                      f:value: {}
+                    k:{"name":"LOG_LEVEL"}:
+                      .: {}
+                      f:name: {}
+                      f:value: {}
+                    k:{"name":"QUARKUS_PROFILE"}:
+                      .: {}
+                      f:name: {}
+                      f:value: {}
+                    k:{"name":"REGISTRY_ENABLE_MULTITENANCY"}:
+                      .: {}
+                      f:name: {}
+                      f:value: {}
+                    k:{"name":"REGISTRY_LOG_LEVEL"}:
+                      .: {}
+                      f:name: {}
+                      f:value: {}
+                  f:image: {}
+                  f:imagePullPolicy: {}
+                  f:livenessProbe:
+                    .: {}
+                    f:failureThreshold: {}
+                    f:httpGet:
+                      .: {}
+                      f:path: {}
+                      f:port: {}
+                      f:scheme: {}
+                    f:initialDelaySeconds: {}
+                    f:periodSeconds: {}
+                    f:successThreshold: {}
+                    f:timeoutSeconds: {}
+                  f:name: {}
+                  f:ports:
+                    .: {}
+                    k:{"containerPort":8080,"protocol":"TCP"}:
+                      .: {}
+                      f:containerPort: {}
+                      f:protocol: {}
+                  f:readinessProbe:
+                    .: {}
+                    f:failureThreshold: {}
+                    f:httpGet:
+                      .: {}
+                      f:path: {}
+                      f:port: {}
+                      f:scheme: {}
+                    f:initialDelaySeconds: {}
+                    f:periodSeconds: {}
+                    f:successThreshold: {}
+                    f:timeoutSeconds: {}
+                  f:resources:
+                    .: {}
+                    f:limits:
+                      .: {}
+                      f:cpu: {}
+                      f:memory: {}
+                    f:requests:
+                      .: {}
+                      f:cpu: {}
+                      f:memory: {}
+                  f:terminationMessagePath: {}
+                  f:terminationMessagePolicy: {}
+              f:dnsPolicy: {}
+              f:restartPolicy: {}
+              f:schedulerName: {}
+              f:securityContext: {}
+              f:terminationGracePeriodSeconds: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: "2021-04-29T15:04:51Z"
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+        f:spec:
+          f:template:
+            f:spec:
+              f:containers:
+                k:{"name":"apicurio-registry"}:
+                  f:ports:
+                    k:{"containerPort":8080,"protocol":"TCP"}:
+                      f:name: {}
+                k:{"name":"envoy"}:
+                  .: {}
+                  f:args: {}
+                  f:command: {}
+                  f:image: {}
+                  f:imagePullPolicy: {}
+                  f:name: {}
+                  f:ports:
+                    .: {}
+                    k:{"containerPort":9901,"protocol":"TCP"}:
+                      .: {}
+                      f:containerPort: {}
+                      f:name: {}
+                      f:protocol: {}
+                    k:{"containerPort":38080,"protocol":"TCP"}:
+                      .: {}
+                      f:containerPort: {}
+                      f:name: {}
+                      f:protocol: {}
+                  f:resources:
+                    .: {}
+                    f:limits:
+                      .: {}
+                      f:cpu: {}
+                      f:memory: {}
+                    f:requests:
+                      .: {}
+                      f:cpu: {}
+                      f:memory: {}
+                  f:terminationMessagePath: {}
+                  f:terminationMessagePolicy: {}
+                  f:volumeMounts:
+                    .: {}
+                    k:{"mountPath":"/etc/envoy.yaml"}:
+                      .: {}
+                      f:mountPath: {}
+                      f:name: {}
+                      f:subPath: {}
+              f:volumes:
+                .: {}
+                k:{"name":"apicurio-envoy-config"}:
+                  .: {}
+                  f:configMap:
+                    .: {}
+                    f:defaultMode: {}
+                    f:name: {}
+                  f:name: {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: "2021-05-03T12:36:42Z"
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:deployment.kubernetes.io/revision: {}
+        f:status:
+          f:availableReplicas: {}
+          f:conditions:
+            .: {}
+            k:{"type":"Available"}:
+              .: {}
+              f:lastTransitionTime: {}
+              f:lastUpdateTime: {}
+              f:message: {}
+              f:reason: {}
+              f:status: {}
+              f:type: {}
+            k:{"type":"Progressing"}:
+              .: {}
+              f:lastTransitionTime: {}
+              f:lastUpdateTime: {}
+              f:message: {}
+              f:reason: {}
+              f:status: {}
+              f:type: {}
+          f:observedGeneration: {}
+          f:readyReplicas: {}
+          f:replicas: {}
+          f:updatedReplicas: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2021-05-03T15:30:36Z"
+    name: apicurio-registry
+    namespace: apicurio-apicurio-registry
+    resourceVersion: "201311288"
+    selfLink: /apis/apps/v1/namespaces/apicurio-apicurio-registry/deployments/apicurio-registry
+    uid: cba1007a-db90-4ef3-985f-a4e83ad1035e
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/name: apicurio
+        name: registry
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: apicurio-registry
+          app.kubernetes.io/name: apicurio
+          name: registry
+      spec:
+        containers:
+        - env:
+          - name: AUTH_ENABLED
+            value: "false"
+          - name: REGISTRY_ENABLE_MULTITENANCY
+            value: "false"
+          - name: REGISTRY_LOG_LEVEL
+            value: DEBUG
+          - name: LOG_LEVEL
+            value: DEBUG
+          - name: QUARKUS_PROFILE
+            value: prod
+          image: quay.io/apicurio/apicurio-registry-mem:latest-snapshot
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: apicurio-registry
+          ports:
+          - containerPort: 8080
+            name: web
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1300Mi
+            requests:
+              cpu: 200m
+              memory: 600Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - args:
+          - -c
+          - /etc/envoy.yaml
+          - --service-node
+          - apicurio
+          - --service-cluster
+          - apicurio
+          - -l
+          - debug
+          command:
+          - envoy
+          image: envoyproxy/envoy:v1.16.0
+          imagePullPolicy: IfNotPresent
+          name: envoy
+          ports:
+          - containerPort: 38080
+            name: envoy-http
+            protocol: TCP
+          - containerPort: 9901
+            name: envoy-metrics
+            protocol: TCP
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1300Mi
+            requests:
+              cpu: 200m
+              memory: 600Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/envoy.yaml
+            name: apicurio-envoy-config
+            subPath: envoy.yaml
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: apicurio-envoy-config
+          name: apicurio-envoy-config
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2021-04-29T15:04:51Z"
+      lastUpdateTime: "2021-05-03T13:13:13Z"
+      message: ReplicaSet "apicurio-registry-6b4b49c8db" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2021-05-03T15:30:36Z"
+      lastUpdateTime: "2021-05-03T15:30:36Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 4
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "2"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"limitador","app.kubernetes.io/instance":"registry"},"name":"limitador","namespace":"apicurio-apicurio-registry"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"limitador"}},"template":{"metadata":{"labels":{"app":"limitador"}},"spec":{"containers":[{"env":[{"name":"RUST_LOG","value":"debug"},{"name":"REDIS_URL","value":"redis://redis:6379"},{"name":"LIMITS_FILE","value":"/home/limitador/limits.yaml"}],"image":"quay.io/3scale/limitador:0.4.0","imagePullPolicy":"IfNotPresent","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/status","port":"http","scheme":"HTTP"},"initialDelaySeconds":5,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":2},"name":"limitador","ports":[{"containerPort":8080,"name":"http","protocol":"TCP"},{"containerPort":8081,"name":"grpc","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/status","port":"http","scheme":"HTTP"},"initialDelaySeconds":5,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5},"resources":{"limits":{"cpu":"1000m","memory":"1300Mi"},"requests":{"cpu":"200m","memory":"600Mi"}},"volumeMounts":[{"mountPath":"/home/limitador/limits.yaml","name":"runtime-config","subPath":"limits.yaml"}]}],"volumes":[{"configMap":{"name":"limitador-config"},"name":"runtime-config"}]}}}}
+    creationTimestamp: "2021-05-03T12:16:00Z"
+    generation: 3
+    labels:
+      app: limitador
+      app.kubernetes.io/instance: registry
+    managedFields:
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:deployment.kubernetes.io/revision: {}
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:labels:
+            .: {}
+            f:app: {}
+        f:spec:
+          f:progressDeadlineSeconds: {}
+          f:replicas: {}
+          f:revisionHistoryLimit: {}
+          f:selector: {}
+          f:strategy:
+            f:rollingUpdate:
+              .: {}
+              f:maxSurge: {}
+              f:maxUnavailable: {}
+            f:type: {}
+          f:template:
+            f:metadata:
+              f:labels:
+                .: {}
+                f:app: {}
+            f:spec:
+              f:containers:
+                k:{"name":"limitador"}:
+                  .: {}
+                  f:env:
+                    .: {}
+                    k:{"name":"LIMITS_FILE"}:
+                      .: {}
+                      f:name: {}
+                      f:value: {}
+                    k:{"name":"REDIS_URL"}:
+                      .: {}
+                      f:name: {}
+                      f:value: {}
+                    k:{"name":"RUST_LOG"}:
+                      .: {}
+                      f:name: {}
+                      f:value: {}
+                  f:image: {}
+                  f:imagePullPolicy: {}
+                  f:livenessProbe:
+                    .: {}
+                    f:failureThreshold: {}
+                    f:httpGet:
+                      .: {}
+                      f:path: {}
+                      f:port: {}
+                      f:scheme: {}
+                    f:initialDelaySeconds: {}
+                    f:periodSeconds: {}
+                    f:successThreshold: {}
+                    f:timeoutSeconds: {}
+                  f:name: {}
+                  f:ports:
+                    .: {}
+                    k:{"containerPort":8080,"protocol":"TCP"}:
+                      .: {}
+                      f:containerPort: {}
+                      f:name: {}
+                      f:protocol: {}
+                    k:{"containerPort":8081,"protocol":"TCP"}:
+                      .: {}
+                      f:containerPort: {}
+                      f:name: {}
+                      f:protocol: {}
+                  f:readinessProbe:
+                    .: {}
+                    f:failureThreshold: {}
+                    f:httpGet:
+                      .: {}
+                      f:path: {}
+                      f:port: {}
+                      f:scheme: {}
+                    f:initialDelaySeconds: {}
+                    f:periodSeconds: {}
+                    f:successThreshold: {}
+                    f:timeoutSeconds: {}
+                  f:resources:
+                    .: {}
+                    f:limits:
+                      .: {}
+                      f:cpu: {}
+                      f:memory: {}
+                    f:requests:
+                      .: {}
+                      f:cpu: {}
+                      f:memory: {}
+                  f:terminationMessagePath: {}
+                  f:terminationMessagePolicy: {}
+                  f:volumeMounts:
+                    .: {}
+                    k:{"mountPath":"/home/limitador/limits.yaml"}:
+                      .: {}
+                      f:mountPath: {}
+                      f:name: {}
+                      f:subPath: {}
+              f:dnsPolicy: {}
+              f:restartPolicy: {}
+              f:schedulerName: {}
+              f:securityContext: {}
+              f:terminationGracePeriodSeconds: {}
+              f:volumes:
+                .: {}
+                k:{"name":"runtime-config"}:
+                  .: {}
+                  f:configMap:
+                    .: {}
+                    f:defaultMode: {}
+                    f:name: {}
+                  f:name: {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: "2021-05-03T12:16:00Z"
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:deployment.kubernetes.io/revision: {}
+        f:status:
+          f:availableReplicas: {}
+          f:conditions:
+            .: {}
+            k:{"type":"Available"}:
+              .: {}
+              f:lastTransitionTime: {}
+              f:lastUpdateTime: {}
+              f:message: {}
+              f:reason: {}
+              f:status: {}
+              f:type: {}
+            k:{"type":"Progressing"}:
+              .: {}
+              f:lastTransitionTime: {}
+              f:lastUpdateTime: {}
+              f:message: {}
+              f:reason: {}
+              f:status: {}
+              f:type: {}
+          f:observedGeneration: {}
+          f:readyReplicas: {}
+          f:replicas: {}
+          f:updatedReplicas: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2021-05-03T13:53:07Z"
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:labels:
+            f:app.kubernetes.io/instance: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: "2021-05-04T07:53:05Z"
+    name: limitador
+    namespace: apicurio-apicurio-registry
+    resourceVersion: "204484881"
+    selfLink: /apis/apps/v1/namespaces/apicurio-apicurio-registry/deployments/limitador
+    uid: 36bf60ed-f705-4a65-8f76-daf0ca0a46d8
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 2
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: limitador
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: limitador
+      spec:
+        containers:
+        - env:
+          - name: RUST_LOG
+            value: debug
+          - name: REDIS_URL
+            value: redis://redis:6379
+          - name: LIMITS_FILE
+            value: /home/limitador/limits.yaml
+          image: quay.io/3scale/limitador:0.4.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /status
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          name: limitador
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 8081
+            name: grpc
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /status
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1300Mi
+            requests:
+              cpu: 200m
+              memory: 600Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /home/limitador/limits.yaml
+            name: runtime-config
+            subPath: limits.yaml
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: limitador-config
+          name: runtime-config
+  status:
+    availableReplicas: 2
+    conditions:
+    - lastTransitionTime: "2021-05-03T12:16:00Z"
+      lastUpdateTime: "2021-05-03T12:16:52Z"
+      message: ReplicaSet "limitador-84b75775cf" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2021-05-03T13:53:07Z"
+      lastUpdateTime: "2021-05-03T13:53:07Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 3
+    readyReplicas: 2
+    replicas: 2
+    updatedReplicas: 2
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"StatefulSet","metadata":{"annotations":{},"labels":{"app.kubernetes.io/instance":"registry"},"name":"redis","namespace":"apicurio-apicurio-registry"},"spec":{"replicas":1,"selector":{"matchLabels":{"statefulset":"redis"}},"serviceName":"redis","template":{"metadata":{"labels":{"statefulset":"redis"}},"spec":{"containers":[{"image":"redis:6.0","livenessProbe":{"exec":{"command":["redis-cli","ping"]},"failureThreshold":5,"initialDelaySeconds":30,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5},"name":"redis","ports":[{"containerPort":6379,"name":"redis"}],"readinessProbe":{"exec":{"command":["redis-cli","ping"]},"failureThreshold":5,"initialDelaySeconds":5,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":2},"volumeMounts":[{"mountPath":"/data","name":"redis-storage","subPath":"data"}]}]}},"volumeClaimTemplates":[{"metadata":{"name":"redis-storage"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"1Gi"}},"volumeMode":"Filesystem"}}]}}
+    creationTimestamp: "2021-05-03T12:03:02Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/instance: registry
+    managedFields:
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations: {}
+        f:spec:
+          f:podManagementPolicy: {}
+          f:replicas: {}
+          f:revisionHistoryLimit: {}
+          f:selector: {}
+          f:serviceName: {}
+          f:template:
+            f:metadata:
+              f:labels:
+                .: {}
+                f:statefulset: {}
+            f:spec:
+              f:containers:
+                k:{"name":"redis"}:
+                  .: {}
+                  f:image: {}
+                  f:imagePullPolicy: {}
+                  f:livenessProbe:
+                    .: {}
+                    f:exec:
+                      .: {}
+                      f:command: {}
+                    f:failureThreshold: {}
+                    f:initialDelaySeconds: {}
+                    f:periodSeconds: {}
+                    f:successThreshold: {}
+                    f:timeoutSeconds: {}
+                  f:name: {}
+                  f:ports:
+                    .: {}
+                    k:{"containerPort":6379,"protocol":"TCP"}:
+                      .: {}
+                      f:containerPort: {}
+                      f:name: {}
+                      f:protocol: {}
+                  f:readinessProbe:
+                    .: {}
+                    f:exec:
+                      .: {}
+                      f:command: {}
+                    f:failureThreshold: {}
+                    f:initialDelaySeconds: {}
+                    f:periodSeconds: {}
+                    f:successThreshold: {}
+                    f:timeoutSeconds: {}
+                  f:resources: {}
+                  f:terminationMessagePath: {}
+                  f:terminationMessagePolicy: {}
+                  f:volumeMounts:
+                    .: {}
+                    k:{"mountPath":"/data"}:
+                      .: {}
+                      f:mountPath: {}
+                      f:name: {}
+                      f:subPath: {}
+              f:dnsPolicy: {}
+              f:restartPolicy: {}
+              f:schedulerName: {}
+              f:securityContext: {}
+              f:terminationGracePeriodSeconds: {}
+          f:updateStrategy:
+            f:rollingUpdate:
+              .: {}
+              f:partition: {}
+            f:type: {}
+          f:volumeClaimTemplates: {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: "2021-05-03T12:03:02Z"
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:collisionCount: {}
+          f:currentReplicas: {}
+          f:currentRevision: {}
+          f:observedGeneration: {}
+          f:readyReplicas: {}
+          f:replicas: {}
+          f:updateRevision: {}
+          f:updatedReplicas: {}
+      manager: kube-controller-manager
+      operation: Update
+      time: "2021-05-03T12:03:26Z"
+    - apiVersion: apps/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:labels:
+            .: {}
+            f:app.kubernetes.io/instance: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: "2021-05-04T07:53:06Z"
+    name: redis
+    namespace: apicurio-apicurio-registry
+    resourceVersion: "204484930"
+    selfLink: /apis/apps/v1/namespaces/apicurio-apicurio-registry/statefulsets/redis
+    uid: a60d4333-15e4-48c3-b901-24c879e39784
+  spec:
+    podManagementPolicy: OrderedReady
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        statefulset: redis
+    serviceName: redis
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          statefulset: redis
+      spec:
+        containers:
+        - image: redis:6.0
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - redis-cli
+              - ping
+            failureThreshold: 5
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: redis
+          ports:
+          - containerPort: 6379
+            name: redis
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - redis-cli
+              - ping
+            failureThreshold: 5
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data
+            name: redis-storage
+            subPath: data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    updateStrategy:
+      rollingUpdate:
+        partition: 0
+      type: RollingUpdate
+    volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        creationTimestamp: null
+        name: redis-storage
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        volumeMode: Filesystem
+      status:
+        phase: Pending
+  status:
+    collisionCount: 0
+    currentReplicas: 1
+    currentRevision: redis-5d864cbcbc
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updateRevision: redis-5d864cbcbc
+    updatedReplicas: 1
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"route.openshift.io/v1","kind":"Route","metadata":{"annotations":{},"labels":{"app":"apicurio-registry","app.kubernetes.io/instance":"registry","template":"apicurio-registry"},"name":"apicurio-envoy","namespace":"apicurio-apicurio-registry"},"spec":{"to":{"kind":"Service","name":"apicurio-envoy","weight":100},"wildcardPolicy":"None"}}
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2021-05-03T12:53:48Z"
+    labels:
+      app: apicurio-registry
+      app.kubernetes.io/instance: registry
+      template: apicurio-registry
+    managedFields:
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:openshift.io/host.generated: {}
+          f:labels:
+            .: {}
+            f:app: {}
+            f:template: {}
+        f:spec:
+          f:to:
+            f:kind: {}
+            f:name: {}
+            f:weight: {}
+          f:wildcardPolicy: {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: "2021-05-03T12:53:48Z"
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:ingress: {}
+      manager: openshift-router
+      operation: Update
+      time: "2021-05-03T12:53:48Z"
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:labels:
+            f:app.kubernetes.io/instance: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: "2021-05-04T07:53:08Z"
+    name: apicurio-envoy
+    namespace: apicurio-apicurio-registry
+    resourceVersion: "204484995"
+    uid: 870a5b53-8739-4f45-bf1f-f59800dde248
+  spec:
+    host: apicurio-envoy-apicurio-apicurio-registry.apps.zero.massopen.cloud
+    to:
+      kind: Service
+      name: apicurio-envoy
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2021-05-03T12:53:48Z"
+        status: "True"
+        type: Admitted
+      host: apicurio-envoy-apicurio-apicurio-registry.apps.zero.massopen.cloud
+      routerCanonicalHostname: apps.zero.massopen.cloud
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"route.openshift.io/v1","kind":"Route","metadata":{"annotations":{},"labels":{"app":"apicurio-registry","app.kubernetes.io/instance":"registry","app.kubernetes.io/name":"apicurio","template":"apicurio-registry"},"name":"apicurio-registry","namespace":"apicurio-apicurio-registry"},"spec":{"to":{"kind":"Service","name":"apicurio-registry","weight":100},"wildcardPolicy":"None"}}
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2021-04-29T15:04:51Z"
+    labels:
+      app: apicurio-registry
+      app.kubernetes.io/instance: registry
+      app.kubernetes.io/name: apicurio
+      template: apicurio-registry
+    managedFields:
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:ingress: {}
+      manager: openshift-router
+      operation: Update
+      time: "2021-04-29T15:04:51Z"
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:labels:
+            .: {}
+            f:app: {}
+            f:app.kubernetes.io/instance: {}
+            f:app.kubernetes.io/name: {}
+            f:template: {}
+        f:spec:
+          f:to:
+            f:kind: {}
+            f:name: {}
+            f:weight: {}
+          f:wildcardPolicy: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: "2021-05-04T06:23:55Z"
+    name: apicurio-registry
+    namespace: apicurio-apicurio-registry
+    resourceVersion: "204207437"
+    uid: fed4c6fb-0299-4994-b54c-ef26b550142f
+  spec:
+    host: apicurio-registry-apicurio-apicurio-registry.apps.zero.massopen.cloud
+    to:
+      kind: Service
+      name: apicurio-registry
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2021-04-29T15:04:51Z"
+        status: "True"
+        type: Admitted
+      host: apicurio-registry-apicurio-apicurio-registry.apps.zero.massopen.cloud
+      routerCanonicalHostname: apps.zero.massopen.cloud
+      routerName: default
+      wildcardPolicy: None
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
