@@ -16,3 +16,19 @@ To apply the `kustomization` command locally, to verify what is the output of th
 cd manifests/registry
 oc get -k ./overlay_limitador/ -o yaml | tee log.txt
 ```
+
+## Multitenancy enabled deployment
+
+The `overlay_multitenancy` contains configuration files for deploying Apicurio Registry with multitenancy enabled.
+
+```bash
+./kustomize build ./manifests/registry/overlay_multitenancy/ | k apply -f -
+```
+
+## Ingresses for local testing
+
+If you are using Kind for testing kubernetes locally in your computer, you can use manifests in `local_testing` for configuring ingresses to Apicurio Registry and Tenant Manager.
+
+```bash
+./kustomize build ./manifests/registry/local_testing/ | k apply -f -
+```

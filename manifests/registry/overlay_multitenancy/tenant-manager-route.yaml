@@ -1,0 +1,13 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: tenant-manager
+  labels:
+    app: tenant-manager
+    template: tenant-manager
+spec:
+  to:
+    kind: Service
+    name: tenant-manager
+    weight: 100
+  wildcardPolicy: None

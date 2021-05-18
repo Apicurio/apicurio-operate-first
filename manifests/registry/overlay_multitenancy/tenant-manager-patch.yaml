@@ -1,0 +1,61 @@
+- op: add
+  path: "/spec/template/spec/containers/-"
+  value: 
+    name: tenant-manager
+    image: quay.io/apicurio/apicurio-registry-tenant-manager-api:latest-snapshot
+    imagePullPolicy: Always
+    ports:
+      - containerPort: 8585
+        protocol: TCP
+    env:
+      - name: DATASOURCE_URL
+        valueFrom:
+          configMapKeyRef:
+            name: postgresql-configmap
+            key: pg-ds-url
+      - name: DATASOURCE_USERNAME
+        valueFrom:
+          configMapKeyRef:
+            name: postgresql-configmap
+            key: pg-user
+      - name: DATASOURCE_PASSWORD
+        valueFrom:
+          configMapKeyRef:
+            name: postgresql-configmap
+            key: pg-pwd
+
+      - name: REGISTRY_ROUTE_URL
+        value: http://localhost:8080
+
+      - name: QUARKUS_HTTP_PORT
+        value: "8585"
+      - name: QUARKUS_LOG_LEVEL
+        value: DEBUG
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1000Mi
+      requests:
+        cpu: 200m
+        memory: 600Mi
+    livenessProbe:
+      httpGet:
+        path: /health/live
+        port: 8585
+        scheme: HTTP
+      initialDelaySeconds: 5
+      timeoutSeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      failureThreshold: 3
+    readinessProbe:
+      httpGet:
+        path: /health/ready
+        port: 8585
+        scheme: HTTP
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      failureThreshold: 5
+    terminationMessagePath: /dev/termination-log

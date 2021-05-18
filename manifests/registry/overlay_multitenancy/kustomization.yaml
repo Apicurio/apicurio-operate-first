@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+  - ../base
+  - ../database
+resources:
+  - tenant-manager-service.yaml
+  - tenant-manager-route.yaml
+patchesJson6902:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: apicurio-registry
+    path: tenant-manager-patch.yaml
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: apicurio-registry
+    path: enable-multitenancy-patch.yaml
+
+images:
+- name: quay.io/apicurio/apicurio-registry-mem
+  newName: quay.io/apicurio/apicurio-registry-sql
+  newTag: latest-snapshot
