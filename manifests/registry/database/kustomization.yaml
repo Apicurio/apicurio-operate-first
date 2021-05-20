@@ -1,5 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - pg-configmap.yaml
+  - db-init-script-configmap.yaml
+  - pg-apicurio-configmap.yaml
+  - pg-fleetmanager-configmap.yaml
+  - pg-tenantmanager-configmap.yaml
   - pg-deployment.yaml

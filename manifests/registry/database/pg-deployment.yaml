@@ -20,21 +20,10 @@ spec:
           env:
             - name: POSTGRESQL_ADMIN_PASSWORD
               value: admin1234
-            - name: POSTGRESQL_DATABASE
-              valueFrom:
-                configMapKeyRef:
-                  name: postgresql-configmap
-                  key: pg-database-name
-            - name: POSTGRESQL_PASSWORD
-              valueFrom:
-                configMapKeyRef:
-                  name: postgresql-configmap
-                  key: pg-pwd
-            - name: POSTGRESQL_USER
-              valueFrom:
-                configMapKeyRef:
-                  name: postgresql-configmap
-                  key: pg-user
+            - name: CREATE_MULTIPLE_DATABASES
+              value: apicurio,tenantmanager,fleetmanager
+            - name: MULTIPLE_DATABASES_PASSWORD
+              value: pass
           ports:
             - containerPort: 5432
               protocol: TCP
@@ -51,6 +40,8 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/pgsql/data
               name: apicurio-registry-postgresql
+            - mountPath: /opt/app-root/src/postgresql-start/
+              name: create-databases-script
           resources:
             limits:
               cpu: 500m
@@ -62,6 +53,9 @@ spec:
         - name: apicurio-registry-postgresql
           persistentVolumeClaim:
             claimName: apicurio-registry-postgresql
+        - name: create-databases-script
+          configMap:
+            name: db-init-script-configmap
 ---
 apiVersion: v1
 kind: Service
