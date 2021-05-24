@@ -22,7 +22,7 @@ oc get -k ./overlay_limitador/ -o yaml | tee log.txt
 The `overlay_multitenancy` contains configuration files for deploying Apicurio Registry with multitenancy enabled.
 
 ```bash
-./kustomize build ./manifests/registry/overlay_multitenancy/ | k apply -f -
+oc apply -k ./manifests/registry/overlay_multitenancy/
 ```
 
 ## Ingresses for local testing
@@ -30,5 +30,5 @@ The `overlay_multitenancy` contains configuration files for deploying Apicurio R
 If you are using Kind for testing kubernetes locally in your computer, you can use manifests in `local_testing` for configuring ingresses to Apicurio Registry and Tenant Manager.
 
 ```bash
-./kustomize build ./manifests/registry/local_testing/ | k apply -f -
+oc apply -k ./manifests/registry/local_testing/
 ```

@@ -19,10 +19,20 @@ data:
     EOSQL
     }
 
+    function databaseExists() {
+      local database=$1
+      DBLIST=$(psql -v ON_ERROR_STOP=1 --username postgres -c 'SELECT datname FROM pg_database')
+      echo $DBLIST | grep $database
+    }
+
     if [ -n "$CREATE_MULTIPLE_DATABASES" ]; then
       echo "Multiple database creation requested: $CREATE_MULTIPLE_DATABASES"
       for db in $(echo $CREATE_MULTIPLE_DATABASES | tr ',' ' '); do
-        create_user_and_database $db
+        if databaseExists $db ; then
+          echo "Skipping database '$db' creation"
+        else
+          create_user_and_database $db
+        fi
       done
       echo "Multiple databases created"
     fi
