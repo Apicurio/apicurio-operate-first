@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  labels:
+    app: apicurio-registry
+  name: apicurio-registry-ingress
+spec:
+  rules:
+  - host: apicurio-registry.127.0.0.1.nip.io
+    http:
+      paths:
+      - backend:
+          service:
+            name: apicurio-registry
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix

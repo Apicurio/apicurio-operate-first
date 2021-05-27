@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgresql-tenantmanager-configmap
+data:
+  pg-user: tenantmanager
+  pg-pwd: pass
+  pg-ds-url: jdbc:postgresql://apicurio-registry-postgresql:5432/tenantmanager
+  pg-database-name: tenantmanager

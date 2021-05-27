@@ -1,0 +1,29 @@
+- op: replace
+  path: "/spec/template/spec/containers/0/env"
+  value: 
+    - name: AUTH_ENABLED
+      value: "false"
+    - name: REGISTRY_ENABLE_MULTITENANCY
+      value: "true"
+    - name: REGISTRY_LOG_LEVEL
+      value: DEBUG
+    - name: LOG_LEVEL
+      value: INFO
+    - name: QUARKUS_PROFILE
+      value: prod
+
+    - name: REGISTRY_DATASOURCE_URL
+      valueFrom:
+        configMapKeyRef:
+          name: postgresql-apicurio-configmap
+          key: pg-ds-url
+    - name: REGISTRY_DATASOURCE_USERNAME
+      valueFrom:
+        configMapKeyRef:
+          name: postgresql-apicurio-configmap
+          key: pg-user
+    - name: REGISTRY_DATASOURCE_PASSWORD
+      valueFrom:
+        configMapKeyRef:
+          name: postgresql-apicurio-configmap
+          key: pg-pwd
