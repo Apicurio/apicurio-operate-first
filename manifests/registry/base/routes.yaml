@@ -11,4 +11,7 @@ spec:
     kind: Service
     name: apicurio-registry
     weight: 100
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
