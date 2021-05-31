@@ -31,6 +31,8 @@
         value: "8585"
       - name: QUARKUS_LOG_LEVEL
         value: DEBUG
+      - name: QUARKUS_HTTP_CORS
+        value: "true"
     resources:
       limits:
         cpu: 500m
