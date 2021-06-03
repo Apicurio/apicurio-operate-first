@@ -1,4 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 bases:
+  # normal deployment, with limitador and some other experiments
   - ../overlay_limitador
+  # multitenancy deployment
+  - ../keycloak
+  - ../overlay_multitenancy
