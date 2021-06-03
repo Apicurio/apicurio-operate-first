@@ -112,7 +112,7 @@ spec:
           privileged: false
       restartPolicy: Always
       terminationGracePeriodSeconds: 60
-  volumeClaimTemplates:
+  # volumeClaimTemplates:
   # - metadata:
   #     labels:
   #       app.kubernetes.io/part-of: keycloak
@@ -130,7 +130,7 @@ kind: Route
 metadata:
   name: keycloak-server
 spec:
-  host: 'keycloak-server-apicurio-apicurio-registry.apps.zero.massopen.cloud'
+  # host: 'keycloak-server-apicurio-apicurio-registry.apps.zero.massopen.cloud'
   tls:
     termination: passthrough
   to:
@@ -138,5 +138,3 @@ spec:
     name: keycloak-server
     weight: 100
   wildcardPolicy: None
-
-  

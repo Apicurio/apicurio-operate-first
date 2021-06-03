@@ -6,6 +6,3 @@ resources:
   - deployments.yaml
   - services.yaml
   - routes.yaml
-  # keycloak
-  - keycloak-server.yaml
-  - postgres-keycloak.yaml
