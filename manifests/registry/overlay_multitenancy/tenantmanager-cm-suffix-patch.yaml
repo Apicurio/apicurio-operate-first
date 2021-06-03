@@ -1,0 +1,3 @@
+- op: replace
+  path: "/data/pg-ds-url"
+  value: jdbc:postgresql://apicurio-registry-postgresql-mt:5432/tenantmanager

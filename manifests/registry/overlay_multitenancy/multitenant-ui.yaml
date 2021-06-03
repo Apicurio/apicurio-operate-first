@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: apicurio-registry-mt-ui
+  name: apicurio-registry-mt-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apicurio-registry-mt-ui
+  template:
+    metadata:
+      labels:
+        app: apicurio-registry-mt-ui
+    spec:
+      containers:
+        - name: apicurio-registry-mt-ui
+          image: quay.io/apicurio/apicurio-registry-mt-ui:latest
+          env:
+            - name: TENANT_MANAGER_API
+              value: http://tenant-manager-apicurio-apicurio-registry.apps.zero.massopen.cloud/api/v1
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          # readinessProbe:
+          #   tcpSocket:
+          #     port: 5432
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 10
+          # livenessProbe:
+          #   tcpSocket:
+          #     port: 5432
+          #   initialDelaySeconds: 15
+          #   periodSeconds: 20
+          resources:
+            limits:
+              cpu: 500m
+              memory: 875Mi
+            # requests:
+            #   cpu: 200m
+            #   memory: 600Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: apicurio-registry-mt-ui
+  name: apicurio-registry-mt-ui
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: apicurio-registry-mt-ui
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: apicurio-registry-mt-ui
+  labels:
+    app: apicurio-registry-mt-ui
+    template: apicurio-registry-mt-ui
+spec:
+  to:
+    kind: Service
+    name: apicurio-registry-mt-ui
+    weight: 100
+  wildcardPolicy: None

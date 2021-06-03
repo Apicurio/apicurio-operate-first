@@ -3,6 +3,5 @@ kind: Kustomization
 resources:
   - db-init-script-configmap.yaml
   - pg-apicurio-configmap.yaml
-  - pg-fleetmanager-configmap.yaml
   - pg-tenantmanager-configmap.yaml
   - pg-deployment.yaml

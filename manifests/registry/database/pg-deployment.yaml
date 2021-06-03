@@ -21,7 +21,7 @@ spec:
             - name: POSTGRESQL_ADMIN_PASSWORD
               value: admin1234
             - name: CREATE_MULTIPLE_DATABASES
-              value: apicurio,tenantmanager,fleetmanager
+              value: apicurio,tenantmanager
             - name: MULTIPLE_DATABASES_PASSWORD
               value: pass
           ports:
@@ -83,4 +83,4 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100Mi
+      storage: 1Gi

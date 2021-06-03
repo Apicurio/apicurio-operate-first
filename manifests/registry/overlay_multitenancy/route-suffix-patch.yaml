@@ -1,0 +1,4 @@
+- op: replace
+  path: "/spec/to"
+  value: 
+    name: apicurio-registry-mt

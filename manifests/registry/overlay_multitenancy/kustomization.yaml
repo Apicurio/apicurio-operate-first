@@ -1,24 +1,53 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
+nameSuffix: -mt
+commonLabels:
+  app.kubernetes.io/name: apicurio-mt
+
 bases:
   - ../base
   - ../database
 resources:
   - tenant-manager-service.yaml
   - tenant-manager-route.yaml
+  #TODO multitenant UI image not published yet! fix build and publish it!
+  # - multitenant-ui.yaml
+  #TODO automate required keycloak configuration and enable authentication
 patchesJson6902:
+  #Adding tenant-manager sidecar
   - target:
       group: apps
       version: v1
       kind: Deployment
       name: apicurio-registry
     path: tenant-manager-patch.yaml
+  #Modifiying apicurio-registry env vars to enable multitenancy and set up access to postgresql db
   - target:
       group: apps
       version: v1
       kind: Deployment
       name: apicurio-registry
     path: enable-multitenancy-patch.yaml
+  #update route to point to service after using nameSuffix
+  - target:
+      group: route.openshift.io
+      version: v1
+      kind: Route
+      name: apicurio-registry
+    path: route-suffix-patch.yaml
+  #update database url after using nameSuffix
+  - target:
+      version: v1
+      kind: ConfigMap
+      name: postgresql-apicurio-configmap
+    path: apicurio-cm-suffix-patch.yaml
+  #update database url after using nameSuffix
+  - target:
+      version: v1
+      kind: ConfigMap
+      name: postgresql-tenantmanager-configmap
+    path: tenantmanager-cm-suffix-patch.yaml
 
 images:
 - name: quay.io/apicurio/apicurio-registry-mem
