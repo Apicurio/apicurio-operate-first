@@ -33,10 +33,10 @@
         value: DEBUG
     resources:
       limits:
-        cpu: 500m
+        cpu: 200m
         memory: 1000Mi
       requests:
-        cpu: 200m
+        cpu: 100m
         memory: 600Mi
     livenessProbe:
       httpGet:

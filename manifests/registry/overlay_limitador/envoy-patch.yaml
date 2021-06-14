@@ -14,11 +14,11 @@
         protocol: TCP
     resources:
       limits:
-        cpu: 1000m
-        memory: 1300Mi
-      requests:
         cpu: 200m
-        memory: 600Mi
+        memory: 300Mi
+      requests:
+        cpu: 150m
+        memory: 300Mi
     volumeMounts:
     - name: apicurio-envoy-config
       mountPath: /etc/envoy.yaml
