@@ -5,7 +5,7 @@ metadata:
   labels:
     app: limitador
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: limitador
@@ -21,8 +21,8 @@ spec:
           env:
             - name: RUST_LOG
               value: debug
-            - name: REDIS_URL
-              value: "redis://redis:6379"
+            # - name: REDIS_URL
+            #   value: "redis://redis:6379"
             - name: LIMITS_FILE
               value: "/home/limitador/limits.yaml"
           resources:

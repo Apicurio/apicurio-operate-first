@@ -3,8 +3,9 @@ kind: Kustomization
 bases:
   - ../base
 resources:
-  - redis-service.yaml # redis is a dependency to speed up limitador
-  - redis-statefulset.yaml
+  ##disabling redis
+  # - redis-service.yaml # redis is a dependency to speed up limitador
+  # - redis-statefulset.yaml
   - limitador-config-configmap.yaml
   - limitador-service.yaml
   - limitador-deployment.yaml

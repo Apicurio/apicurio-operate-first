@@ -19,7 +19,9 @@ spec:
           image: quay.io/apicurio/apicurio-registry-mt-ui:latest
           env:
             - name: TENANT_MANAGER_API
-              value: http://tenant-manager-apicurio-apicurio-registry.apps.zero.massopen.cloud/api/v1
+              value: https://tenant-manager-mt-apicurio-apicurio-registry.apps.zero.massopen.cloud/api/v1
+            - name: MT_REGISTRY_APIS
+              value: https://apicurio-registry-mt-apicurio-apicurio-registry.apps.zero.massopen.cloud/t/:tenantId/apis
           ports:
             - containerPort: 8080
               protocol: TCP
@@ -35,11 +37,14 @@ spec:
           #   periodSeconds: 20
           resources:
             limits:
-              cpu: 500m
+              cpu: 250m
               memory: 875Mi
-            # requests:
-            #   cpu: 200m
-            #   memory: 600Mi
+            requests:
+              cpu: 200m
+              memory: 600Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
 ---
 apiVersion: v1
 kind: Service
@@ -66,6 +71,7 @@ metadata:
 spec:
   to:
     kind: Service
-    name: apicurio-registry-mt-ui
+    #HEY workaround here!! because of using nameSuffix: -mt
+    name: apicurio-registry-mt-ui-mt
     weight: 100
   wildcardPolicy: None

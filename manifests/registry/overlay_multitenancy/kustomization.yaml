@@ -11,8 +11,7 @@ bases:
 resources:
   - tenant-manager-service.yaml
   - tenant-manager-route.yaml
-  #TODO multitenant UI image not published yet! fix build and publish it!
-  # - multitenant-ui.yaml
+  - multitenant-ui.yaml
   #TODO automate required keycloak configuration and enable authentication
 patchesJson6902:
   #Adding tenant-manager sidecar

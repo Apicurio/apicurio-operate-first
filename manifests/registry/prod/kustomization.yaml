@@ -4,5 +4,5 @@ bases:
   # normal deployment, with limitador and some other experiments
   - ../overlay_limitador
   # multitenancy deployment
-  - ../keycloak
+  # - ../keycloak
   - ../overlay_multitenancy
