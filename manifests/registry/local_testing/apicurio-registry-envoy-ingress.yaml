@@ -6,17 +6,17 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
   labels:
-    app: tenant-manager
-  name: tenant-manager-ingress
+    app: apicurio-registry
+  name: apicurio-registry-envoy-ingress
 spec:
   rules:
-  - host: tenant-manager.127.0.0.1.nip.io
+  - host: apicurio-envoy.127.0.0.1.nip.io
     http:
       paths:
       - backend:
           service:
-            name: tenant-manager-mt
+            name: apicurio-envoy-mt
             port:
-              number: 8585
+              number: 80
         path: /
         pathType: Prefix

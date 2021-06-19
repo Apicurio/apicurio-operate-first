@@ -36,10 +36,10 @@ spec:
               value: prod
           resources:
             limits:
-              cpu: 350m
+              cpu: 500m
               memory: 1300Mi
             requests:
-              cpu: 200m
+              cpu: 300m
               memory: 600Mi
           livenessProbe:
             httpGet:

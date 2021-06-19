@@ -20,8 +20,10 @@ spec:
           env:
             - name: TENANT_MANAGER_API
               value: https://tenant-manager-mt-apicurio-apicurio-registry.apps.zero.massopen.cloud/api/v1
+              # value: http://tenant-manager.127.0.0.1.nip.io/api/v1
             - name: MT_REGISTRY_APIS
-              value: https://apicurio-registry-mt-apicurio-apicurio-registry.apps.zero.massopen.cloud/t/:tenantId/apis
+              value: https://apicurio-envoy-mt-apicurio-apicurio-registry.apps.zero.massopen.cloud/t/:tenantId/apis
+              # value: http://apicurio-envoy.127.0.0.1.nip.io/t/:tenantId/apis
           ports:
             - containerPort: 8080
               protocol: TCP
