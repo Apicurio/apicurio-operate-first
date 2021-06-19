@@ -15,7 +15,7 @@ spec:
       paths:
       - backend:
           service:
-            name: apicurio-registry
+            name: apicurio-registry-mt
             port:
               number: 8080
         path: /

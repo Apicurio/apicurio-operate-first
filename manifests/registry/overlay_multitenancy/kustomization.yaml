@@ -8,19 +8,25 @@ commonLabels:
 bases:
   - ../base
   - ../database
+  - ../limitador
 resources:
   - tenant-manager-service.yaml
   - tenant-manager-route.yaml
   - multitenant-ui.yaml
   #TODO automate required keycloak configuration and enable authentication
+  - apicurio-envoy-configmap.yaml
+  - apicurio-envoy-routes.yaml
+  - apicurio-envoy-service.yaml
 patchesJson6902:
-  #Adding tenant-manager sidecar
+  #several things for the apicurio-registry deployment
+  #add tenant-manager sidecar
+  #add envoy sidecar
   - target:
       group: apps
       version: v1
       kind: Deployment
       name: apicurio-registry
-    path: tenant-manager-patch.yaml
+    path: apicurio-deployment-patch.yaml
   #Modifiying apicurio-registry env vars to enable multitenancy and set up access to postgresql db
   - target:
       group: apps
