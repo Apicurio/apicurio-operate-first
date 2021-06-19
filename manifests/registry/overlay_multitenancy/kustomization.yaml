@@ -15,7 +15,7 @@ resources:
   - multitenant-ui.yaml
   #TODO automate required keycloak configuration and enable authentication
   - apicurio-envoy-configmap.yaml
-  - apicurio-envoy-routes.yaml
+  - apicurio-envoy-route.yaml
   - apicurio-envoy-service.yaml
 patchesJson6902:
   #several things for the apicurio-registry deployment
