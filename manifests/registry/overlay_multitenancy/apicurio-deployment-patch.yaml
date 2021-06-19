@@ -29,7 +29,7 @@
 
       - name: QUARKUS_HTTP_PORT
         value: "8585"
-      - name: QUARKUS_LOG_LEVEL
+      - name: TENANT_MANAGER_LOG_LEVEL
         value: DEBUG
     resources:
       limits:
