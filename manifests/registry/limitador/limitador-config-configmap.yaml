@@ -15,4 +15,5 @@ data:
       conditions:
       - component == srs_apicurio_registry
       variables:
+      - component
       - tenant_id
