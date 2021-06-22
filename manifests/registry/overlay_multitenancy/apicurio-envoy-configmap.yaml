@@ -164,12 +164,30 @@ data:
                   #           descriptor_value: example_descriptor_value
 
                   # Everything else not matching one of the rules above goes
-                  # directly to the backend, without rate limits.
+                  # it's rate limited by a local rate limit to avoid over loading the ratelimit service
                   - name: default
                     match:
                       prefix: /
                     route:
                       cluster: backend
+                    typed_per_filter_config:
+                      envoy.filters.http.local_ratelimit:
+                        "@type": type.googleapis.com/envoy.extensions.filters.http.local_ratelimit.v3.LocalRateLimit
+                        stat_prefix: http_local_rate_limiter
+                        token_bucket:
+                          max_tokens: 60
+                          tokens_per_fill: 60
+                          fill_interval: 30s
+                        filter_enabled:
+                          runtime_key: local_rate_limit_enabled
+                          default_value:
+                            numerator: 100
+                            denominator: HUNDRED
+                        filter_enforced:
+                          runtime_key: local_rate_limit_enforced
+                          default_value:
+                            numerator: 100
+                            denominator: HUNDRED
 
               http_filters:
 
@@ -198,6 +216,12 @@ data:
                         index = index + 1
                       end
                     end
+
+              # config for main safety local rate limit
+              - name: envoy.filters.http.local_ratelimit
+                typed_config:
+                  "@type": type.googleapis.com/envoy.extensions.filters.http.local_ratelimit.v3.LocalRateLimit
+                  stat_prefix: http_local_rate_limiter
 
               # This is needed to enable the rate limiter:
               - name: envoy.filters.http.ratelimit
