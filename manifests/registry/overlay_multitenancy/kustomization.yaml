@@ -56,5 +56,5 @@ patchesJson6902:
 
 images:
 - name: quay.io/apicurio/apicurio-registry-mem
-  newName: quay.io/apicurio/apicurio-registry-sql
+  newName: quay.io/apicurio/apicurio-registry-sql-native
   newTag: latest-snapshot
