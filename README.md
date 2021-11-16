@@ -2,17 +2,18 @@
 
 This repo contains the Manifests files we are using to Operate First cluster:
 
-OpenShift Console: [https://console-openshift-console.apps.zero.massopen.cloud]
+OpenShift Console: [https://console-openshift-console.apps.smaug.na.operate-first.cloud/]
 Service Registry Instance: [http://apicurio-registry-apicurio-apicurio-registry.apps.zero.massopen.cloud/]
+ArgoCd Console: [https://argocd.operate-first.cloud/applications]
 
-The project uses [`kustomization`](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/) and in particular the `Overlay` functionality, that allows to define basic configuration and a collection of patches(overlays) we can apply on the basic definitions.
+The project uses [`kustomize`](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/) and in particular the `Overlay` functionality, that allows to define basic configuration and a collection of patches(overlays) we can apply on the basic definitions.
 
 Currently the `base` folder define a basic Service Registry deployement, that could work as is.
 While `overlay_multitenancy` includes the instructions to add all the resources needed to run [Limitador](https://github.com/3scale-labs/limitador/), including the instruction to patch the `Deployment` definition in the `base` folder to add a Sidecar Envoy Proxy container.
 
 The folder `prod` represents what will be deployed to Operate First cluster.
 
-To apply the `kustomization` command locally, to verify what is the output of the applied overlay you can run this command:
+To apply the `kustomize` command locally, to verify what is the output of the applied overlay you can run this command:
 
 ```bash
 cd manifests/registry
@@ -34,3 +35,6 @@ If you are using Kind for testing kubernetes locally in your computer, you can u
 ```bash
 oc apply -k ./manifests/registry/local_testing/
 ```
+
+## Docs and SOPs
+You can find more information in the `docs` folder.
