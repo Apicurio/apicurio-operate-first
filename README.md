@@ -2,9 +2,15 @@
 
 This repo contains the Manifests files we are using to Operate First cluster:
 
+### Useful links
+
 OpenShift Console: [https://console-openshift-console.apps.smaug.na.operate-first.cloud/]
+
 Service Registry Instance: [http://apicurio-registry-apicurio-apicurio-registry.apps.zero.massopen.cloud/]
+
 ArgoCd Console: [https://argocd.operate-first.cloud/applications]
+
+### Overview
 
 The project uses [`kustomize`](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/) and in particular the `Overlay` functionality, that allows to define basic configuration and a collection of patches(overlays) we can apply on the basic definitions.
 
