@@ -42,14 +42,14 @@
         value: DEBUG
     resources:
       limits:
-        cpu: 200m
+        cpu: 400m
         memory: 800Mi
       requests:
-        cpu: 100m
+        cpu: 200m
         memory: 600Mi
     livenessProbe:
       httpGet:
-        path: /health/live
+        path: /q/health/live
         port: 8585
         scheme: HTTP
       initialDelaySeconds: 5
@@ -59,7 +59,7 @@
       failureThreshold: 3
     readinessProbe:
       httpGet:
-        path: /health/ready
+        path: /q/health/ready
         port: 8585
         scheme: HTTP
       initialDelaySeconds: 15
