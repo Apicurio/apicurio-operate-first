@@ -6,7 +6,9 @@ This repo contains the Manifests files we are using to Operate First cluster:
 
 OpenShift Console: [https://console-openshift-console.apps.smaug.na.operate-first.cloud/]
 
-Service Registry Instance: [http://apicurio-registry-apicurio-apicurio-registry.apps.zero.massopen.cloud/]
+Service Registry Instance: [https://apicurio-registry-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/]
+
+Multitenant UI Service Registry: [http://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/]
 
 ArgoCd Console: [https://argocd.operate-first.cloud/applications]
 
