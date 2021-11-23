@@ -19,10 +19,11 @@ spec:
           image: quay.io/apicurio/apicurio-registry-mt-ui:latest
           env:
             - name: TENANT_MANAGER_API
-              value: https://tenant-manager-mt-apicurio-apicurio-registry.apps.zero.massopen.cloud/api/v1
+              # TODO find away to get this values dynamically, instead of setting this cluster url manually
+              value: https://tenant-manager-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/api/v1
               # value: http://tenant-manager.127.0.0.1.nip.io/api/v1
             - name: MT_REGISTRY_APIS
-              value: https://apicurio-envoy-mt-apicurio-apicurio-registry.apps.zero.massopen.cloud/t/:tenantId/apis
+              value: https://apicurio-envoy-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/t/:tenantId/apis
               # value: http://apicurio-envoy.127.0.0.1.nip.io/t/:tenantId/apis
           ports:
             - containerPort: 8080
