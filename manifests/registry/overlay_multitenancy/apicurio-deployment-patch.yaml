@@ -52,11 +52,11 @@
         path: /q/health/live
         port: 8585
         scheme: HTTP
-      initialDelaySeconds: 5
-      timeoutSeconds: 5
+      initialDelaySeconds: 15
+      timeoutSeconds: 10
       periodSeconds: 10
       successThreshold: 1
-      failureThreshold: 3
+      failureThreshold: 5
     readinessProbe:
       httpGet:
         path: /q/health/ready
