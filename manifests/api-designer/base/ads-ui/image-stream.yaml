@@ -1,0 +1,16 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  label:
+    component: ads-ui
+  labels:
+    app: api-designer
+  name: ads-ui
+spec:
+  tags:
+  - from:
+      kind: DockerImage
+      name: quay.io/apicurio/api-designer-ads:latest-snapshot
+    importPolicy:
+      scheduled: true
+    name: latest
