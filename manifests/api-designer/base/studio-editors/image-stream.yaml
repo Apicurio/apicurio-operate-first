@@ -1,0 +1,15 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:    
+  labels:
+    app: api-designer
+    component: studio-editors
+  name: studio-editors
+spec:
+  tags:
+  - from:
+      kind: DockerImage
+      name: quay.io/apicurio/apicurio-studio-editors:latest-snapshot
+    importPolicy:
+      scheduled: true
+    name: latest
