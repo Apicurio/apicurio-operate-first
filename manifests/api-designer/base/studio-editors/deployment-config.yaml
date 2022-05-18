@@ -3,12 +3,12 @@ kind: DeploymentConfig
 metadata:
   labels:
     app: api-designer
-    component: api-designer-poc
-  name: api-designer-poc
+    component: studio-editors
+  name: studio-editors
 spec:
   replicas: 1
   selector:
-    component: api-designer-poc
+    component: studio-editors
   strategy:
     activeDeadlineSeconds: 21600
     resources: {}
@@ -22,22 +22,13 @@ spec:
   template:
     metadata:
       labels:
-        component: api-designer-poc
-      name: api-designer-poc
+        component: studio-editors
+      name: studio-editors
     spec:
       containers:
-      - env:
-        - name: AUTH_ENABLED
-          value: "false"
-        - name: ADS_UI_URL
-          value: http://ads-ui.apps.smaug.na.operate-first.cloud/ads.js
-        - name: SRS_API_URL
-          value: local-mock
-        - name: EDITORS_URL
-          value: http://studio-editors.apps.smaug.na.operate-first.cloud
-        image: api-designer-poc:latest
+      - image: studio-editors:latest
         imagePullPolicy: Always
-        name: api-designer-poc
+        name: studio-editors
         ports:
         - containerPort: 8080
           protocol: TCP
@@ -53,8 +44,8 @@ spec:
   - imageChangeParams:
       automatic: true
       containerNames:
-      - api-designer-poc
+      - studio-editors
       from:
         kind: ImageStreamTag
-        name: api-designer-poc:latest
+        name: studio-editors:latest
     type: ImageChange
