@@ -31,6 +31,8 @@ spec:
           value: "false"
         - name: ADS_UI_URL
           value: http://ads-ui.apps.smaug.na.operate-first.cloud/ads.js
+        - name: SRS_API_URL
+          value: local-mock
         image: api-designer-poc:latest
         imagePullPolicy: Always
         name: api-designer-poc
