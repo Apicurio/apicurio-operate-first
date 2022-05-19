@@ -1,0 +1,63 @@
+---
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: ads-ui
+spec:
+  strategy:
+    rollingParams:
+      post:
+        failurePolicy: Ignore
+        execNewPod:
+          containerName: ads-ui 
+          command: [ "/usr/bin/sh", "/usr/local/bin/notify-gchat.sh"] 
+          env: 
+            - name: GOOGLE_CHAT_WEBHOOK
+              valueFrom:
+                secretKeyRef:
+                  name: gchat-webhook
+                  key: webhook-url
+
+---
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: api-designer-poc
+spec:
+  strategy:
+    rollingParams:
+      post:
+        failurePolicy: Ignore
+        execNewPod:
+          containerName: api-designer-poc 
+          command: [ "/usr/bin/sh", "/usr/local/bin/notify-gchat.sh"] 
+          env: 
+            - name: GOOGLE_CHAT_WEBHOOK
+              valueFrom:
+                secretKeyRef:
+                  name: gchat-webhook
+                  key: webhook-url
+
+
+---
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: studio-editors
+spec:
+  strategy:
+    rollingParams:
+      post:
+        failurePolicy: Ignore
+        execNewPod:
+          containerName: studio-editors 
+          command: [ "/usr/bin/sh", "/usr/local/bin/notify-gchat.sh"] 
+          env: 
+            - name: GOOGLE_CHAT_WEBHOOK
+              valueFrom:
+                secretKeyRef:
+                  name: gchat-webhook
+                  key: webhook-url
