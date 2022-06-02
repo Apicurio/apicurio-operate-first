@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: api-designer
+    component: apicurio-registry-mem-1
+  name: apicurio-registry-mem-1
+spec:
+  ports:
+  - name: 8080-http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    component: apicurio-registry-mem-1
