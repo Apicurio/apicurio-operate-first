@@ -4,13 +4,13 @@ metadata:
   labels:
     app: api-designer
     component: apicurio-registry-mem
-  name: apicurio-registry-mem-1
+  name: apicurio-registry-mem-one
 spec:
-  host: apicurio-registry-mem-1.apps.smaug.na.operate-first.cloud
+  host: apicurio-registry-mem-one.apps.smaug.na.operate-first.cloud
   port:
     targetPort: 8080-http
   to:
     kind: Service
-    name: apicurio-registry-mem-1
+    name: apicurio-registry-mem-one
     weight: 100
   wildcardPolicy: None

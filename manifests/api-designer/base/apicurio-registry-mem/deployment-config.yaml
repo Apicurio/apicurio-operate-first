@@ -4,11 +4,11 @@ metadata:
   labels:
     app: api-designer
     component: apicurio-registry-mem
-  name: apicurio-registry-mem-1
+  name: apicurio-registry-mem-one
 spec:
   replicas: 1
   selector:
-    deploymentConfig: apicurio-registry-mem-1
+    deploymentConfig: apicurio-registry-mem-one
   strategy:
     activeDeadlineSeconds: 21600
     resources: {}
@@ -22,8 +22,8 @@ spec:
   template:
     metadata:
       labels:
-        deploymentConfig: apicurio-registry-mem-1
-      name: apicurio-registry-mem-1
+        deploymentConfig: apicurio-registry-mem-one
+      name: apicurio-registry-mem-one
     spec:
       containers:
       - image: apicurio-registry-mem:latest
