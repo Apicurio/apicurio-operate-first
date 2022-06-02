@@ -1,48 +1,55 @@
-# Manifests for OpenShift
+# Operate First
+Operate First is a community of developers, operators, and others — site reliability engineers (SRE), data scientists, Open Source practitioners, and so forth — who believe in promoting Open Source approach to operations.
 
-This repo contains the Manifests files we are using to Operate First cluster:
+Open Source software is widely available, but it faces an operations-barrier when bringing it to a production environment.
 
-### Useful links
+Proprietary services have attempted to address this barrier, but they undermine the Open Source development model because lessons learned from operating the code are invisible to the Open Source developers.
+To overcome this operations barrier in an Open Source way, we must switch to an Open Source-like approach to operations, or Open Operations (Open Ops).
 
-OpenShift Console: [https://console-openshift-console.apps.smaug.na.operate-first.cloud/]
+Open Ops means developers and operators collaborating Openly to apply a product's operational considerations right back into the code itself. The result is an Open Source service.
 
-Service Registry Instance: [https://apicurio-registry-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/]
+For More information on operate-first, please visit https://www.operate-first.cloud/
 
-Multitenant UI Service Registry: [http://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/]
+# This Repository
+This repository holds the manifests files that are used for deploying the apicurio projects on the operate-first cluster. The manifest files for each project are organized under the manifests folder.
 
-ArgoCd Console: [https://argocd.operate-first.cloud/applications]
+The project uses [kustomize](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/) and in particular the `Overlay` functionality, that allows to define basic configuration and a collection of patches(overlays) we can apply on the base definitions.
 
-### Overview
+Apicurio Operate First deployments uses [Argo CD](https://argo-cd.readthedocs.io/en/stable/) to enable GitOps and continuous deployments. Hence, any changes made to the manifest files will automatically be applied to the project deployments.
 
-The project uses [`kustomize`](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/) and in particular the `Overlay` functionality, that allows to define basic configuration and a collection of patches(overlays) we can apply on the basic definitions.
+# Useful links
 
-Currently the `base` folder define a basic Service Registry deployement, that could work as is.
-While `overlay_multitenancy` includes the instructions to add all the resources needed to run [Limitador](https://github.com/3scale-labs/limitador/), including the instruction to patch the `Deployment` definition in the `base` folder to add a Sidecar Envoy Proxy container.
+### Generic 
+- [OpenShift Console](https://console-openshift-console.apps.smaug.na.operate-first.cloud/)
 
-The folder `prod` represents what will be deployed to Operate First cluster.
+- [ArgoCd Console](https://argocd.operate-first.cloud/applications)
 
-To apply the `kustomize` command locally, to verify what is the output of the applied overlay you can run this command:
 
-```bash
-cd manifests/registry
-oc get -k ./prod/ -o yaml | tee log.txt
-```
+### Apicurio Registry
 
-## Multitenancy enabled deployment
+- [Apicurio Registry Openshift Project](https://console-openshift-console.apps.smaug.na.operate-first.cloud/k8s/cluster/projects/apicurio-apicurio-registry)
 
-The `overlay_multitenancy` contains configuration files for deploying Apicurio Registry with multitenancy enabled.
+- [Apicurio Registry ArgoCD Application](https://argocd.operate-first.cloud/applications/registry-smaug?resource=)
 
-```bash
-oc apply -k ./manifests/registry/overlay_multitenancy/
-```
+- [Apicurio Registry Instance](https://apicurio-registry-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/)
 
-## Ingresses for local testing
+- [Apicurio Registry Multitenant UI](http://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/)
 
-If you are using Kind for testing kubernetes locally in your computer, you can use manifests in `local_testing` for configuring ingresses to Apicurio Registry and Tenant Manager.
+### API Designer
 
-```bash
-oc apply -k ./manifests/registry/local_testing/
-```
+- [API Designer Openshift Project](https://console-openshift-console.apps.smaug.na.operate-first.cloud/k8s/cluster/projects/api-designer)
 
-## Docs and SOPs
-You can find more information in the `docs` folder.
+- [API Designer ArgoCD Application](https://argocd.operate-first.cloud/applications/api-designer-smaug?resource=)
+
+- [API Designer POC UI](http://api-designer-poc.apps.smaug.na.operate-first.cloud/)
+
+- [ADS UI](http://ads-ui.apps.smaug.na.operate-first.cloud/)
+
+- [Studio Editors UI](http://studio-editors.apps.smaug.na.operate-first.cloud/?demo)
+
+# Docs and SOPs
+Please follow the below links for more information on:-
+- [Apicurio Operate-First set up](docs/apicurio-operate-first-setup.md)
+- [Apicurio Registry deployment](docs/registry-deployment.md)
+- [Api Designer deployment](docs/api-designer-deployment.md)
+
