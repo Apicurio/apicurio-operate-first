@@ -2,8 +2,12 @@
 
 This document describes what is the setup in operate-first to enable the deployment the manifests in this repository.
 
+<br>
+
 ## This repository
 This repository contains a set of kubernetes manifests that are organized using kustomize.
+
+<br>
 
 ## Operate First Cluster
 Operate First initiative has multiple openshift clusters and uses ArgoCD to manage each of those clusters.
@@ -16,6 +20,8 @@ Our namespaces `apicurio-apicurio-registry` and `api-designer` can be found here
 
 #### Openshift cluster
 And this namespace is created in `smaug` cluster because it's defined here [https://github.com/operate-first/apps/blob/master/cluster-scope/overlays/prod/moc/smaug/kustomization.yaml]
+
+<br>
 
 ## Argo CD
 ArgoCD is a kubernetes operator to enable GitOps workloads. ArgoCD is deployed in a kubernetes cluster but can deploy applications to many kubernetes clusters.
