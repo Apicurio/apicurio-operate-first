@@ -1,0 +1,51 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: api-designer
+    component: apicurio-registry-mem
+  name: apicurio-registry-mem-1
+spec:
+  replicas: 1
+  selector:
+    deploymentConfig: apicurio-registry-mem-1
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        deploymentConfig: apicurio-registry-mem-1
+      name: apicurio-registry-mem-1
+    spec:
+      containers:
+      - image: apicurio-registry-mem:latest
+        imagePullPolicy: Always
+        name: apicurio-registry-mem
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "500m"
+            memory: 1300Mi
+          requests:
+            cpu: 100m
+            memory: 600Mi
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - apicurio-registry-mem
+      from:
+        kind: ImageStreamTag
+        name: apicurio-registry-mem:latest
+    type: ImageChange

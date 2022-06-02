@@ -4,6 +4,7 @@ bases:
   - ../../base/ads-ui
   - ../../base/api-designer-poc
   - ../../base/studio-editors
+  - ../../base/apicurio-registy-mem
 
 resources:
   - secret.yaml
