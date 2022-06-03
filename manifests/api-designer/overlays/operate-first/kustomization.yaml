@@ -11,3 +11,4 @@ resources:
 
 patches:
   - lifecycle-hooks.yaml
+  - pod-resources.yaml
