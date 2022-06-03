@@ -32,7 +32,7 @@ spec:
         - name: ADS_UI_URL
           value: http://ads-ui.apps.smaug.na.operate-first.cloud/ads.js
         - name: SRS_API_URL
-          value: local-mock
+          value: operate-first-mock
         - name: EDITORS_URL
           value: http://studio-editors.apps.smaug.na.operate-first.cloud
         image: api-designer-poc:latest
