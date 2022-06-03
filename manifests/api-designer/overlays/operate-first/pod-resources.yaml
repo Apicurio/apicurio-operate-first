@@ -1,0 +1,96 @@
+---
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: ads-ui
+spec:
+  template:
+    spec:
+      containers:
+      - name: ads-ui
+        resources:
+          limits:
+            cpu: "300m"
+            memory: 1300Mi
+          requests:
+            cpu: 100m
+            memory: 600Mi
+
+
+---
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: api-designer-poc
+spec:
+  template:
+    spec:
+      containers:
+      - name: api-designer-poc
+        resources:
+          limits:
+            cpu: "300m"
+            memory: 1300Mi
+          requests:
+            cpu: 100m
+            memory: 600Mi
+
+
+---
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: studio-editors
+spec:
+  template:
+    spec:
+      containers:
+      - name: studio-editors
+        resources:
+          limits:
+            cpu: "300m"
+            memory: 1300Mi
+          requests:
+            cpu: 100m
+            memory: 600Mi
+
+---
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: apicurio-registry-mem-one
+spec:
+  template:
+    spec:
+      containers:
+      - name: apicurio-registry-mem
+        resources:
+          limits:
+            cpu: "300m"
+            memory: 1300Mi
+          requests:
+            cpu: 100m
+            memory: 600Mi
+
+---
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: apicurio-registry-mem-two
+spec:
+  template:
+    spec:
+      containers:
+      - name: apicurio-registry-mem
+        resources:
+          limits:
+            cpu: "300m"
+            memory: 1300Mi
+          requests:
+            cpu: 100m
+            memory: 600Mi
