@@ -6,7 +6,6 @@ metadata:
     component: studio-editors
   name: studio-editors
 spec:
-  host: ''
   port:
     targetPort: 9011-http
   to:

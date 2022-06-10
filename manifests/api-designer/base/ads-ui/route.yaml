@@ -6,7 +6,6 @@ metadata:
     component: ads-ui
   name: ads-ui
 spec:
-  host: ''
   port:
     targetPort: 9009-http
   to:

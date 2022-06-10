@@ -6,7 +6,6 @@ metadata:
     component: apicurio-registry-mem
   name: apicurio-registry-mem-one
 spec:
-  host: ''
   port:
     targetPort: 8080-http
   to:
@@ -25,7 +24,6 @@ metadata:
     component: apicurio-registry-mem
   name: apicurio-registry-mem-two
 spec:
-  host: ''
   port:
     targetPort: 8080-http
   to:
