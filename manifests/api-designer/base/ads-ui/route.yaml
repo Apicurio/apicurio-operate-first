@@ -6,7 +6,7 @@ metadata:
     component: ads-ui
   name: ads-ui
 spec:
-  host: ads-ui.apps.smaug.na.operate-first.cloud
+  host: ''
   port:
     targetPort: 9009-http
   to:
