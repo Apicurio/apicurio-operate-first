@@ -1,0 +1,18 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: api-designer-poc
+spec:
+  template:
+    spec:
+      containers:
+      - name: api-designer-poc
+        env:
+        - name: AUTH_ENABLED
+          value: "false"
+        - name: ADS_UI_URL
+          value: http://ads-ui.apps.smaug.na.operate-first.cloud/ads.js
+        - name: SRS_API_URL
+          value: operate-first-mock
+        - name: EDITORS_URL
+          value: http://studio-editors.apps.smaug.na.operate-first.cloud

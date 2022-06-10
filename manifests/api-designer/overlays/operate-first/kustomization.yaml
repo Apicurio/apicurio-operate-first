@@ -12,3 +12,4 @@ resources:
 patches:
   - lifecycle-hooks.yaml
   - pod-resources.yaml
+  - pod-env-variables.yaml
