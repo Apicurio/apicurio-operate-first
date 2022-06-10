@@ -6,7 +6,7 @@ metadata:
     component: api-designer-poc
   name: api-designer-poc
 spec:
-  host: api-designer-poc.apps.smaug.na.operate-first.cloud
+  host: ''
   port:
     targetPort: 8080-http
   to:

@@ -6,7 +6,7 @@ metadata:
     component: apicurio-registry-mem
   name: apicurio-registry-mem-one
 spec:
-  host: apicurio-registry-mem-one.apps.smaug.na.operate-first.cloud
+  host: ''
   port:
     targetPort: 8080-http
   to:
@@ -25,7 +25,7 @@ metadata:
     component: apicurio-registry-mem
   name: apicurio-registry-mem-two
 spec:
-  host: apicurio-registry-mem-two.apps.smaug.na.operate-first.cloud
+  host: ''
   port:
     targetPort: 8080-http
   to:
