@@ -5,12 +5,24 @@ While `overlay_multitenancy` includes the instructions to add all the resources 
 
 The folder `prod` represents what will be deployed to Operate First cluster.
 
-To apply the `kustomize` command locally, to verify what is the output of the applied overlay you can run this command:
+
+## Local Verification
+To verify what is the output of the applied overlay you can run this command:
 
 ```bash
 cd manifests/registry
-oc get -k ./prod/ -o yaml | tee log.txt
+oc kustomize prod | tee effective-manifest.yaml
 ```
+
+If you’re using kustomize as a standalone CLI, you’ll instead run:
+
+```bash
+cd manifests/registry
+kustomize build prod | tee effective-manifest.yaml
+```
+
+The output is the concatenation of all the YAML documents for all of the resources we specified along with the applied overlay, patches, common labels etc.
+
 
 ## Multitenancy enabled deployment
 
