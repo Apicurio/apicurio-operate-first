@@ -21,7 +21,7 @@ spec:
             - name: POSTGRESQL_ADMIN_PASSWORD
               value: admin1234
             - name: CREATE_MULTIPLE_DATABASES
-              value: apicurio,tenantmanager
+              value: apicurio,tenantmanager,fleetmanager
             - name: MULTIPLE_DATABASES_PASSWORD
               value: pass
           ports:
