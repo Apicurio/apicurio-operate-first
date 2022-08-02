@@ -38,6 +38,11 @@ spec:
                 configMapKeyRef:
                   name: postgresql-fleetmanager-configmap
                   key: pg-pwd
+            - name: REGISTRY_BROWSER_URL
+              value: 'https://apicurio-registry-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/t/TENANT_ID'
+          volumeMounts:
+            - name: registry-deployments-config-file
+              mountPath: /config/registry-deployments.yaml
           resources:
             limits:
               cpu: 500m
@@ -48,6 +53,10 @@ spec:
           terminationMessagePath: /dev/termination-log
   strategy:
     type: Recreate
+  volumes:
+    - name: registry-deployments-config-file
+      configMap:
+          name: registry-deployments-config-file
 
 ---
 apiVersion: v1
