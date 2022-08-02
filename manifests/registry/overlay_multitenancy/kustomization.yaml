@@ -13,6 +13,7 @@ resources:
   - tenant-manager-service.yaml
   - tenant-manager-route.yaml
   - multitenant-ui.yaml
+  - fleet-manager.yaml
   #TODO automate required keycloak configuration and enable authentication
   - apicurio-envoy-configmap.yaml
   - apicurio-envoy-route.yaml
