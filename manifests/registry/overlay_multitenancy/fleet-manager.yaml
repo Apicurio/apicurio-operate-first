@@ -31,6 +31,10 @@ spec:
       labels:
         app: fleet-manager
     spec:
+      volumes:
+        - name: registry-deployments-config-file
+          configMap:
+            name: registry-deployments-config-file
       containers:
         - name: fleet-manager
           image: quay.io/apicurio/apicurio-registry-fleet-manager-api:latest-snapshot
@@ -70,10 +74,6 @@ spec:
           terminationMessagePath: /dev/termination-log
   strategy:
     type: Recreate
-  volumes:
-    - name: registry-deployments-config-file
-      configMap:
-          name: registry-deployments-config-file
 
 ---
 apiVersion: v1
