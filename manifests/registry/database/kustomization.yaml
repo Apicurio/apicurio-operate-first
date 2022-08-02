@@ -5,3 +5,4 @@ resources:
   - pg-apicurio-configmap.yaml
   - pg-tenantmanager-configmap.yaml
   - pg-deployment.yaml
+  - pg-fleetmanager-configmap.yaml
