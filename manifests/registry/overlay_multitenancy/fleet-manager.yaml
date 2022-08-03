@@ -107,6 +107,8 @@ spec:
               value: '/config/quota-plans.yaml'
             - name: REGISTRY_DEPLOYMENTS_CONFIG_FILE
               value: '/config/registry-deployments.yaml'
+            - name: USE_LOCAL_AMS
+              value: 'true'
           volumeMounts:
             - name: registry-deployments-config-file
               mountPath: /config/registry-deployments.yaml
