@@ -11,6 +11,7 @@
       value: INFO
     - name: QUARKUS_PROFILE
       value: prod
+
     - name: REGISTRY_DATASOURCE_URL
       valueFrom:
         configMapKeyRef:
