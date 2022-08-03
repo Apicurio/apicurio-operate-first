@@ -1,0 +1,24 @@
+- op: replace
+  path: "/spec/template/spec/containers/0/env"
+  value:
+    - name: AUTH_ENABLED
+      value: "true"
+    - name: KEYCLOAK_URL
+      value: "https://auth.apicur.io/auth"
+    - name: KEYCLOAK_REALM
+      value: 'operate-first-apicurio'
+    - name: KEYCLOAK_API_CLIENT_ID
+      value: "sr-api"
+    - name: TENANT_MANAGER_AUTH_URL
+      value: "https://auth.apicur.io/auth"
+    - name: TENANT_MANAGER_REALM
+      value: "operate-first-apicurio"
+    - name: TENANT_MANAGER_CLIENT_ID
+      value: "sr-tenant-manager"
+    - name: ORGANIZATION_ID_CLAIM
+      value: "organization_id"
+    - name: TENANT_MANAGER_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: tenant-manager-auth-secret
+          key: client_secret

@@ -40,8 +40,15 @@
         value: "8585"
       - name: TENANT_MANAGER_LOG_LEVEL
         value: DEBUG
-      - name: TENANT_MANAGER_AUTH_ENABLED
-        value: false
+
+      - name: AUTH_ENABLED
+        value: "true"
+      - name: KEYCLOAK_URL
+        value: "https://auth.apicur.io/auth"
+      - name: KEYCLOAK_REALM
+        value: "operate-first-apicurio"
+      - name: KEYCLOAK_API_CLIENT_ID
+        value: "sr-tenant-manager'"
     resources:
       limits:
         cpu: 400m
