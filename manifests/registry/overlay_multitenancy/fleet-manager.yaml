@@ -25,7 +25,7 @@ data:
   quota-plans.yaml: |-
     reconcile: false # Enable this if you make changes to the plans configuration
     plans:
-      - name: basic
+      - name: default
         resources:
           - type: MAX_TOTAL_SCHEMAS_COUNT
             limit: 1000
@@ -103,11 +103,17 @@ spec:
                   key: pg-pwd
             - name: REGISTRY_BROWSER_URL
               value: 'https://apicurio-registry-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/t/TENANT_ID'
+            - name: REGISTRY_QUOTA_PLANS_CONFIG_FILE
+              value: '/config/quota-plans.yaml'
+            - name: REGISTRY_DEPLOYMENTS_CONFIG_FILE
+              value: '/config/registry-deployments.yaml'
           volumeMounts:
             - name: registry-deployments-config-file
               mountPath: /config/registry-deployments.yaml
+              subPath: registry-deployments.yaml
             - name: registry-quota-plans-config
               mountPath: /config/quota-plans.yaml
+              subPath: quota-plans.yaml
           resources:
             limits:
               cpu: 500m
