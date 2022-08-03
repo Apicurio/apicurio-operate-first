@@ -103,6 +103,8 @@ spec:
                   key: pg-pwd
             - name: REGISTRY_BROWSER_URL
               value: 'https://apicurio-registry-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/t/TENANT_ID'
+            - name: USE_LOCAL_AMS
+              value: 'true'
           volumeMounts:
             - name: registry-deployments-config-file
               mountPath: /config/registry-deployments.yaml
