@@ -79,7 +79,7 @@ spec:
             name: registry-quota-plans-config
       containers:
         - name: fleet-manager
-          image: quay.io/apicurio/apicurio-registry-fleet-manager-api:latest-snapshot
+          image: quay.io/apicurio/apicurio-registry-fleet-manager:latest-snapshot
           imagePullPolicy: Always
           ports:
             - name: web
