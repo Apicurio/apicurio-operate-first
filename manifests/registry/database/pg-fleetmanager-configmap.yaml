@@ -5,5 +5,5 @@ metadata:
 data:
   pg-user: fleetmanager
   pg-pwd: pass
-  pg-ds-url: jdbc:postgresql://apicurio-registry-postgresql:5432/fleetmanager
+  pg-ds-url: jdbc:postgresql://apicurio-registry-postgresql-mt:5432/fleetmanager
   pg-database-name: fleetmanager

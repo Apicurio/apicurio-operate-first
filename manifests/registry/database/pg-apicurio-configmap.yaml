@@ -5,5 +5,5 @@ metadata:
 data:
   pg-user: apicurio
   pg-pwd: pass
-  pg-ds-url: jdbc:postgresql://apicurio-registry-postgresql:5432/apicurio
+  pg-ds-url: jdbc:postgresql://apicurio-registry-postgresql-mt:5432/apicurio
   pg-database-name: apicurio
