@@ -10,9 +10,7 @@
     - name: LOG_LEVEL
       value: INFO
     - name: QUARKUS_PROFILE
-      value: prod    
-    - name: TENANT_MANAGER_AUTH_ENABLED
-      value: "false"
+      value: prod
     - name: REGISTRY_DATASOURCE_URL
       valueFrom:
         configMapKeyRef:
