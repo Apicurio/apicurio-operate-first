@@ -40,6 +40,8 @@
         value: "8585"
       - name: TENANT_MANAGER_LOG_LEVEL
         value: DEBUG
+      - name: TENANT_MANAGER_AUTH_ENABLED
+        value: false
     resources:
       limits:
         cpu: 400m
