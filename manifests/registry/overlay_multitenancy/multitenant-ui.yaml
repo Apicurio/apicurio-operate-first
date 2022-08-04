@@ -18,13 +18,20 @@ spec:
         - name: apicurio-registry-mt-ui
           image: quay.io/apicurio/apicurio-registry-mt-ui:hackathon
           env:
-            - name: TENANT_MANAGER_API
-              # TODO find away to get this values dynamically, instead of setting this cluster url manually
-              value: https://tenant-manager-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/api/v1
-              # value: http://tenant-manager.127.0.0.1.nip.io/api/v1
-            - name: MT_REGISTRY_APIS
-              value: https://apicurio-envoy-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/t/:tenantId/apis
-              # value: http://apicurio-envoy.127.0.0.1.nip.io/t/:tenantId/apis
+            - name: REGISTRY_UI_URL
+              value: http://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/modules/registry/apicurio_registry.js
+            - name: SRS_API_URL
+              value: https://fleet-manager-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud
+            - name: AUTH_ENABLED
+              value: 
+            - name: KEYCLOAK_REALM
+              value: operate-first-apicurio
+            - name: KEYCLOAK_URL
+              value: https://auth.apicur.io/auth
+            - name: KEYCLOAK_SSL_REQUIRED
+              value: external
+            - name: KEYCLOAK_RESOURCE
+              value: sr-ui
           ports:
             - containerPort: 1337
               protocol: TCP
