@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: apicurio-registry-mt-ui
-          image: quay.io/apicurio/apicurio-registry-mt-ui:latest
+          image: quay.io/apicurio/apicurio-registry-mt-ui:hackathon
           env:
             - name: TENANT_MANAGER_API
               # TODO find away to get this values dynamically, instead of setting this cluster url manually
@@ -26,7 +26,7 @@ spec:
               value: https://apicurio-envoy-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/t/:tenantId/apis
               # value: http://apicurio-envoy.127.0.0.1.nip.io/t/:tenantId/apis
           ports:
-            - containerPort: 8080
+            - containerPort: 1337
               protocol: TCP
           # readinessProbe:
           #   tcpSocket:
@@ -57,9 +57,10 @@ metadata:
   name: apicurio-registry-mt-ui
 spec:
   ports:
-    - port: 8080
+    - name: 1337-https
+      port: 1337
       protocol: TCP
-      targetPort: 8080
+      targetPort: 1337
   selector:
     app: apicurio-registry-mt-ui
   type: ClusterIP
@@ -77,4 +78,8 @@ spec:
     #HEY workaround here!! because of using nameSuffix: -mt
     name: apicurio-registry-mt-ui-mt
     weight: 100
-  wildcardPolicy: None
+    port:
+      targetPort: 1337-https
+    tls:
+      termination: passthrough
+    wildcardPolicy: None
