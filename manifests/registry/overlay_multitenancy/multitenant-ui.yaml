@@ -85,8 +85,8 @@ spec:
     #HEY workaround here!! because of using nameSuffix: -mt
     name: apicurio-registry-mt-ui-mt
     weight: 100
-    port:
-      targetPort: 1337-https
-    tls:
-      termination: passthrough
-    wildcardPolicy: None
+  port:
+    targetPort: 1337
+  tls:
+    termination: passthrough
+  wildcardPolicy: None
