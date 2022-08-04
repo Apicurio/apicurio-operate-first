@@ -19,7 +19,7 @@ spec:
           image: quay.io/apicurio/apicurio-registry-mt-ui:hackathon
           env:
             - name: REGISTRY_UI_URL
-              value: http://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/modules/registry/apicurio_registry.js
+              value: https://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/modules/registry/apicurio_registry.js
             - name: SRS_API_URL
               value: https://fleet-manager-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud
             - name: AUTH_ENABLED
