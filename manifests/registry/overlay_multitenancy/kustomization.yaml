@@ -54,6 +54,12 @@ patchesJson6902:
       kind: ConfigMap
       name: postgresql-tenantmanager-configmap
     path: tenantmanager-cm-suffix-patch.yaml
+  #update database url after using nameSuffix
+  - target:
+      version: v1
+      kind: ConfigMap
+      name: postgresql-fleetmanager-configmap
+    path: fleetmanager-cm-suffix-patch.yaml
 
 images:
 - name: quay.io/apicurio/apicurio-registry-mem
