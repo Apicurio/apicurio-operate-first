@@ -179,4 +179,8 @@ spec:
     #HEY workaround here!! because of using nameSuffix: '-mt' in Kustomize
     name: fleet-manager-mt
     weight: 100
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
+
