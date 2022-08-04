@@ -107,6 +107,30 @@ spec:
               value: '/config/quota-plans.yaml'
             - name: REGISTRY_DEPLOYMENTS_CONFIG_FILE
               value: '/config/registry-deployments.yaml'
+
+            - name: AUTH_ENABLED
+              value: 'true'
+            - name: KEYCLOAK_URL
+              value: 'https://auth.apicur.io/auth'
+            - name: KEYCLOAK_REALM
+              value: 'operate-first-apicurio'
+            - name: KEYCLOAK_API_CLIENT_ID
+              value: 'sr-fleet-manager'
+            - name: TENANT_MANAGER_AUTH_ENABLED
+              value: 'true'
+            - name: TENANT_MANAGER_AUTH_SERVER_URL
+              value: 'https://auth.apicur.io/auth'
+            - name: TENANT_MANAGER_AUTH_SERVER_REALM
+              value: 'operate-first-apicurio'
+            - name: TENANT_MANAGER_AUTH_CLIENT_ID
+              value: 'sr-tenant-manager'
+            - name: TENANT_MANAGER_AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: tenant-manager-auth-secret
+                  key: client_secret
+            - name: ORGANIZATION_ID_CLAIM
+              value: 'organization_id'
             - name: USE_LOCAL_AMS
               value: 'true'
           volumeMounts:

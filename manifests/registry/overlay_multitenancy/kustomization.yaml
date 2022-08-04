@@ -28,13 +28,13 @@ patchesJson6902:
       kind: Deployment
       name: apicurio-registry
     path: apicurio-deployment-patch.yaml
-  #Modifiying apicurio-registry env vars to enable multitenancy and set up access to postgresql db
+  #Modifiying apicurio-registry env vars to enable authentication, multitenancy and set up access to postgresql db
   - target:
       group: apps
       version: v1
       kind: Deployment
       name: apicurio-registry
-    path: enable-multitenancy-patch.yaml
+    path: enable-multitenancy-and-authentication-patch.yaml
   #update route to point to service after using nameSuffix
   - target:
       group: route.openshift.io
