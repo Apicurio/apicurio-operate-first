@@ -35,6 +35,13 @@ patchesJson6902:
       kind: Deployment
       name: apicurio-registry
     path: enable-multitenancy-and-authentication-patch.yaml
+  #Modifiying apicurio-registry env vars to configure authorization
+  #- target:
+  #    group: apps
+  #    version: v1
+  #    kind: Deployment
+  #    name: apicurio-registry
+  #  path: apicurio-registry-authorization-patch.yaml
   #update route to point to service after using nameSuffix
   - target:
       group: route.openshift.io

@@ -52,3 +52,16 @@
         secretKeyRef:
           name: tenant-manager-auth-secret
           key: client_secret
+
+    
+    # configure authorization options
+    - name: REGISTRY_AUTH_RBAC_ENABLED
+      value: "false"
+    - name: REGISTRY_DOWNLOAD_HREF_TTL_DYNAMIC_ALLOW
+      value: "false"
+    - name: REGISTRY_AUTH_OWNER_ONLY_AUTHORIZATION_LIMIT_GROUP_ACCESS_DYNAMIC_ALLOW
+      value: "true"
+    - name: REGISTRY_AUTH_ANONYMOUS_READ_ACCESS_ENABLED_DYNAMIC_ALLOW
+      value: "true"
+    - name: REGISTRY_UI_FEATURES_READONLY_DYNAMIC_ALLOW
+      value: "false"
