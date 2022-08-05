@@ -89,4 +89,5 @@ spec:
     targetPort: 1337
   tls:
     termination: passthrough
+    insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
