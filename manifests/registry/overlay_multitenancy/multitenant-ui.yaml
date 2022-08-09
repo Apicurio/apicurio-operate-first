@@ -14,17 +14,9 @@ spec:
       labels:
         app: apicurio-registry-mt-ui
     spec:
-      volumes:
-        - name: tls-certs
-          secret:
-            secretName: mt-ui-certs
       containers:
         - name: apicurio-registry-mt-ui
-          image: quay.io/apicurio/apicurio-registry-mt-ui:hackathon
-          volumeMounts:
-            - name: tls-certs
-              mountPath: /usr/local/etc/ssl/certs
-              readOnly: true
+          image: quay.io/apicurio/apicurio-registry-mt-ui:latest
           env:
             - name: REGISTRY_UI_URL
               value: https://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/modules/registry/apicurio_registry.js
