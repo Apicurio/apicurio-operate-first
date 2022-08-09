@@ -171,6 +171,8 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: fleet-manager
+  annotations:
+    kubernetes.io/tls-acme: "true"
   labels:
     app: fleet-manager
 spec:

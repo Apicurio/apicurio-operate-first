@@ -3,6 +3,9 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: apicurio-registry
+  # TODO add the annotation as an overlay patch
+  annotations:
+    kubernetes.io/tls-acme: "true"
   labels:
     app: apicurio-registry
     template: apicurio-registry

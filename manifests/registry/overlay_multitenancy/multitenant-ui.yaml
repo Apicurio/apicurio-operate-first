@@ -76,6 +76,8 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: apicurio-registry-mt-ui
+  annotations:
+    kubernetes.io/tls-acme: "true"
   labels:
     app: apicurio-registry-mt-ui
     template: apicurio-registry-mt-ui
