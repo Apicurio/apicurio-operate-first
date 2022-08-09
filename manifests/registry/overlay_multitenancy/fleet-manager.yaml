@@ -54,21 +54,33 @@ data:
 
 ---
 
-apiVersion: apps/v1
-kind: Deployment
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
 metadata:
-  name: fleet-manager
   labels:
     app: fleet-manager
+    component: fleet-manager
+  name: fleet-manager
 spec:
   replicas: 1
   selector:
-    matchLabels:
-      app: fleet-manager
+    component: fleet-manager
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
   template:
     metadata:
       labels:
-        app: fleet-manager
+        component: fleet-manager
+      name: fleet-manager
     spec:
       volumes:
         - name: registry-deployments-config-file
@@ -78,78 +90,86 @@ spec:
           configMap:
             name: registry-quota-plans-config
       containers:
-        - name: fleet-manager
-          image: quay.io/apicurio/apicurio-registry-fleet-manager:latest-snapshot
-          imagePullPolicy: Always
-          ports:
-            - name: web
-              containerPort: 8080
-              protocol: TCP
-          env:
-            - name: SERVICE_API_DATASOURCE_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: postgresql-fleetmanager-configmap
-                  key: pg-ds-url
-            - name: SERVICE_API_DATASOURCE_USERNAME
-              valueFrom:
-                configMapKeyRef:
-                  name: postgresql-fleetmanager-configmap
-                  key: pg-user
-            - name: SERVICE_API_DATASOURCE_PASSWORD
-              valueFrom:
-                configMapKeyRef:
-                  name: postgresql-fleetmanager-configmap
-                  key: pg-pwd
-            - name: REGISTRY_BROWSER_URL
-              value: 'https://apicurio-registry-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/t/TENANT_ID'
-            - name: REGISTRY_QUOTA_PLANS_CONFIG_FILE
-              value: '/config/quota-plans.yaml'
-            - name: REGISTRY_DEPLOYMENTS_CONFIG_FILE
-              value: '/config/registry-deployments.yaml'
+      - image: fleet-manager:latest
+        imagePullPolicy: Always
+        name: fleet-manager
+        ports:
+          - name: web
+            containerPort: 8080
+            protocol: TCP
+        env:
+          - name: SERVICE_API_DATASOURCE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: postgresql-fleetmanager-configmap
+                key: pg-ds-url
+          - name: SERVICE_API_DATASOURCE_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                name: postgresql-fleetmanager-configmap
+                key: pg-user
+          - name: SERVICE_API_DATASOURCE_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: postgresql-fleetmanager-configmap
+                key: pg-pwd
+          - name: REGISTRY_BROWSER_URL
+            value: 'https://apicurio-registry-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/t/TENANT_ID'
+          - name: REGISTRY_QUOTA_PLANS_CONFIG_FILE
+            value: '/config/quota-plans.yaml'
+          - name: REGISTRY_DEPLOYMENTS_CONFIG_FILE
+            value: '/config/registry-deployments.yaml'
 
-            - name: AUTH_ENABLED
-              value: 'true'
-            - name: KEYCLOAK_URL
-              value: 'https://auth.apicur.io/auth'
-            - name: KEYCLOAK_REALM
-              value: 'operate-first-apicurio'
-            - name: KEYCLOAK_API_CLIENT_ID
-              value: 'sr-fleet-manager'
-            - name: TENANT_MANAGER_AUTH_ENABLED
-              value: 'true'
-            - name: TENANT_MANAGER_AUTH_SERVER_URL
-              value: 'https://auth.apicur.io/auth'
-            - name: TENANT_MANAGER_AUTH_SERVER_REALM
-              value: 'operate-first-apicurio'
-            - name: TENANT_MANAGER_AUTH_CLIENT_ID
-              value: 'sr-tenant-manager'
-            - name: TENANT_MANAGER_AUTH_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: tenant-manager-auth-secret
-                  key: client_secret
-            - name: ORGANIZATION_ID_CLAIM
-              value: 'organization_id'
-            - name: USE_LOCAL_AMS
-              value: 'true'
-          volumeMounts:
-            - name: registry-deployments-config-file
-              mountPath: /config/registry-deployments.yaml
-              subPath: registry-deployments.yaml
-            - name: registry-quota-plans-config
-              mountPath: /config/quota-plans.yaml
-              subPath: quota-plans.yaml
-          resources:
-            limits:
-              cpu: 500m
-              memory: 1300Mi
-            requests:
-              cpu: 300m
-              memory: 600Mi
-          terminationMessagePath: /dev/termination-log
-  strategy:
-    type: Recreate
+          - name: AUTH_ENABLED
+            value: 'true'
+          - name: KEYCLOAK_URL
+            value: 'https://auth.apicur.io/auth'
+          - name: KEYCLOAK_REALM
+            value: 'operate-first-apicurio'
+          - name: KEYCLOAK_API_CLIENT_ID
+            value: 'sr-fleet-manager'
+          - name: TENANT_MANAGER_AUTH_ENABLED
+            value: 'true'
+          - name: TENANT_MANAGER_AUTH_SERVER_URL
+            value: 'https://auth.apicur.io/auth'
+          - name: TENANT_MANAGER_AUTH_SERVER_REALM
+            value: 'operate-first-apicurio'
+          - name: TENANT_MANAGER_AUTH_CLIENT_ID
+            value: 'sr-tenant-manager'
+          - name: TENANT_MANAGER_AUTH_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: tenant-manager-auth-secret
+                key: client_secret
+          - name: ORGANIZATION_ID_CLAIM
+            value: 'organization_id'
+          - name: USE_LOCAL_AMS
+            value: 'true'
+        volumeMounts:
+          - name: registry-deployments-config-file
+            mountPath: /config/registry-deployments.yaml
+            subPath: registry-deployments.yaml
+          - name: registry-quota-plans-config
+            mountPath: /config/quota-plans.yaml
+            subPath: quota-plans.yaml
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1300Mi
+          requests:
+            cpu: 300m
+            memory: 600Mi
+        terminationMessagePath: /dev/termination-log
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - fleet-manager
+      from:
+        kind: ImageStreamTag
+        name: fleet-manager-mt:latest
+    type: ImageChange
 
 ---
 apiVersion: v1

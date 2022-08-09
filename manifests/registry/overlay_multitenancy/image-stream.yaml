@@ -1,0 +1,47 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: tenant-manager
+    component: registry
+  name: tenant-manager
+spec:
+  tags:
+  - from:
+      kind: DockerImage
+      name: quay.io/apicurio/apicurio-registry-tenant-manager-api:latest-snapshot
+    importPolicy:
+      scheduled: true
+    name: latest
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: apicurio-registry-mt-ui
+    component: apicurio-registry-mt-ui
+  name: apicurio-registry-mt-ui
+spec:
+  tags:
+  - from:
+      kind: DockerImage
+      name: quay.io/apicurio/apicurio-registry-mt-ui:latest
+    importPolicy:
+      scheduled: true
+    name: latest
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: fleet-manager
+    component: registry
+  name: fleet-manager
+spec:
+  tags:
+  - from:
+      kind: DockerImage
+      name: quay.io/apicurio/apicurio-registry-fleet-manager:latest-snapshot
+    importPolicy:
+      scheduled: true
+    name: latest
