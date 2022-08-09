@@ -1,4 +1,3 @@
 - op: replace
-  path: "/spec/to"
-  value: 
-    name: apicurio-registry-mt
+  path: "/spec/to/name"
+  value: apicurio-registry-mt
