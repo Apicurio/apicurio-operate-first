@@ -24,3 +24,7 @@ spec:
           value: external
         - name: KEYCLOAK_RESOURCE
           value: ad-ui
+        - name: NAV_ENABLED
+          value: "true"
+        - name: NAV_REGISTRY_URL
+          value: https://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/
