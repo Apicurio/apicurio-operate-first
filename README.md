@@ -41,11 +41,11 @@ Apicurio Operate First deployments uses [Argo CD](https://argo-cd.readthedocs.io
 
 - [API Designer ArgoCD Application](https://argocd.operate-first.cloud/applications/api-designer-smaug?resource=)
 
-- [API Designer POC UI](http://api-designer-poc.apps.smaug.na.operate-first.cloud/)
+- [API Designer POC UI](https://api-designer-poc.apps.smaug.na.operate-first.cloud/)
 
-- [ADS UI](http://ads-ui.apps.smaug.na.operate-first.cloud/)
+- [ADS UI](https://ads-ui.apps.smaug.na.operate-first.cloud/)
 
-- [Studio Editors UI](http://studio-editors.apps.smaug.na.operate-first.cloud/?demo)
+- [Studio Editors UI](https://studio-editors.apps.smaug.na.operate-first.cloud/?demo)
 
 # Docs and SOPs
 Please follow the below links for more information on:-
