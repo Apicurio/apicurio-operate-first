@@ -12,6 +12,9 @@ spec:
     kind: Service
     name: apicurio-registry-mem-one
     weight: 100
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
 
 ---
@@ -30,4 +33,7 @@ spec:
     kind: Service
     name: apicurio-registry-mem-two
     weight: 100
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None

@@ -12,4 +12,7 @@ spec:
     kind: Service
     name: ads-ui
     weight: 100
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
