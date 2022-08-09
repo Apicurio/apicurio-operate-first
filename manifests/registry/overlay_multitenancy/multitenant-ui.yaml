@@ -32,6 +32,10 @@ spec:
               value: external
             - name: KEYCLOAK_RESOURCE
               value: sr-ui
+            - name: NAV_ENABLED
+              value: "true"
+            - name: NAV_DESIGNER_URL
+              value: https://api-designer-poc.apps.smaug.na.operate-first.cloud/
           ports:
             - containerPort: 1337
               protocol: TCP
