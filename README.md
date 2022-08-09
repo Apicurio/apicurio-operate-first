@@ -10,6 +10,7 @@ Open Ops means developers and operators collaborating Openly to apply a product'
 
 For More information on operate-first, please visit https://www.operate-first.cloud/
 
+
 # This Repository
 This repository holds the manifests files that are used for deploying the apicurio projects on the operate-first cluster. The manifest files for each project are organized under the manifests folder.
 
