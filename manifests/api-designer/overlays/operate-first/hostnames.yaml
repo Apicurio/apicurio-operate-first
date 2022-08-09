@@ -10,6 +10,8 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
   name: api-designer-poc
 spec:
   host: api-designer-poc.apps.smaug.na.operate-first.cloud
@@ -19,6 +21,8 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
   name: studio-editors
 spec:
   host: studio-editors.apps.smaug.na.operate-first.cloud
@@ -28,6 +32,8 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
   name: apicurio-registry-mem-one
 spec:
   host: apicurio-registry-mem-one.apps.smaug.na.operate-first.cloud
@@ -37,6 +43,8 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
   name: apicurio-registry-mem-two
 spec:
   host: apicurio-registry-mem-two.apps.smaug.na.operate-first.cloud
