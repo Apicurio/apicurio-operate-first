@@ -37,7 +37,7 @@ spec:
             - name: NAV_DESIGNER_URL
               value: https://api-designer-poc.apps.smaug.na.operate-first.cloud/
           ports:
-            - containerPort: 1337
+            - containerPort: 8080
               protocol: TCP
           # readinessProbe:
           #   tcpSocket:
@@ -68,10 +68,10 @@ metadata:
   name: apicurio-registry-mt-ui
 spec:
   ports:
-    - name: 1337-https
-      port: 1337
+    - name: 8080-http
+      port: 8080
       protocol: TCP
-      targetPort: 1337
+      targetPort: 8080
   selector:
     app: apicurio-registry-mt-ui
   type: ClusterIP
@@ -92,8 +92,8 @@ spec:
     name: apicurio-registry-mt-ui-mt
     weight: 100
   port:
-    targetPort: 1337
+    targetPort: 8080
   tls:
-    termination: passthrough
+    termination: edge
     insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
