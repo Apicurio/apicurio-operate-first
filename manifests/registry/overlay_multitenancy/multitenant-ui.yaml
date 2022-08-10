@@ -94,7 +94,7 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    app: apicurio-registry-mt-ui
+    component: apicurio-registry-mt-ui
   type: ClusterIP
 ---
 apiVersion: route.openshift.io/v1
