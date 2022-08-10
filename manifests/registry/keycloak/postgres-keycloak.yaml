@@ -96,8 +96,8 @@ spec:
           timeoutSeconds: 3
         resources:
           limits:
-            cpu: 500m
-            memory: 2000Mi
+            cpu: 300m
+            memory: 1000Mi
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: postgres-keycloak-volume
