@@ -10,8 +10,10 @@ spec:
         failurePolicy: Ignore
         execNewPod:
           containerName: apicurio-registry
-          command: ["/bin/sh","-c"]
-          args: [ "curl -i $GOOGLE_CHAT_WEBHOOK -X POST -H 'Content-Type: application/json' --data '{\"text\":\"\n*Operate First Deployment Alert - Registry*\n\n\"}'" ]
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "curl -i $GOOGLE_CHAT_WEBHOOK -X POST -H 'Content-Type: application/json' --data '{\"text\":\"\n*Operate First Deployment Alert - Registry*\n\n\"}'"
           env: 
             - name: GOOGLE_CHAT_WEBHOOK
               valueFrom:
@@ -30,8 +32,10 @@ spec:
         failurePolicy: Ignore
         execNewPod:
           containerName: fleet-manager
-          command: ["/bin/sh","-c"]
-          args: [ "curl -i $GOOGLE_CHAT_WEBHOOK -X POST -H 'Content-Type: application/json' --data '{\"text\":\"\n*Operate First Deployment Alert - Fleet Manager*\n\n\"}'" ]
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "curl -i $GOOGLE_CHAT_WEBHOOK -X POST -H 'Content-Type: application/json' --data '{\"text\":\"\n*Operate First Deployment Alert - Fleet Manager*\n\n\"}'"
           env: 
             - name: GOOGLE_CHAT_WEBHOOK
               valueFrom:
@@ -50,8 +54,10 @@ spec:
         failurePolicy: Ignore
         execNewPod:
           containerName: apicurio-registry-mt-ui
-          command: ["/bin/sh","-c"]
-          args: [ "curl -i $GOOGLE_CHAT_WEBHOOK -X POST -H 'Content-Type: application/json' --data '{\"text\":\"\n*Operate First Deployment Alert - Registry UI mt*\n\n\"}'" ]
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "curl -i $GOOGLE_CHAT_WEBHOOK -X POST -H 'Content-Type: application/json' --data '{\"text\":\"\n*Operate First Deployment Alert - Registry UI mt*\n\n\"}'"
           env: 
             - name: GOOGLE_CHAT_WEBHOOK
               valueFrom:
