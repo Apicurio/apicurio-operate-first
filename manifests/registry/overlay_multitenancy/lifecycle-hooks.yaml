@@ -16,7 +16,7 @@ spec:
             - name: GOOGLE_CHAT_WEBHOOK
               valueFrom:
                 secretKeyRef:
-                  name: gchat-webhook
+                  name: gchat-webhook-mt
                   key: webhook-url
 ---
 apiVersion: apps.openshift.io/v1
@@ -36,7 +36,7 @@ spec:
             - name: GOOGLE_CHAT_WEBHOOK
               valueFrom:
                 secretKeyRef:
-                  name: gchat-webhook
+                  name: gchat-webhook-mt
                   key: webhook-url
 ---
 apiVersion: apps.openshift.io/v1
@@ -56,5 +56,5 @@ spec:
             - name: GOOGLE_CHAT_WEBHOOK
               valueFrom:
                 secretKeyRef:
-                  name: gchat-webhook
+                  name: gchat-webhook-mt
                   key: webhook-url
