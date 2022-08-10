@@ -2,10 +2,10 @@
   path: "/spec/template/spec/containers/0/resources"
   value:
     limits:
-      cpu: 300m
+      cpu: 500m
       memory: 600Mi
     requests:
-      cpu: 300m
+      cpu: 500m
       memory: 600Mi
 - op: add
   path: "/spec/template/spec/containers/-"
@@ -51,10 +51,10 @@
         value: "sr-tenant-manager"
     resources:
       limits:
-        cpu: 300m
+        cpu: 500m
         memory: 600Mi
       requests:
-        cpu: 300m
+        cpu: 500m
         memory: 600Mi
     livenessProbe:
       httpGet:
