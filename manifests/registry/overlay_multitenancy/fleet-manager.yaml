@@ -114,7 +114,7 @@ spec:
                 name: postgresql-fleetmanager-configmap-mt
                 key: pg-pwd
           - name: REGISTRY_BROWSER_URL
-            value: 'https://apicurio-registry-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/instances/TENANT_ID'
+            value: 'https://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/instances/TENANT_ID'
           - name: REGISTRY_QUOTA_PLANS_CONFIG_FILE
             value: '/config/quota-plans.yaml'
           - name: REGISTRY_DEPLOYMENTS_CONFIG_FILE
