@@ -75,7 +75,7 @@ spec:
       maxUnavailable: 25%
       timeoutSeconds: 600
       updatePeriodSeconds: 1
-    type: Rolling
+    type: Recreate
   template:
     metadata:
       labels:
@@ -101,17 +101,17 @@ spec:
           - name: SERVICE_API_DATASOURCE_URL
             valueFrom:
               configMapKeyRef:
-                name: postgresql-fleetmanager-configmap
+                name: postgresql-fleetmanager-configmap-mt
                 key: pg-ds-url
           - name: SERVICE_API_DATASOURCE_USERNAME
             valueFrom:
               configMapKeyRef:
-                name: postgresql-fleetmanager-configmap
+                name: postgresql-fleetmanager-configmap-mt
                 key: pg-user
           - name: SERVICE_API_DATASOURCE_PASSWORD
             valueFrom:
               configMapKeyRef:
-                name: postgresql-fleetmanager-configmap
+                name: postgresql-fleetmanager-configmap-mt
                 key: pg-pwd
           - name: REGISTRY_BROWSER_URL
             value: 'https://apicurio-registry-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/t/TENANT_ID'
