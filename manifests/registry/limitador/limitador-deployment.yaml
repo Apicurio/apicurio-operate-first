@@ -27,10 +27,10 @@ spec:
               value: "/home/limitador/limits.yaml"
           resources:
             limits:
-              cpu: 300m
+              cpu: 200m
               memory: 500Mi
             requests:
-              cpu: 300m
+              cpu: 200m
               memory: 500Mi
           ports:
             - name: http
