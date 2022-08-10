@@ -15,17 +15,17 @@
     - name: REGISTRY_DATASOURCE_URL
       valueFrom:
         configMapKeyRef:
-          name: postgresql-apicurio-configmap
+          name: postgresql-apicurio-configmap-mt
           key: pg-ds-url
     - name: REGISTRY_DATASOURCE_USERNAME
       valueFrom:
         configMapKeyRef:
-          name: postgresql-apicurio-configmap
+          name: postgresql-apicurio-configmap-mt
           key: pg-user
     - name: REGISTRY_DATASOURCE_PASSWORD
       valueFrom:
         configMapKeyRef:
-          name: postgresql-apicurio-configmap
+          name: postgresql-apicurio-configmap-mt
           key: pg-pwd
 
     # enable authentication
