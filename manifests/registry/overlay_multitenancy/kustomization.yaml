@@ -68,8 +68,10 @@ patchesJson6902:
       kind: ConfigMap
       name: postgresql-fleetmanager-configmap
     path: fleetmanager-cm-suffix-patch.yaml
-
-images:
-- name: quay.io/apicurio/apicurio-registry-mem
-  newName: quay.io/apicurio/apicurio-registry-sql-native
-  newTag: latest-snapshot
+  # update the imagestream registry image
+  - target:
+      group: image.openshift.io
+      version: v1
+      kind: ImageStream
+      name: apicurio-registry
+    path: registry-image-stream-patch.yaml

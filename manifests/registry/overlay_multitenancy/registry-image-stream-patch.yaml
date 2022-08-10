@@ -1,0 +1,3 @@
+- op: replace
+  path: /spec/tags/0/from/name
+  value: quay.io/apicurio/apicurio-registry-sql-native:latest-snapshot
