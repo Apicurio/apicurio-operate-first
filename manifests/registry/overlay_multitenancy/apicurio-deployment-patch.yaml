@@ -2,10 +2,10 @@
   path: "/spec/template/spec/containers/0/resources"
   value:
     limits:
-      cpu: 100m
+      cpu: 300m
       memory: 600Mi
     requests:
-      cpu: 100m
+      cpu: 300m
       memory: 600Mi
 - op: add
   path: "/spec/template/spec/containers/-"
@@ -51,10 +51,10 @@
         value: "sr-tenant-manager"
     resources:
       limits:
-        cpu: 100m
+        cpu: 300m
         memory: 600Mi
       requests:
-        cpu: 100m
+        cpu: 300m
         memory: 600Mi
     livenessProbe:
       httpGet:
@@ -93,10 +93,10 @@
         protocol: TCP
     resources:
       limits:
-        cpu: 100m
+        cpu: 200m
         memory: 300Mi
       requests:
-        cpu: 100m
+        cpu: 200m
         memory: 300Mi
     volumeMounts:
     - name: apicurio-envoy-config
