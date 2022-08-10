@@ -20,17 +20,17 @@
       - name: DATASOURCE_URL
         valueFrom:
           configMapKeyRef:
-            name: postgresql-tenantmanager-configmap
+            name: postgresql-tenantmanager-configmap-mt
             key: pg-ds-url
       - name: DATASOURCE_USERNAME
         valueFrom:
           configMapKeyRef:
-            name: postgresql-tenantmanager-configmap
+            name: postgresql-tenantmanager-configmap-mt
             key: pg-user
       - name: DATASOURCE_PASSWORD
         valueFrom:
           configMapKeyRef:
-            name: postgresql-tenantmanager-configmap
+            name: postgresql-tenantmanager-configmap-mt
             key: pg-pwd
 
       - name: REGISTRY_ROUTE_URL
