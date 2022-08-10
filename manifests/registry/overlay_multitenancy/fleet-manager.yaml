@@ -75,7 +75,7 @@ spec:
       maxUnavailable: 25%
       timeoutSeconds: 600
       updatePeriodSeconds: 1
-    type: Recreate
+    type: Rolling
   template:
     metadata:
       labels:
