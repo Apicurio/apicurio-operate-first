@@ -1,0 +1,60 @@
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: apicurio-registry
+spec:
+  strategy:
+    rollingParams:
+      post:
+        failurePolicy: Ignore
+        execNewPod:
+          containerName: apicurio-registry
+          command: ["/bin/sh","-c"]
+          args: [ "curl -i $GOOGLE_CHAT_WEBHOOK -X POST -H 'Content-Type: application/json' --data '{\"text\":\"\n*Operate First Deployment Alert - Registry*\n\n\"}'" ]
+          env: 
+            - name: GOOGLE_CHAT_WEBHOOK
+              valueFrom:
+                secretKeyRef:
+                  name: gchat-webhook
+                  key: webhook-url
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: fleet-manager
+spec:
+  strategy:
+    rollingParams:
+      post:
+        failurePolicy: Ignore
+        execNewPod:
+          containerName: fleet-manager
+          command: ["/bin/sh","-c"]
+          args: [ "curl -i $GOOGLE_CHAT_WEBHOOK -X POST -H 'Content-Type: application/json' --data '{\"text\":\"\n*Operate First Deployment Alert - Fleet Manager*\n\n\"}'" ]
+          env: 
+            - name: GOOGLE_CHAT_WEBHOOK
+              valueFrom:
+                secretKeyRef:
+                  name: gchat-webhook
+                  key: webhook-url
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: apicurio-registry-mt-ui
+spec:
+  strategy:
+    rollingParams:
+      post:
+        failurePolicy: Ignore
+        execNewPod:
+          containerName: apicurio-registry-mt-ui
+          command: ["/bin/sh","-c"]
+          args: [ "curl -i $GOOGLE_CHAT_WEBHOOK -X POST -H 'Content-Type: application/json' --data '{\"text\":\"\n*Operate First Deployment Alert - Registry UI mt*\n\n\"}'" ]
+          env: 
+            - name: GOOGLE_CHAT_WEBHOOK
+              valueFrom:
+                secretKeyRef:
+                  name: gchat-webhook
+                  key: webhook-url

@@ -8,6 +8,7 @@ bases:
   - ../database
   - ../limitador
 resources:
+  - gchat-secret.yaml
   - image-stream.yaml
   - tenant-manager-service.yaml
   - tenant-manager-route.yaml
@@ -17,6 +18,10 @@ resources:
   - apicurio-envoy-configmap.yaml
   - apicurio-envoy-route.yaml
   - apicurio-envoy-service.yaml
+
+patches:
+  - lifecycle-hooks.yaml
+
 patchesJson6902:
   #several things for the apicurio-registry deployment
   #add tenant-manager sidecar
