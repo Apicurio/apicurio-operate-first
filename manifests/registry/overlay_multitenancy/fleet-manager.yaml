@@ -143,8 +143,8 @@ spec:
                 key: client_secret
           - name: ORGANIZATION_ID_CLAIM
             value: 'organization_id'
-          - name: USE_LOCAL_AMS
-            value: 'true'
+          - name: FM_AMS_LOCAL_MAX_INSTANCES_PER_ORG_ID
+            value: '2'
         volumeMounts:
           - name: registry-deployments-config-file
             mountPath: /config/registry-deployments.yaml
