@@ -184,7 +184,7 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    app: fleet-manager
+    component: fleet-manager
   type: ClusterIP
 ---
 apiVersion: route.openshift.io/v1

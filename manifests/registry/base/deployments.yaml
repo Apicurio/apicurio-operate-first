@@ -3,7 +3,7 @@ kind: DeploymentConfig
 metadata:
   labels:
     app: apicurio-registry
-    component: registry
+    component: apicurio-registry
   name: apicurio-registry
 spec:
   replicas: 1
