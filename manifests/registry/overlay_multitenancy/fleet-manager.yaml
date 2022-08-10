@@ -88,7 +88,7 @@ spec:
             name: registry-deployments-config-file
         - name: registry-quota-plans-config
           configMap:
-            name: registry-quota-plans-config
+            name: registry-quota-plans-config-mt
       containers:
       - image: fleet-manager:latest
         imagePullPolicy: Always
