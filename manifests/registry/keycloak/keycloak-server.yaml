@@ -93,8 +93,8 @@ spec:
           timeoutSeconds: 5
         resources:
           limits:
-            cpu: 500m
-            memory: 2000Mi
+            cpu: 400m
+            memory: 1000Mi
         ports:
         - containerPort: 8080
           name: http
