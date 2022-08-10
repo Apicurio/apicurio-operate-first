@@ -1,0 +1,15 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: apicurio-registry
+    component: registry
+  name: apicurio-registry
+spec:
+  tags:
+  - from:
+      kind: DockerImage
+      name: quay.io/apicurio/apicurio-registry-mem:latest-snapshot
+    importPolicy:
+      scheduled: true
+    name: latest

@@ -3,6 +3,7 @@ kind: Kustomization
 commonLabels:
   app.kubernetes.io/name: apicurio
 resources:
+  - image-stream.yaml
   - deployments.yaml
   - services.yaml
   - routes.yaml

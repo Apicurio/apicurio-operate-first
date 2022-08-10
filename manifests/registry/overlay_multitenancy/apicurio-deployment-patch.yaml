@@ -11,7 +11,7 @@
   path: "/spec/template/spec/containers/-"
   value: 
     name: tenant-manager
-    image: quay.io/apicurio/apicurio-registry-tenant-manager-api:latest-snapshot
+    image: tenant-manager:latest
     imagePullPolicy: Always
     ports:
       - containerPort: 8585
@@ -108,3 +108,23 @@
     - name: apicurio-envoy-config
       configMap:
         name: apicurio-envoy-config
+- op: replace
+  path: /spec/triggers
+  value:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - apicurio-registry
+        from:
+          kind: ImageStreamTag
+          name: apicurio-registry-mt:latest
+      type: ImageChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - tenant-manager
+        from:
+          kind: ImageStreamTag
+          name: tenant-manager-mt:latest
+      type: ImageChange
