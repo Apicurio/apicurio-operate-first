@@ -154,10 +154,10 @@ spec:
             subPath: quota-plans.yaml
         resources:
           limits:
-            cpu: 300m
-            memory: 600Mi
+            cpu: 1000m
+            memory: 1200Mi
           requests:
-            cpu: 300m
+            cpu: 500m
             memory: 600Mi
         terminationMessagePath: /dev/termination-log
   triggers:

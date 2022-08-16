@@ -2,8 +2,8 @@
   path: "/spec/template/spec/containers/0/resources"
   value:
     limits:
-      cpu: 500m
-      memory: 600Mi
+      cpu: 1000m
+      memory: 1200Mi
     requests:
       cpu: 500m
       memory: 600Mi
@@ -51,8 +51,8 @@
         value: "sr-tenant-manager"
     resources:
       limits:
-        cpu: 500m
-        memory: 600Mi
+        cpu: 1000m
+        memory: 1200Mi
       requests:
         cpu: 500m
         memory: 600Mi
@@ -93,8 +93,8 @@
         protocol: TCP
     resources:
       limits:
-        cpu: 200m
-        memory: 300Mi
+        cpu: 500m
+        memory: 600Mi
       requests:
         cpu: 200m
         memory: 300Mi
