@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: backstage-postgresql
+  name: backstage-postgresql
+spec:
+  serviceName: backstage
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backstage-postgresql
+  template:
+    metadata:
+      labels:
+        app: backstage-postgresql
+    spec:
+      containers:
+        - name: backstage-postgresql
+          image: quay.io/centos7/postgresql-12-centos7:1
+          env:
+            - name: POSTGRESQL_ADMIN_PASSWORD
+              value: admin1234
+            - name: CREATE_MULTIPLE_DATABASES
+              value: backstage
+            - name: MULTIPLE_DATABASES_PASSWORD
+              value: pass
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          volumeMounts:
+            - mountPath: /var/lib/pgsql/data
+              name: backstage-postgresql
+            - mountPath: /opt/app-root/src/postgresql-start/
+              name: create-databases-script
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1200Mi
+            requests:
+              cpu: 400m
+              memory: 500Mi
+      volumes:
+        - name: backstage-postgresql
+          persistentVolumeClaim:
+            claimName: backstage-postgresql
+        - name: create-databases-script
+          configMap:
+            name: backstage-db-init-script-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: backstage-postgresql
+  name: backstage-postgresql
+spec:
+  ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    app: backstage-postgresql
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    name: backstage-postgresql
+  name: backstage-postgresql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

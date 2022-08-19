@@ -1,0 +1,64 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: backstage
+  name: backstage
+spec:
+  replicas: 1
+  selector:
+    app: backstage
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        app: backstage
+      name: backstage
+    spec:
+      containers:
+      - name: backstage
+        image: backstage:latest
+        imagePullPolicy: Always
+        env:
+          - name: POSTGRES_HOST
+            value: "backstage-postgresql"
+          - name: POSTGRES_PORT
+            value: "5432"
+          - name: POSTGRES_USER
+            value: "backstage"
+          - name: POSTGRES_PASSWORD
+            value: "pass"
+          - name: APP_CONFIG_backend_baseUrl
+            value: "https://backstage-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud"
+          - name: APP_CONFIG_app_baseUrl
+            value: "https://backstage-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud"
+        ports:
+          - name: 'app'
+            containerPort: 7007
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1000Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        terminationMessagePath: /dev/termination-log
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - backstage
+      from:
+        kind: ImageStreamTag
+        name: backstage:latest
+    type: ImageChange
