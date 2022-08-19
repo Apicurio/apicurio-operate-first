@@ -1,0 +1,14 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: backstage
+  name: backstage
+spec:
+  tags:
+  - from:
+      kind: DockerImage
+      name: quay.io/aperuffo/backstage-demo:latest
+    importPolicy:
+      scheduled: true
+    name: latest
