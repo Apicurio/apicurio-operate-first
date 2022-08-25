@@ -23,14 +23,14 @@ metadata:
     app: fleet-manager
 data:
   quota-plans.yaml: |-
-    reconcile: false # Enable this if you make changes to the plans configuration
+    reconcile: true # Enable this if you make changes to the plans configuration
     plans:
       - name: default
         resources:
           - type: MAX_TOTAL_SCHEMAS_COUNT
             limit: 1000
           - type: MAX_SCHEMA_SIZE_BYTES
-            limit: 65536 # 64 KiB
+            limit: 1000000 # 1Mb
           - type: MAX_ARTIFACTS_COUNT
             limit: -1
           - type: MAX_VERSIONS_PER_ARTIFACT_COUNT
