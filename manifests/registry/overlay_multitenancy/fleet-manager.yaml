@@ -23,7 +23,7 @@ metadata:
     app: fleet-manager
 data:
   quota-plans.yaml: |-
-    reconcile: false # Enable this if you make changes to the plans configuration
+    reconcile: true # Enable this if you make changes to the plans configuration
     plans:
       - name: default
         resources:
