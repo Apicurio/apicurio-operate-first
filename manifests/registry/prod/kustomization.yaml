@@ -5,5 +5,8 @@ bases:
   # - ../base
   # multitenancy deployment
   # - ../keycloak
+  # Disable fake continuous delivery
+  #- ../mt_continuous_delivery
   - ../overlay_multitenancy
-  - ../mt_continuous_delivery
+  - ../backstage
+  
