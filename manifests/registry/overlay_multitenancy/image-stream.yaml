@@ -9,7 +9,7 @@ spec:
   tags:
   - from:
       kind: DockerImage
-      name: quay.io/apicurio/apicurio-registry-tenant-manager-api:latest-snapshot
+      name: quay.io/apicurio/apicurio-tenant-manager-api:latest-snapshot
     importPolicy:
       scheduled: true
     name: latest
