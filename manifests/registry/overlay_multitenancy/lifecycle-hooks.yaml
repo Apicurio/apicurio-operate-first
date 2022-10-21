@@ -18,7 +18,8 @@ spec:
             - name: GOOGLE_CHAT_WEBHOOK
               valueFrom:
                 secretKeyRef:
-                  name: gchat-webhook-mt
+                  # The secret is created transitively via ExternalSecret CR and therefore doesn't get the 'mt' suffix
+                  name: gchat-webhook
                   key: webhook-url
 ---
 apiVersion: apps.openshift.io/v1
@@ -40,7 +41,8 @@ spec:
             - name: GOOGLE_CHAT_WEBHOOK
               valueFrom:
                 secretKeyRef:
-                  name: gchat-webhook-mt
+                  # The secret is created transitively via ExternalSecret CR and therefore doesn't get the 'mt' suffix
+                  name: gchat-webhook
                   key: webhook-url
 ---
 apiVersion: apps.openshift.io/v1
@@ -62,5 +64,6 @@ spec:
             - name: GOOGLE_CHAT_WEBHOOK
               valueFrom:
                 secretKeyRef:
-                  name: gchat-webhook-mt
+                  # The secret is created transitively via ExternalSecret CR and therefore doesn't get the 'mt' suffix
+                  name: gchat-webhook
                   key: webhook-url
