@@ -15,15 +15,10 @@ spec:
           restartPolicy: Never
           containers:
             - name: kubectl
-              image: quay.io/bitnami/kubectl:1.20
-              env:
-                - name: REGISTRY_DEPLOYMENT_NAME
-                  value: apicurio-registry-mt
-                - name: UI_DEPLOYMENT_NAME
-                  value: apicurio-registry-mt-ui-mt
+              image: docker.io/bitnami/kubectl:1.25
               command:
                 - bash
                 - -c
                 - >-
                   kubectl delete rc --field-selector=status.replicas==0 &&
-                  kubectl delete pod --field-selector=status.phase==Succeeded
+                  kubectl delete pod --field-selector=status.phase==Succeeded --field-selector=status.phase==Failed
