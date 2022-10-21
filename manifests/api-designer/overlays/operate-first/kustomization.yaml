@@ -6,7 +6,7 @@ bases:
   - ../../base/studio-editors
 
 resources:
-  - secret.yaml
+  - external-secret.yaml
 
 patches:
   - lifecycle-hooks.yaml
