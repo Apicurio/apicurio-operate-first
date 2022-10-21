@@ -1,0 +1,26 @@
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: housekeeper
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: housekeeper
+rules:
+  - apiGroups: [""] # "" indicates the core API group
+    resources: ["pods", "replicationcontrollers"]
+    verbs: ["delete", "deletecollection"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: housekeeper
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: housekeeper
+subjects:
+  - kind: ServiceAccount
+    name: housekeeper

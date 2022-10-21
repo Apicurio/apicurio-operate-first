@@ -1,0 +1,29 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: housekeeping
+spec:
+  concurrencyPolicy: Forbid
+  schedule: '0 0 * * *'
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 600 # timeout                                
+      template:
+        spec:
+          serviceAccountName: housekeeper
+          restartPolicy: Never
+          containers:
+            - name: kubectl
+              image: quay.io/bitnami/kubectl:1.20
+              env:
+                - name: REGISTRY_DEPLOYMENT_NAME
+                  value: apicurio-registry-mt
+                - name: UI_DEPLOYMENT_NAME
+                  value: apicurio-registry-mt-ui-mt
+              command:
+                - bash
+                - -c
+                - >-
+                  kubectl delete rc --field-selector=status.replicas==0 &&
+                  kubectl delete pod --field-selector=status.phase==Succeeded

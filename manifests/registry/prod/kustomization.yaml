@@ -9,4 +9,5 @@ bases:
   #- ../mt_continuous_delivery
   - ../overlay_multitenancy
   - ../backstage
+  - ../housekeeping
   
