@@ -8,7 +8,7 @@ bases:
   - ../database
   - ../limitador
 resources:
-  - external-secret.yaml
+  - external-secrets.yaml
   - image-stream.yaml
   - tenant-manager-service.yaml
   - tenant-manager-route.yaml
