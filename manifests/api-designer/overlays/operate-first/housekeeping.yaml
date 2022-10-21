@@ -1,0 +1,57 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: housekeeper
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: housekeeper
+rules:
+  - apiGroups: [""] # "" indicates the core API group
+    resources: ["pods", "replicationcontrollers"]
+    verbs: ["delete", "deletecollection", "get", "list"]
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: housekeeper
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: housekeeper
+subjects:
+  - kind: ServiceAccount
+    name: housekeeper
+
+---
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: housekeeping
+spec:
+  concurrencyPolicy: Forbid
+  schedule: '0 0 * * *'
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 600 # timeout                                
+      template:
+        spec:
+          serviceAccountName: housekeeper
+          restartPolicy: Never
+          containers:
+            - name: kubectl
+              image: docker.io/bitnami/kubectl:1.25
+              command:
+                - bash
+                - -c
+                - >-
+                  kubectl delete rc --field-selector=status.replicas==0 &&
+                  kubectl delete pod --field-selector=status.phase==Succeeded --field-selector=status.phase==Failed
+                  
