@@ -8,7 +8,7 @@ bases:
   - ../database
   - ../limitador
 resources:
-  - gchat-secret.yaml
+  - external-secret.yaml
   - image-stream.yaml
   - tenant-manager-service.yaml
   - tenant-manager-route.yaml
