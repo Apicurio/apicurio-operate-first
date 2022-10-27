@@ -53,5 +53,5 @@ spec:
                 - -c
                 - >-
                   kubectl delete rc --field-selector=status.replicas==0 &&
-                  kubectl delete pod --field-selector=status.phase==Succeeded --field-selector=status.phase==Failed
-                  
+                  kubectl delete pod --field-selector=status.phase==Succeeded &&
+                  kubectl delete pod --field-selector=status.phase==Failed
