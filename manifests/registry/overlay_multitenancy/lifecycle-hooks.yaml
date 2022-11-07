@@ -13,7 +13,7 @@ spec:
           command:
             - "/bin/sh"
             - "-c"
-            - "curl -i $GOOGLE_CHAT_WEBHOOK -X POST -H 'Content-Type: application/json' --data '{\"text\":\"\n*Operate First Deployment Alert - Registry*\n\n\"}'"
+            - "echo '{\"text\":\"\n*Operate First Deployment Alert - Registry*\n\n' > data.json && cat /work/meta/git.properties >> data.json && echo '\"}' >> data.json && curl -i $GOOGLE_CHAT_WEBHOOK -X POST -H 'Content-Type: application/json' --data-binary '@data.json'"
           env: 
             - name: GOOGLE_CHAT_WEBHOOK
               valueFrom:
