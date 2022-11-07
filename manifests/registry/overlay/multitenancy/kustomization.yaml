@@ -4,9 +4,12 @@ kind: Kustomization
 nameSuffix: -mt
 
 bases:
-  - ../base
-  - ../database
-  - ../limitador
+  - ../../base
+
+components:
+  - ../../component/database
+  - ../../component/limitador
+
 resources:
   - external-secrets.yaml
   - image-stream.yaml
