@@ -8,6 +8,8 @@
       value: INFO
     - name: QUARKUS_PROFILE
       value: prod
+    - name: REGISTRY_CONFIG_CACHE_ENABLED
+      value: "true"
 
     # enable multitenancy
     - name: REGISTRY_ENABLE_MULTITENANCY

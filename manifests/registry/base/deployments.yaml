@@ -44,6 +44,8 @@ spec:
             value: DEBUG
           - name: QUARKUS_PROFILE
             value: prod
+          - name: REGISTRY_CONFIG_CACHE_ENABLED
+            value: "true"
         resources:
           limits:
             cpu: 300m
