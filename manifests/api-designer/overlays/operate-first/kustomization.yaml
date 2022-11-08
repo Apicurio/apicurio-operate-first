@@ -7,7 +7,7 @@ bases:
 
 resources:
   - external-secret.yaml
-  - housekeeping.yaml
+#  - housekeeping.yaml
 
 patches:
   - lifecycle-hooks.yaml
