@@ -1,0 +1,46 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: registry-e2e
+spec:
+  steps:
+    - name: playwright
+      # https://github.com/nodejs/docker-node/issues/1734#issuecomment-1274343563
+      # this ships with node 16.14
+      image: mcr.microsoft.com/playwright:v1.20.0-focal
+      env:
+        - name: TEST_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: e2e-registry-secret
+              key: username
+        - name: TEST_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: e2e-registry-secret
+              key: password
+      script: |
+        #!/bin/sh
+        git clone https://github.com/Apicurio/apicurio-registry-e2e-operate-first.git
+        cd apicurio-registry-e2e-operate-first
+        npm ci
+        npx playwright install
+        npx playwright test --project chromium
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: registry-e2e-pipeline
+spec:
+  tasks:
+    - name: registry-e2e
+      taskRef:
+        name: registry-e2e
+---
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: registry-e2e-pipeline-run
+spec:
+  pipelineRef:
+    name: registry-e2e-pipeline
