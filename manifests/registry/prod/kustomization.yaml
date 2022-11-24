@@ -10,4 +10,4 @@ bases:
   - ../overlay_multitenancy
   - ../backstage
  # - ../housekeeping
-  
+  - ../tekton-e2e
