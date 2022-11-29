@@ -6,4 +6,5 @@ resources:
 
 components:
   - ../../component/backstage
-  - ../../component/housekeeping
+  - ../../component/tekton-pipelines
+  #- ../../component/housekeeping
