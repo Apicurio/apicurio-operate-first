@@ -8,3 +8,4 @@ components:
   - ../../component/backstage
   - ../../component/tekton-pipelines
   #- ../../component/housekeeping
+  - ../../component/application-services-ui
