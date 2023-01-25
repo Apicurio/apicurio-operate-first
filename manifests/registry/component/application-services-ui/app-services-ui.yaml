@@ -1,0 +1,295 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: env-stage-sso
+  labels:
+    frontend: notifications
+    frontendenv: env-stage
+data:
+  sso-url.js: >-
+    "use
+    strict";(self.webpackChunkinsights_chrome=self.webpackChunkinsights_chrome||[]).push([[172],{30701:(s,e,h)=>{h.r(e),h.d(e,{default:()=>c});const
+    c="https://sso.stage.redhat.com/auth/"}}]);
+
+
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: env-stage
+  labels:
+    frontendenv: env-stage
+data:
+  user-preferences-navigation.json: >-
+    {"id":"user-preferences","title":"User
+    Preferences","navItems":[{"title":"Email
+    Preferences","appId":"userPreferences","href":"/user-preferences/email"},{"title":"Notifications","routes":[{"title":"Application
+    Services","appId":"userPreferences","href":"/user-preferences/notifications/application-services"},{"title":"Openshift","appId":"userPreferences","href":"/user-preferences/notifications/openshift"},{"title":"Red
+    Hat Enterprise
+    Linux","appId":"userPreferences","href":"/user-preferences/notifications/rhel"},{"title":"Edge","appId":"userPreferences","href":"/user-preferences/notifications/edge"},{"title":"Console","appId":"userPreferences","href":"/user-preferences/notifications/console"}],"expandable":true}]}
+  landing-navigation.json: >-
+    [{"title":"OpenShift","appId":"openshift","href":"/openshift"},{"title":"Red
+    Hat Enterprise Linux","routes":[{"title":"Red Hat
+    Insights","appId":"dashboard","href":"/insights/dashboard"},{"title":"Edge
+    Management","appId":"edge","href":"/edge"}],"expandable":true},{"title":"Ansible
+    Automation Platform","appId":"ansible","href":"/ansible/ansible-dashboard"}]
+  openshift-navigation.json: >-
+    {"id":"openshift","title":"OpenShift","navItems":[{"title":"Subscriptions","routes":[{"title":"All
+    RHEL","appId":"subscriptions","href":"/insights/subscriptions/rhel","product":"Subscription
+    Watch"},{"title":"ARM","appId":"subscriptions","href":"/insights/subscriptions/rhel-arm","product":"Subscription
+    Watch"},{"title":"IBM
+    Power","appId":"subscriptions","href":"/insights/subscriptions/rhel-ibmpower","product":"Subscription
+    Watch"},{"title":"IBM Z
+    systems","appId":"subscriptions","href":"/insights/subscriptions/rhel-ibmz","product":"Subscription
+    Watch"},{"title":"X86","appId":"subscriptions","href":"/insights/subscriptions/rhel-x86","product":"Subscription
+    Watch"},{"title":"OpenShift
+    Subscriptions","appId":"subscriptions","href":"/openshift/subscriptions/openshift-container","product":"Subscription
+    Watch"},{"title":"Dedicated
+    (On-Demand)","appId":"subscriptions","href":"/openshift/subscriptions/openshift-dedicated","product":"Subscription
+    Watch"},{"title":"Streams for Apache
+    Kafka","appId":"subscriptions","href":"/application-services/subscriptions/streams","product":"Subscription
+    Watch"}],"expandable":true},{"title":"Cost
+    Management","routes":[{"title":"Overview","appId":"cost-management","href":"/openshift/cost-management"},{"title":"OpenShift","appId":"cost-management","href":"/openshift/cost-management/ocp"},{"title":"Amazon
+    Web
+    Services","appId":"cost-management","href":"/openshift/cost-management/aws"},{"title":"Google
+    Cloud
+    Platform","appId":"cost-management","href":"/openshift/cost-management/gcp"},{"title":"IBM
+    Cloud","appId":"cost-management","href":"/openshift/cost-management/ibm"},{"title":"Microsoft
+    Azure","appId":"cost-management","href":"/openshift/cost-management/azure"},{"title":"Oracle
+    Cloud
+    Infrastructure","appId":"cost-management","href":"/openshift/cost-management/oci"},{"title":"Cost
+    models","appId":"cost-management","href":"/openshift/cost-management/cost-models"},{"title":"Cost
+    Explorer","appId":"cost-management","href":"/openshift/cost-management/explorer"}],"expandable":true},{"title":"Advisor","routes":[{"title":"Recommendations","appId":"ocpAdvisor","href":"/openshift/insights/advisor/recommendations","product":"Red
+    Hat OpenShift Cluster
+    Manager"},{"title":"Clusters","appId":"ocpAdvisor","href":"/openshift/insights/advisor/clusters","product":"Red
+    Hat OpenShift Cluster Manager"}],"expandable":true}]}
+  ansible-navigation.json: >-
+    {"id":"ansible","title":"Ansible Automation
+    Platform","navItems":[{"title":"Reports","appId":"automationAnalytics","href":"/ansible/automation-analytics/reports","product":"Red
+    Hat Insights"},{"title":"Savings
+    Planner","appId":"automationAnalytics","href":"/ansible/automation-analytics/savings-planner","product":"Red
+    Hat Insights"},{"title":"Automation
+    Calculator","appId":"automationAnalytics","href":"/ansible/automation-analytics/automation_calculator","product":"Red
+    Hat Insights"},{"title":"Organization
+    Statistics","appId":"automationAnalytics","href":"/ansible/automation-analytics/organization-statistics","product":"Red
+    Hat Insights"},{"title":"Job
+    Explorer","appId":"automationAnalytics","href":"/ansible/automation-analytics/job-explorer","product":"Red
+    Hat
+    Insights"},{"title":"Clusters","appId":"automationAnalytics","href":"/ansible/automation-analytics/clusters","product":"Red
+    Hat
+    Insights"},{"title":"Notifications","appId":"automationAnalytics","href":"/ansible/automation-analytics/notifications","product":"Red
+    Hat Insights"},{"title":"Beta
+    Reports","appId":"automationAnalytics","href":"/beta/ansible/automation-analytics/reports","product":"Red
+    Hat Insights"},{"title":"Beta Savings
+    Planner","appId":"automationAnalytics","href":"/beta/ansible/automation-analytics/savings-planner","product":"Red
+    Hat Insights"},{"title":"Beta Automation
+    Calculator","appId":"automationAnalytics","href":"/beta/ansible/automation-analytics/automation_calculator","product":"Red
+    Hat Insights"},{"title":"Beta Organization
+    Statistics","appId":"automationAnalytics","href":"/beta/ansible/automation-analytics/organization-statistics","product":"Red
+    Hat Insights"},{"title":"Beta Job
+    Explorer","appId":"automationAnalytics","href":"/beta/ansible/automation-analytics/job-explorer","product":"Red
+    Hat Insights"},{"title":"Beta
+    Clusters","appId":"automationAnalytics","href":"/beta/ansible/automation-analytics/clusters","product":"Red
+    Hat Insights"},{"title":"Beta
+    Notifications","appId":"automationAnalytics","href":"/beta/ansible/automation-analytics/notifications","product":"Red
+    Hat
+    Insights"},{"title":"Collections","appId":"automationHub","href":"/ansible/automation-hub","product":"Ansible
+    Automation
+    Hub"},{"title":"Partners","appId":"automationHub","href":"/ansible/automation-hub/partners","product":"Ansible
+    Automation Hub"},{"title":"Repo
+    Management","appId":"automationHub","href":"/ansible/automation-hub/repositories","product":"Ansible
+    Automation Hub"},{"title":"Task
+    Management","appId":"automationHub","href":"/ansible/automation-hub/tasks","product":"Ansible
+    Automation Hub"},{"title":"Connect to
+    Hub","appId":"automationHub","href":"/ansible/automation-hub/token","product":"Ansible
+    Automation Hub"}]}
+  insights-navigation.json: >-
+    {"id":"rhel","title":"Red Hat
+    Insights","navItems":[{"title":"Compliance","routes":[{"title":"Reports","appId":"compliance","href":"/insights/compliance/reports","product":"Red
+    Hat Insights"},{"title":"SCAP
+    Policies","appId":"compliance","href":"/insights/compliance/scappolicies","product":"Red
+    Hat
+    Insights"},{"title":"Systems","appId":"compliance","href":"/insights/compliance/systems","product":"Red
+    Hat
+    Insights"}],"expandable":true},{"title":"Inventory","appId":"inventory","href":"/insights/inventory","product":"Red
+    Hat
+    Insights"},{"title":"Advisor","routes":[{"title":"Recommendations","appId":"advisor","href":"/insights/advisor/recommendations","product":"Red
+    Hat
+    Insights"},{"title":"Systems","appId":"advisor","href":"/insights/advisor/systems","product":"Red
+    Hat
+    Insights"},{"title":"Topics","appId":"advisor","href":"/insights/advisor/topics","product":"Red
+    Hat
+    Insights"}],"expandable":true},{"title":"Policies","appId":"policies","href":"/insights/policies"},{"title":"Resource
+    Optimization","appId":"ros","href":"/insights/ros","product":"Red Hat
+    Insights"},{"title":"Remediations","appId":"remediations","href":"/insights/remediations","product":"Red
+    Hat
+    Insights"},{"title":"Provisioning","appId":"provisioning","href":"/insights/provisioning","product":"Provisioning"},{"title":"Drift","routes":[{"title":"Comparison","appId":"drift","href":"/insights/drift/","product":"Red
+    Hat
+    Insights"},{"title":"Baselines","appId":"drift","href":"/insights/drift/baselines","product":"Red
+    Hat Insights"}],"expandable":true},{"title":"Subscription
+    Inventory","appId":"subscriptionInventory","href":"/insights/subscriptions/inventory","product":"Subscription
+    Watch"},{"title":"Subscriptions","routes":[{"title":"All
+    RHEL","appId":"subscriptions","href":"/insights/subscriptions/rhel","product":"Subscription
+    Watch"},{"title":"ARM","appId":"subscriptions","href":"/insights/subscriptions/rhel-arm","product":"Subscription
+    Watch"},{"title":"IBM
+    Power","appId":"subscriptions","href":"/insights/subscriptions/rhel-ibmpower","product":"Subscription
+    Watch"},{"title":"IBM Z
+    systems","appId":"subscriptions","href":"/insights/subscriptions/rhel-ibmz","product":"Subscription
+    Watch"},{"title":"X86","appId":"subscriptions","href":"/insights/subscriptions/rhel-x86","product":"Subscription
+    Watch"},{"title":"OpenShift
+    Subscriptions","appId":"subscriptions","href":"/openshift/subscriptions/openshift-container","product":"Subscription
+    Watch"},{"title":"Dedicated
+    (On-Demand)","appId":"subscriptions","href":"/openshift/subscriptions/openshift-dedicated","product":"Subscription
+    Watch"},{"title":"Streams for Apache
+    Kafka","appId":"subscriptions","href":"/application-services/subscriptions/streams","product":"Subscription
+    Watch"}],"expandable":true},{"title":"Manifests","appId":"manifests","href":"/insights/subscriptions/manifests","product":"Subscription
+    Watch"},{"title":"Policies","appId":"policies","href":"/insights/policies"},{"title":"Hybrid
+    Committed
+    Spend","routes":[{"title":"Overview","appId":"hcs","href":"/business-services/hybrid-committed-spend"},{"title":"Details","appId":"hybrid-committed-spend","href":"/business-services/hybrid-committed-spend/details"}],"expandable":true}]}
+  application-services-navigation.json: >-
+    {"id":"application-services","title":"Application and Data
+    Services","navItems":[{"title":"Subscriptions","routes":[{"title":"All
+    RHEL","appId":"subscriptions","href":"/insights/subscriptions/rhel","product":"Subscription
+    Watch"},{"title":"ARM","appId":"subscriptions","href":"/insights/subscriptions/rhel-arm","product":"Subscription
+    Watch"},{"title":"IBM
+    Power","appId":"subscriptions","href":"/insights/subscriptions/rhel-ibmpower","product":"Subscription
+    Watch"},{"title":"IBM Z
+    systems","appId":"subscriptions","href":"/insights/subscriptions/rhel-ibmz","product":"Subscription
+    Watch"},{"title":"X86","appId":"subscriptions","href":"/insights/subscriptions/rhel-x86","product":"Subscription
+    Watch"},{"title":"OpenShift
+    Subscriptions","appId":"subscriptions","href":"/openshift/subscriptions/openshift-container","product":"Subscription
+    Watch"},{"title":"Dedicated
+    (On-Demand)","appId":"subscriptions","href":"/openshift/subscriptions/openshift-dedicated","product":"Subscription
+    Watch"},{"title":"Streams for Apache
+    Kafka","appId":"subscriptions","href":"/application-services/subscriptions/streams","product":"Subscription
+    Watch"}],"expandable":true},{"title":"Overview","appId":"applicationServices","href":"/application-services/overview"},{"title":"Learning
+    Resources","appId":"applicationServices","href":"/application-services/learning-resources"}]}
+  edge-navigation.json: >-
+    {"id":"edge","title":"Edge
+    Management","navItems":[{"title":"Inventory","permissions":[{"method":"withEmail","args":["@redhat.com","@sbb.ch"]}],"routes":[{"title":"Groups","appId":"edge","href":"/edge/fleet-management"},{"title":"Systems","appId":"edge","href":"/edge/inventory"}],"expandable":true}]}
+  fed-modules.json: >-
+    {"advisor":{"manifestLocation":"/apps/advisor/fed-mods.json","modules":[{"id":"advisor","module":"./RootApp","routes":[{"pathname":"/insights/advisor"},{"pathname":"/ansible/advisor"}]}]},"apiDocs":{"manifestLocation":"/apps/api-docs/fed-mods.json","modules":[{"id":"api-docs","module":"./RootApp","routes":[{"pathname":"/docs/api"},{"pathname":"/docs"}]}],"moduleID":"apiDocs"},"applicationServices":{"manifestLocation":"/apps/application-services/fed-mods.json","modules":[{"id":"application-services","module":"./RootApp","routes":[{"pathname":"/application-services"}]}],"moduleID":"applicationServices"},"automationAnalytics":{"manifestLocation":"/apps/automation-analytics/fed-mods.json","modules":[{"id":"automationAnalytics","module":"./RootApp","routes":[{"pathname":"/ansible/automation-analytics"},{"pathname":"/beta/ansible/automation-analytics"}]}],"moduleID":"automationAnalytics"},"automationHub":{"manifestLocation":"/apps/automation-hub/fed-mods.json","modules":[{"id":"ansible-automation-hub","module":"./RootApp","routes":[{"pathname":"/ansible/automation-hub"}]}]},"chrome":{"manifestLocation":"/apps/chrome/js/fed-mods.json","config":{"ssoUrl":"https://sso.stage.redhat.com/auth/"}},"compliance":{"manifestLocation":"/apps/compliance/fed-mods.json","modules":[{"id":"compliance","module":"./RootApp","routes":[{"pathname":"/insights/compliance"}]}]},"connector":{"manifestLocation":"/apps/connector/fed-mods.json","modules":[{"id":"connector","module":"./RootApp","routes":[{"pathname":"/settings/connector"}]}],"moduleID":"connector"},"contentSources":{"manifestLocation":"/apps/content-sources/fed-mods.json","modules":[{"id":"content-sources","module":"./RootApp","routes":[{"pathname":"/insights/content"},{"pathname":"/settings/content"}]}]},"costManagement":{"manifestLocation":"/apps/cost-management/fed-mods.json","modules":[{"id":"cost-management","module":"./RootApp","routes":[{"pathname":"/openshift/cost-management"}]}]},"dashboard":{"manifestLocation":"/apps/dashboard/fed-mods.json","modules":[{"id":"dashboard","module":"./RootApp","routes":[{"pathname":"/insights/dashboard"}]}]},"drift":{"manifestLocation":"/apps/drift/fed-mods.json","modules":[{"id":"drift","module":"./RootApp","routes":[{"pathname":"/insights/drift"},{"pathname":"/ansible/drift"}]}],"moduleID":"drift"},"edge":{"manifestLocation":"/apps/edge/fed-mods.json","modules":[{"id":"edge","module":"./RootApp","routes":[{"pathname":"/edge"}]}],"moduleID":"edge"},"hybridCommittedSpend":{"manifestLocation":"/apps/hybrid-committed-spend/fed-mods.json","modules":[{"id":"hybrid-committed-spend","module":"./RootApp","routes":[{"pathname":"/business-services/hybrid-committed-spend"}]}]},"inventory":{"manifestLocation":"/apps/inventory/fed-mods.json","modules":[{"id":"inventory","module":"./RootApp","routes":[{"pathname":"/insights/inventory"}]}]},"landing":{"manifestLocation":"/apps/landing/fed-mods.json","modules":[{"id":"landing","module":"./RootApp","routes":[{"pathname":"/","exact":true}]}]},"manifests":{"manifestLocation":"/apps/manifests/fed-mods.json","modules":[{"id":"manifests","module":"./RootApp","routes":[{"pathname":"/insights/subscriptions/manifests"}]}]},"notifications":{"manifestLocation":"/apps/notifications/fed-mods.json","modules":[{"id":"notifications","module":"./RootApp","routes":[{"pathname":"/settings/notifications"}]},{"id":"integrations","module":"./RootApp","routes":[{"pathname":"/settings/integrations"}]}]},"ocpAdvisor":{"manifestLocation":"/apps/ocp-advisor/fed-mods.json","modules":[{"id":"ocp-advisor","module":"./RootApp","routes":[{"pathname":"/openshift/insights/advisor"}]}],"moduleID":"ocpAdvisor"},"policies":{"manifestLocation":"/apps/policies/fed-mods.json","modules":[{"id":"policies","module":"./RootApp","routes":[{"pathname":"/insights/policies"},{"pathname":"/ansible/policies"}]}],"moduleID":"policies"},"provisioning":{"manifestLocation":"/apps/provisioning/fed-mods.json","modules":[{"id":"provisioning","module":"./RootApp","routes":[{"pathname":"/insights/provisioning"}]}]},"rbac":{"manifestLocation":"/apps/rbac/fed-mods.json","modules":[{"id":"my-user-access","module":"./RootApp","routes":[{"pathname":"/settings"},{"pathname":"/settings/my-user-access"}]},{"id":"user-access","module":"./RootApp","routes":[{"pathname":"/settings/rbac"}]}]},"remediations":{"manifestLocation":"/apps/remediations/fed-mods.json","modules":[{"id":"remediations","module":"./RootApp","routes":[{"pathname":"/insights/remediations"}]}]},"ros":{"manifestLocation":"/apps/ros/fed-mods.json","modules":[{"id":"ros","module":"./RootApp","routes":[{"pathname":"/insights/ros"}]}]},"sources":{"manifestLocation":"/apps/sources/fed-mods.json","modules":[{"id":"sources","module":"./RootApp","routes":[{"pathname":"/settings/sources"}]}]},"subscriptionInventory":{"manifestLocation":"/apps/subscription-inventory/fed-mods.json","modules":[{"id":"subscription-inventory","module":"./RootApp","routes":[{"pathname":"/insights/subscriptions/inventory"}]}]},"subscriptions":{"manifestLocation":"/apps/subscriptions/fed-mods.json","modules":[{"id":"application-services-subscriptions","module":"./RootApp","routes":[{"pathname":"/application-services/subscriptions"}]},{"id":"insights-subscriptions","module":"./RootApp","routes":[{"pathname":"/insights/subscriptions"}]},{"id":"openshift-subscriptions","module":"./RootApp","routes":[{"pathname":"/openshift/subscriptions"}]}]},"userPreferences":{"manifestLocation":"/apps/user-preferences/fed-mods.json","modules":[{"id":"user-preferences-email","module":"./RootApp","routes":[{"pathname":"/user-preferences"},{"pathname":"/user-preferences/email"}]},{"id":"user-preferences-notifications","module":"./RootApp","routes":[{"pathname":"/user-preferences/notifications"}]}]}}
+  settings-navigation.json: >-
+    {"id":"settings","title":"Settings","navItems":[{"title":"My User
+    Access","appId":"rbac","href":"/settings/my-user-access"},{"title":"User
+    Access","permissions":[{"method":"isEntitled"}],"routes":[{"title":"Users","appId":"rbac","href":"/settings/rbac/users"},{"title":"Roles","appId":"rbac","href":"/settings/rbac/roles"},{"title":"Groups","appId":"rbac","href":"/settings/rbac/groups"},{"title":"Red
+    Hat Access
+    Requests","appId":"accessRequests","href":"/settings/rbac/access-requests"}],"expandable":true},{"title":"Notifications","routes":[{"title":"Application
+    Services","appId":"notifications","href":"/settings/notifications/application-services"},{"title":"Openshift","appId":"notifications","href":"/settings/notifications/openshift"},{"title":"Red
+    Hat Enterprise
+    Linux","appId":"notifications","href":"/settings/notifications/rhel"},{"title":"Edge","appId":"notifications","href":"/settings/notifications/edge"},{"title":"Console","appId":"notifications","href":"/settings/notifications/console"}],"expandable":true},{"title":"Integrations","href":"/settings/integrations","product":"Red
+    Hat
+    Insights"},{"title":"Sources","appId":"sources","href":"/settings/sources"},{"title":"Repositories","appId":"content-sources","href":"/insights/content","product":"Content"},{"title":"Remote
+    Host Configuration","routes":[{"title":"Manage
+    configuration","appId":"connector","href":"/settings/connector"},{"title":"Activation
+    Keys","appId":"connector","href":"/settings/connector/activation-keys"}],"expandable":true}]}
+  docs.json: >-
+    {"id":"docs","title":"Documentation","navItems":[{"title":"API
+    Documentation","appId":"apiDocs","href":"/docs/api"}]}
+  hac-navigation.json: '{"id":"hac","title":"HAC","navItems":[]}'
+
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: application-services-ui-frontend
+  labels:
+    frontend: application-services-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      frontend: application-services-ui
+  template:
+    metadata:
+      labels:
+        frontend: application-services-ui
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            name: env-stage
+            defaultMode: 420
+        - name: sso
+          configMap:
+            name: env-stage-sso
+            defaultMode: 420
+      containers:
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: fe-image
+          env:
+            - name: SSO_URL
+              value: 'https://sso.stage.redhat.com/auth/'
+            - name: ROUTE_PREFIX
+              value: apps
+          ports:
+            - name: web
+              containerPort: 8000
+              protocol: TCP
+            - name: metrics
+              containerPort: 9000
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: config
+              mountPath: /opt/app-root/src/build/chrome
+            - name: sso
+              mountPath: /opt/app-root/src/build/js/sso-url.js
+              subPath: sso-url.js
+          image: 'quay.io/rhoas/application-services-ui-frontend-container:e1606a5'
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: application-services-ui
+  labels:
+    frontend: application-services-ui
+spec:
+  ports:
+    - name: public
+      protocol: TCP
+      appProtocol: http
+      port: 8000
+      targetPort: 8000
+    - name: metrics
+      protocol: TCP
+      appProtocol: http
+      port: 9000
+      targetPort: 9000
+  type: ClusterIP
+  selector:
+    frontend: application-services-ui
+
+---
+
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: application-services-ui-cx8k9
+  labels:
+    frontend: application-services-ui
+spec:
+  path: /apps/application-services-ui
+  to:
+    kind: Service
+    name: application-services-ui
+    weight: 100
+  port:
+    targetPort: public
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
