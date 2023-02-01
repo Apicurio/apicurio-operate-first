@@ -1,0 +1,122 @@
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
+metadata:
+  name: apicurio-registry-canary
+  namespace: apicurio-apicurio-registry
+spec:
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - canary-application
+        from:
+          kind: ImageStreamTag
+          namespace: apicurio-apicurio-registry
+          name: 'rhosrcanary:latest'
+  replicas: 1
+  revisionHistoryLimit: 10
+  test: false
+  selector:
+    component: canary-application
+  template:
+    metadata:
+      name: canary-application
+      creationTimestamp: null
+      labels:
+        component: canary-application
+    spec:
+      containers:
+        - image: rhosrcanary:latest
+          name: canary-application
+          env:
+            - name: REGISTRY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: rhosr-canary-secret
+                  key: REGISTRY_URL
+            - name: AUTH_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: rhosr-canary-secret
+                  key: AUTH_CLIENT_ID
+            - name: AUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: rhosr-canary-secret
+                  key: AUTH_CLIENT_SECRET
+            - name: AUTH_TOKEN_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: rhosr-canary-secret
+                  key: AUTH_TOKEN_ENDPOINT
+            - name: CONCURRENT_TASKS
+              value: '1'
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1200Mi
+            requests:
+              cpu: 500m
+              memory: 600Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: apicurio-registry-canary
+  namespace: apicurio-apicurio-registry
+  labels:
+    app: apicurio-registry-canary
+    app.kubernetes.io/instance: registry-smaug
+    template: apicurio-registry-canary
+spec:
+  ipFamilies:
+    - IPv4
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  internalTrafficPolicy: Cluster
+  type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    component: apicurio-registry-canary
+
+---
+
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: apicurio-registry-canary
+  namespace: apicurio-apicurio-registry
+  labels:
+    app: apicurio-registry-canary
+    app.kubernetes.io/instance: registry-smaug
+    template: apicurio-registry-canary
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  host: >-
+    apicurio-registry-canary-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud
+  to:
+    kind: Service
+    name: apicurio-registry-canary
+    weight: 100
+  port:
+    targetPort: 8080
+  wildcardPolicy: None

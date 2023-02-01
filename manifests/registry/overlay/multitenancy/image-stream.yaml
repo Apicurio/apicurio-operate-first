@@ -45,3 +45,18 @@ spec:
     importPolicy:
       scheduled: true
     name: latest
+---
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: rhosrcanary
+  namespace: apicurio-apicurio-registry
+spec:
+  tags:
+    - name: latest
+      from:
+        kind: DockerImage
+        name: quay.io/carnalca/rhosrcanary
+      generation: 3
+      importPolicy:
+        scheduled: true
