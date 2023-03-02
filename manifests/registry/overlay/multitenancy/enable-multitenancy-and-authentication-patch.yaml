@@ -67,3 +67,5 @@
       value: "true"
     - name: REGISTRY_UI_FEATURES_READONLY_DYNAMIC_ALLOW
       value: "false"
+    - name: REGISTRY_MULTITENANCY_REAPER_MAX_TENANTS_REAPED
+      value: 1000
