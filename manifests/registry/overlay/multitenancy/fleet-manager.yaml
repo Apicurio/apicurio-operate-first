@@ -119,6 +119,8 @@ spec:
             value: '/config/quota-plans.yaml'
           - name: REGISTRY_DEPLOYMENTS_CONFIG_FILE
             value: '/config/registry-deployments.yaml'
+          - name: CORS_ALLOWED_ORIGINS
+            value: 'https://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud'
 
           - name: AUTH_ENABLED
             value: 'true'
