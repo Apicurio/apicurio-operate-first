@@ -69,3 +69,5 @@
       value: "false"
     - name: REGISTRY_MULTITENANCY_REAPER_MAX_TENANTS_REAPED
       value: 1000
+    - name: CORS_ALLOWED_ORIGINS
+      value: 'https://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud'
