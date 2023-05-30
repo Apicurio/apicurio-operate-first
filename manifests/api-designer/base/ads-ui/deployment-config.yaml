@@ -29,6 +29,12 @@ spec:
       - image: ads-ui:latest
         imagePullPolicy: Always
         name: ads-ui
+        resources:
+          requests:
+            cpu: 300m
+            memory: 1000Mi
+          limits:
+            memory: 1000Mi
         ports:
         - containerPort: 8080
           protocol: TCP
