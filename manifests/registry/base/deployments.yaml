@@ -47,11 +47,12 @@ spec:
           - name: REGISTRY_CONFIG_CACHE_ENABLED
             value: "true"
         resources:
-          requests:
-            cpu: 300m
-            memory: 1000Mi
           limits:
-            memory: 1000Mi
+            cpu: 300m
+            memory: 1300Mi
+          requests:
+            cpu: 100m
+            memory: 600Mi
         livenessProbe:
           httpGet:
             path: /health/live

@@ -33,11 +33,12 @@ spec:
         - containerPort: 8080
           protocol: TCP
         resources:
-          requests:
-            cpu: 300m
-            memory: 1000Mi
           limits:
-            memory: 1000Mi
+            cpu: 300m
+            memory: 1300Mi
+          requests:
+            cpu: 100m
+            memory: 600Mi
   triggers:
   - type: ConfigChange
   - imageChangeParams:
