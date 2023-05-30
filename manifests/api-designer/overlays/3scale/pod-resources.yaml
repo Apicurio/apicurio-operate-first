@@ -1,0 +1,55 @@
+---
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: ads-ui
+spec:
+  template:
+    spec:
+      containers:
+      - name: ads-ui
+        resources:
+          requests:
+            cpu: 300m
+            memory: 1000Mi
+          limits:
+            memory: 1000Mi
+
+
+---
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: api-designer-poc
+spec:
+  template:
+    spec:
+      containers:
+      - name: api-designer-poc
+        resources:
+          requests:
+            cpu: 300m
+            memory: 1000Mi
+          limits:
+            memory: 1000Mi
+
+
+---
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: studio-editors
+spec:
+  template:
+    spec:
+      containers:
+      - name: studio-editors
+        resources:
+          requests:
+            cpu: 300m
+            memory: 1000Mi
+          limits:
+            memory: 1000Mi
