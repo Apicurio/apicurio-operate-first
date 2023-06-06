@@ -46,6 +46,8 @@ spec:
             value: prod
           - name: REGISTRY_CONFIG_CACHE_ENABLED
             value: "true"
+          - name: CORS_ALLOWED_ORIGINS
+            value: "*"
         resources:
           limits:
             cpu: 300m
