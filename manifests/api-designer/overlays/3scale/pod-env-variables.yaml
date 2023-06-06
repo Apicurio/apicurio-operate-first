@@ -1,0 +1,30 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: api-designer-poc
+spec:
+  template:
+    spec:
+      containers:
+      - name: api-designer-poc
+        env:
+        - name: AUTH_ENABLED
+          value: "false"
+        - name: ADS_UI_URL
+          value: https://ads-ui-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net
+        - name: EDITORS_URL
+          value: http://studio-editors-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net
+        #- name: SRS_API_URL
+        #  value: https://fleet-manager-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud
+        #- name: KEYCLOAK_REALM
+        #  value: operate-first-apicurio
+        #- name: KEYCLOAK_URL
+        #  value: https://auth.apicur.io/auth/
+        #- name: KEYCLOAK_SSL_REQUIRED
+        #  value: external
+        #- name: KEYCLOAK_RESOURCE
+        #  value: ad-ui
+        #- name: NAV_ENABLED
+        #  value: "true"
+        #- name: NAV_REGISTRY_URL
+        #  value: https://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/
