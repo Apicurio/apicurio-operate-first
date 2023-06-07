@@ -44,14 +44,16 @@ spec:
         ports:
           - name: 'app'
             containerPort: 7007
+            protocol: TCP
         resources:
           limits:
-            cpu: 1000m
+            cpu: 900m
             memory: 1000Mi
           requests:
             cpu: 500m
             memory: 500Mi
         terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
   triggers:
   - type: ConfigChange
   - imageChangeParams:
