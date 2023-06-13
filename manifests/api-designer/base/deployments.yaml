@@ -40,6 +40,8 @@ spec:
             value: "true"
           - name: QUARKUS_PROFILE
             value: prod
+          - name: DESIGNER_API_URL
+            value: /apis/designer/v0
         resources:
           limits:
             cpu: 300m
