@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 bases:
-   - ../../base/  # Registry in-memory deployment
+   - ../../base/  # Designer in-memory deployment
 
 patches:
   - pod-env-variables.yaml
