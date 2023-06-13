@@ -2,14 +2,14 @@ apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   labels:
-    app: api-designer
-    component: api-designer-poc
-  name: api-designer-poc
+    app: apicurio-api-designer
+    component: registry
+  name: apicurio-api-designer
 spec:
   tags:
   - from:
       kind: DockerImage
-      name: quay.io/apicurio/api-designer-poc:latest-snapshot
+      name: quay.io/apicurio/apicurio-api-designer-mem:latest-snapshot
     importPolicy:
       scheduled: true
     name: latest

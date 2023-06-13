@@ -1,0 +1,19 @@
+# Services for the components
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: apicurio-api-designer
+    template: apicurio-api-designer
+  name: apicurio-api-designer
+spec:
+  selector:
+    component: apicurio-api-designer
+  ports:
+    - name: web
+      port: 8080
+      protocol: TCP
+      targetPort: web # referring to target port via "name" instead that via the number
+  sessionAffinity: None
+status:
+  loadBalancer: {}
