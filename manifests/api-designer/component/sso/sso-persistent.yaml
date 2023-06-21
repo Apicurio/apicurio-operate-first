@@ -65,7 +65,6 @@ items:
     selector:
       deploymentConfig: apicurio-sso
 - apiVersion: route.openshift.io/v1
-  id: apicurio-sso-https
   kind: Route
   metadata:
     annotations:
@@ -204,6 +203,7 @@ items:
         from:
           kind: ImageStreamTag
           name: sso76-openshift-rhel8:7.6
+          namespace: openshift
       type: ImageChange
     - type: ConfigChange
 - apiVersion: apps.openshift.io/v1
@@ -281,6 +281,7 @@ items:
         from:
           kind: ImageStreamTag
           name: postgresql13-for-sso76-openshift-rhel8:13-el8
+          namespace: openshift
       type: ImageChange
     - type: ConfigChange
 - apiVersion: v1
