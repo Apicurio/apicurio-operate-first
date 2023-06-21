@@ -1,0 +1,204 @@
+apiVersion: v1
+kind: List
+metadata: {}
+items:
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    annotations:
+      description: ConfigMap providing service ca bundle.
+      service.beta.openshift.io/inject-cabundle: "true"
+    labels:
+      application: apicurio-sso
+      rhsso: 7.6.1.GA
+      template: sso76-ocp4-x509-postgresql-persistent
+    name: apicurio-sso-service-ca
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      description: The web server's https port.
+      service.alpha.openshift.io/dependencies: '[{"name": "apicurio-sso-postgresql", "kind": "Service"}]'
+      service.alpha.openshift.io/serving-cert-secret-name: sso-x509-https-secret
+    labels:
+      application: apicurio-sso
+      rhsso: 7.6.1.GA
+      template: sso76-ocp4-x509-postgresql-persistent
+    name: apicurio-sso
+  spec:
+    ports:
+    - port: 8443
+      targetPort: 8443
+    selector:
+      deploymentConfig: apicurio-sso
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      description: The JGroups ping port for clustering.
+      service.alpha.openshift.io/serving-cert-secret-name: sso-x509-jgroups-secret
+    labels:
+      application: apicurio-sso
+      rhsso: 7.6.1.GA
+      template: sso76-ocp4-x509-postgresql-persistent
+    name: apicurio-sso-ping
+  spec:
+    clusterIP: None
+    ports:
+    - name: ping
+      port: 8888
+    publishNotReadyAddresses: true
+    selector:
+      deploymentConfig: apicurio-sso
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      description: Route for application's https service.
+    labels:
+      application: apicurio-sso
+      rhsso: 7.6.1.GA
+      template: sso76-ocp4-x509-postgresql-persistent
+    name: apicurio-sso
+  spec:
+    tls:
+      termination: reencrypt
+    to:
+      name: apicurio-sso
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      application: apicurio-sso
+      rhsso: 7.6.1.GA
+      template: sso76-ocp4-x509-postgresql-persistent
+    name: apicurio-sso
+  spec:
+    replicas: 1
+    selector:
+      deploymentConfig: apicurio-sso
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          application: apicurio-sso
+          deploymentConfig: apicurio-sso
+        name: apicurio-sso
+      spec:
+        containers:
+        - env:
+          - name: DB_SERVICE_PREFIX_MAPPING
+            value: apicurio-sso-postgresql=DB
+          - name: DB_JNDI
+            value: java:jboss/datasources/KeycloakDS
+          - name: DB_USERNAME
+            value: sso
+          - name: DB_PASSWORD
+            value: pass
+          - name: DB_DATABASE
+            value: sso
+          - name: TX_DATABASE_PREFIX_MAPPING
+            value: apicurio-sso-postgresql=DB
+          #- name: DB_MIN_POOL_SIZE
+          #  value: ""
+          #- name: DB_MAX_POOL_SIZE
+          #  value: ""
+          #- name: DB_TX_ISOLATION
+          #  value: ""
+          - name: JGROUPS_PING_PROTOCOL
+            value: openshift.DNS_PING
+          - name: OPENSHIFT_DNS_PING_SERVICE_NAME
+            value: apicurio-sso-ping
+          - name: OPENSHIFT_DNS_PING_SERVICE_PORT
+            value: "8888"
+          - name: X509_CA_BUNDLE
+            value: /var/run/configmaps/service-ca/service-ca.crt /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          - name: JGROUPS_CLUSTER_PASSWORD
+            value: 4lwKTSnuXeLOItneD6S6R5WiERLxTcf7
+          - name: SSO_ADMIN_USERNAME
+            value: sk1pIRQr
+          - name: SSO_ADMIN_PASSWORD
+            value: n0tDig04skVU6qU1Y0K3LqqNMDHkQBEI
+          #- name: SSO_REALM
+          #  value: ""
+          #- name: SSO_SERVICE_USERNAME
+          #  value: ""
+          #- name: SSO_SERVICE_PASSWORD
+          #  value: ""
+          #- name: SSO_HOSTNAME
+          #  value: ""
+          image: apicurio-sso
+          imagePullPolicy: Always
+          livenessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - /opt/eap/bin/livenessProbe.sh
+            failureThreshold: 3
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: apicurio-sso
+          ports:
+          - containerPort: 8778
+            name: jolokia
+            protocol: TCP
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 8443
+            name: https
+            protocol: TCP
+          - containerPort: 8888
+            name: ping
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - /opt/eap/bin/readinessProbe.sh
+            failureThreshold: 3	
+            periodSeconds: 10	
+            successThreshold: 1	
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 1Gi
+          terminationMessagePath: /dev/termination-log	
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/x509/https
+            name: sso-x509-https-volume
+            readOnly: true
+          - mountPath: /etc/x509/jgroups
+            name: sso-x509-jgroups-volume
+            readOnly: true
+          - mountPath: /var/run/configmaps/service-ca
+            name: service-ca
+            readOnly: true
+        terminationGracePeriodSeconds: 75
+        volumes:
+        - name: sso-x509-https-volume
+          secret:
+            secretName: sso-x509-https-secret
+        - name: sso-x509-jgroups-volume
+          secret:
+            secretName: sso-x509-jgroups-secret
+        - configMap:
+            name: apicurio-sso-service-ca
+          name: service-ca
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - apicurio-sso
+        from:
+          kind: ImageStreamTag
+          name: sso76-openshift-rhel8:7.6
+          namespace: openshift
+      type: ImageChange
+    - type: ConfigChange
