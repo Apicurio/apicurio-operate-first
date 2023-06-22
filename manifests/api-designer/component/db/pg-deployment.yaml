@@ -2,26 +2,26 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: apicurio-registry-postgresql
-  name: apicurio-registry-postgresql
+    app: apicurio-sso-postgresql
+  name: apicurio-sso-postgresql
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: apicurio-registry-postgresql
+      app: apicurio-sso-postgresql
   template:
     metadata:
       labels:
-        app: apicurio-registry-postgresql
+        app: apicurio-sso-postgresql
     spec:
       containers:
-        - name: apicurio-registry-postgresql
+        - name: apicurio-sso-postgresql
           image: quay.io/centos7/postgresql-12-centos7:1
           env:
             - name: POSTGRESQL_ADMIN_PASSWORD
               value: admin1234
             - name: CREATE_MULTIPLE_DATABASES
-              value: apicurio,tenantmanager,fleetmanager
+              value: sso
             - name: MULTIPLE_DATABASES_PASSWORD
               value: pass
           ports:
@@ -39,7 +39,7 @@ spec:
             periodSeconds: 20
           volumeMounts:
             - mountPath: /var/lib/pgsql/data
-              name: apicurio-registry-postgresql
+              name: apicurio-sso-postgresql
             - mountPath: /opt/app-root/src/postgresql-start/
               name: create-databases-script
           resources:
@@ -50,9 +50,9 @@ spec:
               cpu: 400m
               memory: 500Mi
       volumes:
-        - name: apicurio-registry-postgresql
+        - name: apicurio-sso-postgresql
           persistentVolumeClaim:
-            claimName: apicurio-registry-postgresql
+            claimName: apicurio-sso-postgresql
         - name: create-databases-script
           configMap:
             name: db-init-script-configmap
@@ -61,23 +61,23 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    name: apicurio-registry-postgresql
-  name: apicurio-registry-postgresql
+    name: apicurio-sso-postgresql
+  name: apicurio-sso-postgresql
 spec:
   ports:
     - port: 5432
       protocol: TCP
       targetPort: 5432
   selector:
-    app: apicurio-registry-postgresql
+    app: apicurio-sso-postgresql
   type: ClusterIP
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    name: apicurio-registry-postgresql
-  name: apicurio-registry-postgresql
+    name: apicurio-sso-postgresql
+  name: apicurio-sso-postgresql
 spec:
   accessModes:
     - ReadWriteOnce

@@ -3,6 +3,6 @@ kind: Kustomization
 resources:
 - ../../base/ # Designer in-memory deployment
 
-components:
-- ../../component/sso
-- ../../component/db
+#components:
+#- ../../component/sso
+#- ../../component/db
