@@ -134,17 +134,6 @@ items:
           #  value: ""
           image: apicurio-sso
           imagePullPolicy: Always
-          livenessProbe:
-            exec:
-              command:
-              - /bin/bash
-              - -c
-              - /opt/eap/bin/livenessProbe.sh
-            failureThreshold: 3
-            initialDelaySeconds: 60
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
           name: apicurio-sso
           ports:
           - containerPort: 8778
@@ -159,19 +148,30 @@ items:
           - containerPort: 8888
             name: ping
             protocol: TCP
-          readinessProbe:
-            exec:
-              command:
-              - /bin/bash
-              - -c
-              - /opt/eap/bin/readinessProbe.sh
-            failureThreshold: 3	
-            periodSeconds: 10	
-            successThreshold: 1	
-            timeoutSeconds: 1
           resources:
             limits:
               memory: 1Gi
+          #livenessProbe:
+          #  failureThreshold: 3
+          #  initialDelaySeconds: 60
+          #  periodSeconds: 10
+          #  successThreshold: 1
+          #  timeoutSeconds: 1
+          #  exec:
+          #    command:
+          #    - /bin/bash
+          #    - -c
+          #    - /opt/eap/bin/livenessProbe.sh                      
+          #readinessProbe:
+          #  failureThreshold: 3	
+          #  periodSeconds: 10	
+          #  successThreshold: 1	
+          #  timeoutSeconds: 1
+          #  exec:
+          #    command:
+          #    - /bin/bash
+          #    - -c
+          #    - /opt/eap/bin/readinessProbe.sh
           terminationMessagePath: /dev/termination-log	
           terminationMessagePolicy: File
           volumeMounts:
