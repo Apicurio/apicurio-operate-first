@@ -2,3 +2,13 @@ apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 resources:
   - sso.yaml
+  - postgresql-db.yaml
+
+# A field that allows adding labels without also automatically injecting corresponding selectors.
+# Issue with 'commonLabels': https://www.innoq.com/en/blog/advanced-kustomize-features/#limitlabelsandannotationstospecificresourcesorfields
+# https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/labels/
+labels:
+  - pairs:
+      application: apicurio-sso
+      rhsso: 7.6.1.GA
+      template: sso76-ocp4-x509-postgresql-persistent

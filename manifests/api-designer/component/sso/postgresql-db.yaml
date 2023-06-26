@@ -1,0 +1,149 @@
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-init-script
+  annotations:
+    summary: ConfigMap providing DB initialization script
+    description: |
+      This script simplifies the process of setting up multiple databases within a PostgreSQL environment.
+      It allows for the creation of user accounts, corresponding databases, and grants appropriate privileges.
+      by specifying the desired databases and password as below environment variables in the application's pod:
+        - CREATE_MULTIPLE_DATABASES: Comma separated list of databases to be created
+        - MULTIPLE_DATABASES_PASSWORD: Password for those databases
+  labels:
+    component: database  
+data:
+  create-databases.sh: |
+    #!/bin/bash
+
+    set -e
+    set -u
+
+    function create_user_and_database() {
+      local database=$1
+      echo "  Creating user and database '$database'"
+      psql -v ON_ERROR_STOP=1 --username postgres <<-EOSQL
+          CREATE USER $database WITH PASSWORD '$MULTIPLE_DATABASES_PASSWORD';
+          CREATE DATABASE $database;
+          GRANT ALL PRIVILEGES ON DATABASE $database TO $database;
+    EOSQL
+    }
+
+    function databaseExists() {
+      local database=$1
+      DBLIST=$(psql -v ON_ERROR_STOP=1 --username postgres -c 'SELECT datname FROM pg_database')
+      echo $DBLIST | grep $database
+    }
+
+    if [ -n "$CREATE_MULTIPLE_DATABASES" ]; then
+      echo "Multiple database creation requested: $CREATE_MULTIPLE_DATABASES"
+      for db in $(echo $CREATE_MULTIPLE_DATABASES | tr ',' ' '); do
+        if databaseExists $db ; then
+          echo "Skipping database '$db' creation"
+        else
+          create_user_and_database $db
+        fi
+      done
+      echo "Multiple databases created"
+    fi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: apicurio-sso-postgresql
+  annotations:
+    description: The database server's http service.
+  labels:
+    component: database
+spec:
+  ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    deployment: apicurio-sso-postgresql
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: database
+  name: apicurio-sso-postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: apicurio-sso-postgresql
+  template:
+    metadata:
+      labels:
+        deployment: apicurio-sso-postgresql
+    spec:
+      containers:
+        - name: apicurio-sso-postgresql
+          image: quay.io/centos7/postgresql-12-centos7:1
+          env:
+            - name: POSTGRESQL_ADMIN_PASSWORD
+              value: admin1234
+            - name: CREATE_MULTIPLE_DATABASES
+              value: sso
+            - name: MULTIPLE_DATABASES_PASSWORD
+              value: pass
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          volumeMounts:
+            - mountPath: /var/lib/pgsql/data
+              name: apicurio-sso-postgresql-pvol
+            - mountPath: /opt/app-root/src/postgresql-start/
+              name: create-databases-script
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1200Mi
+            requests:
+              cpu: 400m
+              memory: 500Mi
+      volumes:
+        - name: apicurio-sso-postgresql-pvol
+          persistentVolumeClaim:
+            claimName: apicurio-sso-postgresql-claim
+        - name: create-databases-script
+          configMap:
+            name: db-init-script
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    description: The database server's PersistentVolumeClaim.
+  labels:
+    component: database
+  name: apicurio-sso-postgresql-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+
