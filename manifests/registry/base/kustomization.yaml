@@ -5,3 +5,6 @@ resources:
   - deployments.yaml
   - services.yaml
   - routes.yaml
+  - db-init-script-configmap.yaml
+  - pg-apicurio-configmap.yaml
+  - pg-deployment.yaml
