@@ -37,10 +37,12 @@ spec:
             value: "backstage"
           - name: POSTGRES_PASSWORD
             value: "pass"
-          - name: APP_CONFIG_backend_baseUrl
-            value: "https://backstage-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud"
-          - name: APP_CONFIG_app_baseUrl
-            value: "https://backstage-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud"
+          - name: APP_CONFIG_BACKEND
+            value: "https://backstage-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/"
+          - name: APP_CONFIG_APP
+            value: "https://backstage-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/"
+          - name: APICURIO_ENDPOINT
+            value: "https://apicurio-registry-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/"
         ports:
           - name: 'app'
             containerPort: 7007
