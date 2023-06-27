@@ -48,6 +48,21 @@ spec:
             value: "true"
           - name: CORS_ALLOWED_ORIGINS
             value: "*"
+          - name: REGISTRY_DATASOURCE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: postgresql-apicurio-configmap
+                key: pg-ds-url
+          - name: REGISTRY_DATASOURCE_USERNAME
+            valueFrom:
+              configMapKeyRef:
+                name: postgresql-apicurio-configmap
+                key: pg-user
+          - name: REGISTRY_DATASOURCE_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: postgresql-apicurio-configmap
+                key: pg-pwd
         resources:
           limits:
             cpu: 300m
