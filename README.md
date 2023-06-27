@@ -32,7 +32,7 @@ Apicurio Operate First deployments uses [Argo CD](https://argo-cd.readthedocs.io
 
 - [Apicurio Registry ArgoCD Application](https://argocd.operate-first.cloud/applications/registry-smaug?resource=)
 
-- [Apicurio Registry Instance](https://apicurio-registry-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/)
+- [Apicurio Registry Instance](https://apicurio-registry-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/)
 
 - [Apicurio Registry Multitenant UI](http://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/)
 
@@ -48,6 +48,10 @@ Apicurio Operate First deployments uses [Argo CD](https://argo-cd.readthedocs.io
 
 - [Studio Editors UI](https://studio-editors.apps.smaug.na.operate-first.cloud/?demo)
 
+### Backstage
+
+- [Backstage Instance](https://backstage-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/)
+  
 # Docs and SOPs
 Please follow the below links for more information on:-
 - [Apicurio Operate-First set up](docs/apicurio-operate-first-setup.md)
