@@ -20,41 +20,17 @@ Apicurio Operate First deployments uses [Argo CD](https://argo-cd.readthedocs.io
 
 # Useful links
 
-### Generic 
-- [OpenShift Console](https://console-openshift-console.apps.smaug.na.operate-first.cloud/)
+### Generic
 
-- [ArgoCd Console](https://argocd.operate-first.cloud/applications)
+- [Cluster Details](https://github.com/3scale/platform/blob/master/docs/projects/engineering/dev-ocp-mas.md)
+  
+- [OpenShift Console](https://console-openshift-console.apps.dev-eng-ocp4-mas.dev.3sca.net/)
 
-
-### Apicurio Registry
-
-- [Apicurio Registry Openshift Project](https://console-openshift-console.apps.smaug.na.operate-first.cloud/k8s/cluster/projects/apicurio-apicurio-registry)
-
-- [Apicurio Registry ArgoCD Application](https://argocd.operate-first.cloud/applications/registry-smaug?resource=)
-
-- [Apicurio Registry Instance](https://apicurio-registry-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/)
-
-- [Apicurio Registry Multitenant UI](http://apicurio-registry-mt-ui-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud/)
-
-### API Designer
-
-- [API Designer Openshift Project](https://console-openshift-console.apps.smaug.na.operate-first.cloud/k8s/cluster/projects/api-designer)
-
-- [API Designer ArgoCD Application](https://argocd.operate-first.cloud/applications/api-designer-smaug?resource=)
-
-- [API Designer POC UI](https://api-designer-poc.apps.smaug.na.operate-first.cloud/)
-
-- [ADS UI](https://ads-ui.apps.smaug.na.operate-first.cloud/)
-
-- [Studio Editors UI](https://studio-editors.apps.smaug.na.operate-first.cloud/?demo)
+- [ArgoCd Console](https://gitops.apps.dev-eng-ocp4-mas.dev.3sca.net/applications)
 
 ### Backstage
 
 - [Backstage Instance](https://backstage-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/)
   
-# Docs and SOPs
-Please follow the below links for more information on:-
-- [Apicurio Operate-First set up](docs/apicurio-operate-first-setup.md)
-- [Apicurio Registry deployment](docs/registry-deployment.md)
-- [Api Designer deployment](docs/api-designer-deployment.md)
+
 
