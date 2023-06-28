@@ -34,8 +34,18 @@ spec:
             containerPort: 8080
             protocol: TCP
         env:
+          # enable authentication
           - name: AUTH_ENABLED
-            value: "false"
+            value: "true"
+          - name: KEYCLOAK_URL
+            value: "https://apicurio-sso-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net/auth/"
+          - name: KEYCLOAK_REALM
+            value: "apicurio"
+          - name: KEYCLOAK_API_CLIENT_ID
+            value: "registry-api"
+          - name: KEYCLOAK_UI_CLIENT_ID
+            value: "registry-ui"
+          
           - name: REGISTRY_ENABLE_MULTITENANCY
             value: "false"
           - name: REGISTRY_LOG_LEVEL
