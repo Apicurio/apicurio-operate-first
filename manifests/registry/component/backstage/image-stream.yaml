@@ -8,7 +8,7 @@ spec:
   tags:
   - from:
       kind: DockerImage
-      name: quay.io/aperuffo/backstage-demo:latest
+      name: quay.io/apicurio/backstage:latest
     importPolicy:
       scheduled: true
     name: latest
