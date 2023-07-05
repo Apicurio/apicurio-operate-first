@@ -38,7 +38,7 @@ spec:
           - name: AUTH_ENABLED
             value: "true"
           - name: KEYCLOAK_URL
-            value: "https://apicurio-sso-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net/auth/"
+            value: "https://apicurio-sso-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net/auth"
           - name: KEYCLOAK_REALM
             value: "apicurio"
           - name: KEYCLOAK_API_CLIENT_ID
