@@ -13,8 +13,8 @@ spec:
       labels:
         app: postgres
     spec:
-      securityContext:
-        fsGroup: 1001
+      #securityContext:
+      #  fsGroup: 1001
       containers:
         - name: postgresql
           lifecycle:
@@ -24,8 +24,8 @@ spec:
                   - /pre-stop.sh
           image: docker.io/bitnami/postgresql-repmgr:11.12.0-debian-10-r44
           imagePullPolicy: "IfNotPresent"
-          securityContext:
-            runAsUser: 1001
+          #securityContext:
+          #  runAsUser: 1001
           # Auxiliary vars to populate environment variables
           env:
             - name: BITNAMI_DEBUG

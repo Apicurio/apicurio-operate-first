@@ -12,14 +12,14 @@ spec:
       labels: 
         app: pgpool
     spec:          
-      securityContext:
-        fsGroup: 1001
+      #securityContext:
+      #  fsGroup: 1001
       containers:
         - name: pgpool
           image: docker.io/bitnami/pgpool:4.2.3-debian-10-r38
           imagePullPolicy: "IfNotPresent"
-          securityContext:
-            runAsUser: 1001
+          #securityContext:
+          #  runAsUser: 1001
           env:
             - name: BITNAMI_DEBUG
               value: "false"
