@@ -5,3 +5,4 @@ resources:
 
 components:
 - ../../../common-component/sso
+- ../../../common-component/ha-database
