@@ -4,4 +4,4 @@ resources:
 - ../../base/ # Designer in-memory deployment
 
 components:
-- ../../component/sso
+- ../../../common-component/sso
