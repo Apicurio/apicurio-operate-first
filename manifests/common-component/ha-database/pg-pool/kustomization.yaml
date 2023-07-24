@@ -1,7 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 resources:
-  - pgpool-deployment.yaml
-  - pgpool-svc.yaml
-  - pgpool-svc-nodeport.yaml
-  - pgpool-secret.yaml
+  - deployment.yaml
+  - service.yaml
+  - secrets.yaml

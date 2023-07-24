@@ -1,0 +1,39 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql-ha-headless
+  labels:
+    app.kubernetes.io/name: postgresql-ha
+    app.kubernetes.io/instance: postgresql-ha
+spec:
+  type: ClusterIP
+  clusterIP: None
+  # Setting clusterIP to 'None' indicates that the Service should be headless.
+  # A Headless Service is a type of Kubernetes Service that does not allocate an IP address for the Service itself.
+  # Instead, DNS entries are created for individual Pods, and this allows direct access to the individual Pods behind the Service using their DNS names.
+  # This type of Service is particularly useful when you need to access each individual Pod individually, bypassing load balancing and service discovery mechanisms.
+  # The load balancing responsibility is shifted to the client-side, where the client decides how to distribute the load across the individual Pods. 
+
+  publishNotReadyAddresses: false
+  # When set to `false`, the Service will only publish endpoints for pods that are in the "Ready" state.
+  # This means only fully running and operational pods will be included in the list of endpoints associated with the Service.
+  # If a pod is not ready due to startup delays, readiness probes failing, or other issues, it will be excluded from the list of endpoints.
+
+  # When set to `true`, the Service will publish endpoints for both ready and not ready pods.
+  # This means even if a pod is not yet fully operational, it will still be included in the list of endpoints associated with the Service.
+  # If a pod is not ready, clients trying to access the Service might still be directed to these not-ready pods.
+  # This behavior might lead to connection errors or issues if the pods are not fully operational.
+  
+  # Setting publishNotReadyAddresses: false is often a safer choice, as it ensures that clients are directed only to fully operational pods.
+  # This can help avoid potential connection errors or issues when accessing the Service.
+  
+  ports:
+    - name: "postgresql"
+      port: 5432
+      targetPort: postgresql
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: postgresql-ha
+    app.kubernetes.io/instance: postgresql-ha
+    app.kubernetes.io/component: postgresql
