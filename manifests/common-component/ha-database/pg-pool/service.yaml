@@ -4,8 +4,6 @@ kind: Service
 metadata:
   name: postgresql-ha-pgpool
   labels:
-    app.kubernetes.io/name: postgresql-ha
-    app.kubernetes.io/instance: postgresql-ha
     app.kubernetes.io/component: pgpool
 spec:
   type: ClusterIP
@@ -15,8 +13,5 @@ spec:
       port: 5432
       targetPort: postgresql
       protocol: TCP
-      nodePort: null
   selector:
-    app.kubernetes.io/name: postgresql-ha
-    app.kubernetes.io/instance: postgresql-ha
     app.kubernetes.io/component: pgpool

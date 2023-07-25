@@ -4,8 +4,6 @@ kind: ConfigMap
 metadata:
   name: postgresql-ha-hooks-scripts
   labels:
-    app.kubernetes.io/name: postgresql-ha
-    app.kubernetes.io/instance: postgresql-ha
     app.kubernetes.io/component: postgresql
 data:
   # Postgres requires a script (pre-stop.sh) to be run whenever it is about to be stopped.

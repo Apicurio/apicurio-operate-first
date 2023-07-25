@@ -3,9 +3,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: pg-client
-  labels: 
-    app.kubernetes.io/name: postgresql-ha
-    app.kubernetes.io/instance: postgresql-ha
+  labels:
     app.kubernetes.io/component: pg-client
 spec:
   containers:

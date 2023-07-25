@@ -4,22 +4,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgresql-ha-pgpool
-  labels: 
-    app.kubernetes.io/name: postgresql-ha
-    app.kubernetes.io/instance: postgresql-ha
+  labels:
     app.kubernetes.io/component: pgpool
 spec:
   replicas: 1
   selector:
-    matchLabels: 
-      app.kubernetes.io/name: postgresql-ha
-      app.kubernetes.io/instance: postgresql-ha
+    matchLabels:
       app.kubernetes.io/component: pgpool
   template:
     metadata:
-      labels: 
-        app.kubernetes.io/name: postgresql-ha
-        app.kubernetes.io/instance: postgresql-ha
+      labels:
         app.kubernetes.io/component: pgpool
     spec:
       # Auxiliary vars to populate environment variables
@@ -80,7 +74,6 @@ spec:
               value: "no"
             - name: PGPOOL_HEALTH_CHECK_PSQL_TIMEOUT
               value: "6"
-          envFrom:
           ports:
             - name: postgresql
               containerPort: 5432

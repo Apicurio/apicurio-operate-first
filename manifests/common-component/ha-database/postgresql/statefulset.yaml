@@ -4,10 +4,7 @@ kind: StatefulSet
 metadata:
   name: postgresql-ha
   labels:
-    app.kubernetes.io/name: postgresql-ha
-    app.kubernetes.io/instance: postgresql-ha
     app.kubernetes.io/component: postgresql
-
 spec:
 
   # If you increase replica number, don't forget to update below two env variables:-
@@ -26,14 +23,10 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app.kubernetes.io/name: postgresql-ha
-      app.kubernetes.io/instance: postgresql-ha
       app.kubernetes.io/component: postgresql
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: postgresql-ha
-        app.kubernetes.io/instance: postgresql-ha
         app.kubernetes.io/component: postgresql
     spec:
       hostNetwork: false
@@ -137,7 +130,6 @@ spec:
               value: "1"
             - name: REPMGR_CHILD_NODES_DISCONNECT_TIMEOUT
               value: "30"
-          envFrom:
           ports:
             - name: postgresql
               containerPort: 5432

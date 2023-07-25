@@ -5,3 +5,10 @@ components:
   - pg-pool
   - pg-client
 
+# A field that allows adding labels without also automatically injecting corresponding selectors.
+# Issue with 'commonLabels': https://www.innoq.com/en/blog/advanced-kustomize-features/#limitlabelsandannotationstospecificresourcesorfields
+# https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/labels/
+labels:
+  - pairs:
+      app.kubernetes.io/name: postgresql-ha
+      app.kubernetes.io/instance: postgresql-ha
