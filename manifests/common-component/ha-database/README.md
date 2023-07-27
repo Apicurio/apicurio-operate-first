@@ -13,7 +13,7 @@ High Availability (HA) in the context of PostgreSQL refers to designing a fault-
 
 The PostgreSQL HA cluster setup deploys a master-slave topology. The master node has writing permissions while replication is on the slaves nodes which have reading-only permissions.
 
-![Image Not Available](postgresql-ha-architecture.png)
+![Image Not Available](./architecture.jpg)
 
 To achieve high availability for PostgreSQL, the following two components are crucial:
 
