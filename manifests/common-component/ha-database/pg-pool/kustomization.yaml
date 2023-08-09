@@ -4,3 +4,4 @@ resources:
   - deployment.yaml
   - service.yaml
   - secrets.yaml
+  - db-init-script-configmap.yaml

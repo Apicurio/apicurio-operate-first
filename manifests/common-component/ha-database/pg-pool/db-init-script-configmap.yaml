@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-initialization-script
+  labels:
+    app.kubernetes.io/component: postgresql
+  annotations:
+    summary: ConfigMap providing DB initialization script
+    description: |
+      This script simplifies the process of setting up multiple databases within a PostgreSQL environment.
+      It allows for the creation of user accounts, corresponding databases, and grants appropriate privileges.
+      by specifying the desired databases and password as below environment variables in the application's pod:
+        - CREATE_MULTIPLE_DATABASES: Comma separated list of databases to be created
+        - MULTIPLE_DATABASES_PASSWORD: Password for those databases
+data:
+  create-databases.sh: |
+    #!/bin/bash
+
+    set -eu
+
+    # Setting PGPASSWORD env variable for non-interactive authentication
+    export PGPASSWORD="$PGPOOL_POSTGRES_PASSWORD"
+
+    # validate if psql is installed
+    echo "psql version: $(psql --version)"
+
+    echo "Waiting for 20 seconds for database server to be ready."
+    sleep 20
+    echo "Wait time completed."
+
+    function create_user_and_database() {
+      local database=$1
+      echo "  Creating user and database '$database'"
+      psql -v ON_ERROR_STOP=1 -h /opt/bitnami/pgpool/tmp --username postgres <<-EOSQL
+          CREATE USER $database WITH PASSWORD '$MULTIPLE_DATABASES_PASSWORD';
+          CREATE DATABASE $database;
+          GRANT ALL PRIVILEGES ON DATABASE $database TO $database;
+    EOSQL
+    }
+
+    function databaseExists() {
+      local database=$1
+      DBLIST=$(psql -v ON_ERROR_STOP=1 -h /opt/bitnami/pgpool/tmp --username postgres -c 'SELECT datname FROM pg_database')
+      echo $DBLIST | grep $database
+    }
+
+    if [ -n "$CREATE_MULTIPLE_DATABASES" ]; then
+      echo "Multiple database creation requested: $CREATE_MULTIPLE_DATABASES"
+      for db in $(echo $CREATE_MULTIPLE_DATABASES | tr ',' ' '); do
+        if databaseExists $db ; then
+          echo "Skipping database '$db' creation. Database already exists."
+        else
+          create_user_and_database $db
+        fi
+      done
+      echo "Multiple databases created successfully!"
+    fi

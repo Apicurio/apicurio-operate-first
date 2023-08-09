@@ -21,6 +21,12 @@ spec:
         - name: pgpool
           image: docker.io/bitnami/pgpool:4.4.3-debian-11-r10
           imagePullPolicy: "IfNotPresent"
+          lifecycle:
+            # This automates the creation of multiple-databases
+            postStart:
+              exec:
+                command:
+                  - /create-databases.sh
           env:
             - name: BITNAMI_DEBUG
               value: "false"
@@ -74,6 +80,11 @@ spec:
               value: "no"
             - name: PGPOOL_HEALTH_CHECK_PSQL_TIMEOUT
               value: "6"
+            # Custom Configurations
+            - name: CREATE_MULTIPLE_DATABASES
+              value: sso,backstage,apicurio
+            - name: MULTIPLE_DATABASES_PASSWORD
+              value: pass
           ports:
             - name: postgresql
               containerPort: 5432
@@ -105,3 +116,12 @@ spec:
             limits:
               cpu: 300m
               memory: 600Mi
+          volumeMounts:
+            - name: create-databases-script
+              mountPath: /create-databases.sh
+              subPath: create-databases.sh
+      volumes:
+        - name: create-databases-script
+          configMap:
+            name: db-initialization-script
+            defaultMode: 0755
