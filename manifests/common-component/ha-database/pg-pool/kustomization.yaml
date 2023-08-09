@@ -5,3 +5,4 @@ resources:
   - service.yaml
   - secrets.yaml
   - db-init-script-configmap.yaml
+  - nodeport-service.yaml

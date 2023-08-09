@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql-ha-pgpool-external
+  labels:
+    app.kubernetes.io/component: pgpool
+spec:
+  type: NodePort
+  ports:
+    - name: postgresql
+      port: 5432
+      targetPort: postgresql
+      protocol: TCP
+      nodePort: 30600
+  selector:
+    app.kubernetes.io/component: pgpool
