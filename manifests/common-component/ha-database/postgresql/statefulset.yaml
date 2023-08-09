@@ -11,7 +11,7 @@ spec:
   # 1. REPMGR_PARTNER_NODES: defined in this statefulset
   # 2. PGPOOL_BACKEND_NODES: defined in deployment resource 'postgresql-ha-pgpool'
   # <TODO>: Verify if these env variables gets updated automatically or not?
-  replicas: 3
+  replicas: 2
   
   # Controls how Pods are created, updated, and deleted within the StatefulSet.
   # The "OrderedReady" policy ensures sequential creation of Pods and that each Pod is ready before proceeding to the next one.
