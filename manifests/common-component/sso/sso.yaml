@@ -87,7 +87,7 @@ spec:
       containers:
       - env:
         - name: DB_SERVICE_PREFIX_MAPPING
-          value: apicurio-sso-postgresql=DB
+          value: postgresql-ha-pgpool=DB
         - name: DB_JNDI
           value: java:jboss/datasources/KeycloakDS
         - name: DB_USERNAME
@@ -97,7 +97,7 @@ spec:
         - name: DB_DATABASE
           value: sso
         - name: TX_DATABASE_PREFIX_MAPPING
-          value: apicurio-sso-postgresql=DB
+          value: postgresql-ha-pgpool=DB
         #- name: DB_MIN_POOL_SIZE
         #  value: ""
         #- name: DB_MAX_POOL_SIZE
