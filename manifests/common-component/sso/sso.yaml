@@ -17,7 +17,7 @@ kind: Service
 metadata:
   annotations:
     description: The web server's https port.
-    service.alpha.openshift.io/dependencies: '[{"name": "apicurio-sso-postgresql", "kind": "Service"}]'
+    service.alpha.openshift.io/dependencies: '[{"name": "postgresql-ha-pgpool", "kind": "Service"}]'
     service.alpha.openshift.io/serving-cert-secret-name: sso-x509-https-secret
   labels:
     component: sso
@@ -87,11 +87,11 @@ spec:
       containers:
       - env:
         #- name: APICURIO_SSO_POSTGRESQL_SERVICE_HOST
-        #  value: "apicurio-sso-postgresql"
+        #  value: "postgresql-ha-pgpool"
         #- name: APICURIO_SSO_POSTGRESQL_SERVICE_PORT
         #  value: "5432"
         - name: DB_SERVICE_PREFIX_MAPPING
-          value: apicurio-sso-postgresql=DB
+          value: postgresql-ha-pgpool=DB
         - name: DB_JNDI
           value: java:jboss/datasources/KeycloakDS
         - name: DB_USERNAME
@@ -101,7 +101,7 @@ spec:
         - name: DB_DATABASE
           value: sso
         - name: TX_DATABASE_PREFIX_MAPPING
-          value: apicurio-sso-postgresql=DB
+          value: postgresql-ha-pgpool=DB
         #- name: DB_MIN_POOL_SIZE
         #  value: ""
         #- name: DB_MAX_POOL_SIZE
