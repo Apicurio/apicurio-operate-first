@@ -2,6 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 bases:
    - ../../base/  # Registry in-memory deployment
+   - externalname-db-svc.yaml # proxy service to access db deployed in "rhaf-apicurio-designer" namespace
 
 components:
   - ../../component/backstage

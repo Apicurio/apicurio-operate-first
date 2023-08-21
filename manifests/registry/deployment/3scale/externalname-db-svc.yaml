@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql-ha-pgpool-externalname-svc
+spec:
+  type: ExternalName
+  externalName: postgresql-ha-pgpool.rhaf-apicurio-designer.svc.cluster.local
