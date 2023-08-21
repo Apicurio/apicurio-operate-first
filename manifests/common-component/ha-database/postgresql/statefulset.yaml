@@ -175,10 +175,20 @@ spec:
             - name: hooks-scripts
               mountPath: /readiness-probe.sh
               subPath: readiness-probe.sh
+            - name: postgresql-conf
+              mountPath: /bitnami/repmgr/conf/postgresql.conf
+              subPath: postgresql.conf
+            - name: postgresql-conf
+              mountPath: /bitnami/repmgr/conf/pg_hba.conf
+              subPath: pg_hba.conf
       volumes:
         - name: hooks-scripts
           configMap:
             name: postgresql-ha-hooks-scripts
+            defaultMode: 0755
+        - name: postgresql-conf
+          configMap:
+            name: postgresql-conf
             defaultMode: 0755
   volumeClaimTemplates:
     - metadata:

@@ -5,3 +5,4 @@ resources:
   - service-headless.yaml
   - secrets.yaml
   - hooks-scripts-configmap.yaml
+  - postgresql-conf-configmap.yaml
