@@ -1,0 +1,550 @@
+apiVersion: v1
+data:
+  create-databases.sh: |
+    #!/bin/bash
+
+    set -e
+    set -u
+
+    function create_user_and_database() {
+      local database=$1
+      echo "  Creating user and database '$database'"
+      psql -v ON_ERROR_STOP=1 --username postgres <<-EOSQL
+          CREATE USER $database WITH PASSWORD '$MULTIPLE_DATABASES_PASSWORD';
+          CREATE DATABASE $database;
+          GRANT ALL PRIVILEGES ON DATABASE $database TO $database;
+    EOSQL
+    }
+
+    function databaseExists() {
+      local database=$1
+      DBLIST=$(psql -v ON_ERROR_STOP=1 --username postgres -c 'SELECT datname FROM pg_database')
+      echo $DBLIST | grep $database
+    }
+
+    if [ -n "$CREATE_MULTIPLE_DATABASES" ]; then
+      echo "Multiple database creation requested: $CREATE_MULTIPLE_DATABASES"
+      for db in $(echo $CREATE_MULTIPLE_DATABASES | tr ',' ' '); do
+        if databaseExists $db ; then
+          echo "Skipping database '$db' creation"
+        else
+          create_user_and_database $db
+        fi
+      done
+      echo "Multiple databases created"
+    fi
+kind: ConfigMap
+metadata:
+  name: backstage-db-init-script-configmap
+---
+apiVersion: v1
+data:
+  create-databases.sh: |
+    #!/bin/bash
+
+    set -e
+    set -u
+
+    function create_user_and_database() {
+      local database=$1
+      echo "  Creating user and database '$database'"
+      psql -v ON_ERROR_STOP=1 --username postgres <<-EOSQL
+          CREATE USER $database WITH PASSWORD '$MULTIPLE_DATABASES_PASSWORD';
+          CREATE DATABASE $database;
+          GRANT ALL PRIVILEGES ON DATABASE $database TO $database;
+    EOSQL
+    }
+
+    function databaseExists() {
+      local database=$1
+      DBLIST=$(psql -v ON_ERROR_STOP=1 --username postgres -c 'SELECT datname FROM pg_database')
+      echo $DBLIST | grep $database
+    }
+
+    if [ -n "$CREATE_MULTIPLE_DATABASES" ]; then
+      echo "Multiple database creation requested: $CREATE_MULTIPLE_DATABASES"
+      for db in $(echo $CREATE_MULTIPLE_DATABASES | tr ',' ' '); do
+        if databaseExists $db ; then
+          echo "Skipping database '$db' creation"
+        else
+          create_user_and_database $db
+        fi
+      done
+      echo "Multiple databases created"
+    fi
+kind: ConfigMap
+metadata:
+  name: db-init-script-configmap
+---
+apiVersion: v1
+data:
+  pg-database-name: apicurio
+  pg-ds-url: jdbc:postgresql://apicurio-registry-postgresql:5432/apicurio
+  pg-pwd: pass
+  pg-user: apicurio
+kind: ConfigMap
+metadata:
+  name: postgresql-apicurio-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: apicurio-registry
+    template: apicurio-registry
+  name: apicurio-registry
+spec:
+  ports:
+  - name: web
+    port: 8080
+    protocol: TCP
+    targetPort: web
+  selector:
+    component: apicurio-registry
+  sessionAffinity: None
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: apicurio-registry-postgresql
+  name: apicurio-registry-postgresql
+spec:
+  ports:
+  - port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    app: apicurio-registry-postgresql
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: backstage
+    template: backstage
+  name: backstage
+spec:
+  ports:
+  - name: app
+    port: 7007
+    protocol: TCP
+    targetPort: app
+  selector:
+    app: backstage
+  sessionAffinity: None
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: backstage-postgresql
+  name: backstage-postgresql
+spec:
+  ports:
+  - port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    app: backstage-postgresql
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    name: apicurio-registry-postgresql
+  name: apicurio-registry-postgresql
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    name: backstage-postgresql
+  name: backstage-postgresql
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: apicurio-registry-postgresql
+  name: apicurio-registry-postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apicurio-registry-postgresql
+  template:
+    metadata:
+      labels:
+        app: apicurio-registry-postgresql
+    spec:
+      containers:
+      - env:
+        - name: POSTGRESQL_ADMIN_PASSWORD
+          value: admin1234
+        - name: CREATE_MULTIPLE_DATABASES
+          value: apicurio
+        - name: MULTIPLE_DATABASES_PASSWORD
+          value: pass
+        image: quay.io/centos7/postgresql-12-centos7:1
+        livenessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          tcpSocket:
+            port: 5432
+        name: apicurio-registry-postgresql
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          tcpSocket:
+            port: 5432
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1200Mi
+          requests:
+            cpu: 400m
+            memory: 500Mi
+        volumeMounts:
+        - mountPath: /var/lib/pgsql/data
+          name: apicurio-registry-postgresql
+        - mountPath: /opt/app-root/src/postgresql-start/
+          name: create-databases-script
+      volumes:
+      - name: apicurio-registry-postgresql
+        persistentVolumeClaim:
+          claimName: apicurio-registry-postgresql
+      - configMap:
+          name: db-init-script-configmap
+        name: create-databases-script
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: backstage-postgresql
+  name: backstage-postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backstage-postgresql
+  serviceName: backstage
+  template:
+    metadata:
+      labels:
+        app: backstage-postgresql
+    spec:
+      containers:
+      - env:
+        - name: POSTGRESQL_ADMIN_PASSWORD
+          value: admin1234
+        - name: CREATE_MULTIPLE_DATABASES
+          value: backstage
+        - name: MULTIPLE_DATABASES_PASSWORD
+          value: pass
+        image: quay.io/centos7/postgresql-12-centos7:1
+        livenessProbe:
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          tcpSocket:
+            port: 5432
+        name: backstage-postgresql
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          tcpSocket:
+            port: 5432
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1200Mi
+          requests:
+            cpu: 400m
+            memory: 500Mi
+        volumeMounts:
+        - mountPath: /var/lib/pgsql/data
+          name: backstage-postgresql
+        - mountPath: /opt/app-root/src/postgresql-start/
+          name: create-databases-script
+      volumes:
+      - name: backstage-postgresql
+        persistentVolumeClaim:
+          claimName: backstage-postgresql
+      - configMap:
+          name: backstage-db-init-script-configmap
+        name: create-databases-script
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: apicurio-registry
+    component: apicurio-registry
+  name: apicurio-registry
+spec:
+  replicas: 1
+  selector:
+    component: apicurio-registry
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        component: apicurio-registry
+      name: apicurio-registry
+    spec:
+      containers:
+      - env:
+        - name: AUTH_ENABLED
+          value: "true"
+        - name: KEYCLOAK_URL
+          value: https://apicurio-sso-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net/auth
+        - name: KEYCLOAK_REALM
+          value: apicurio
+        - name: KEYCLOAK_API_CLIENT_ID
+          value: registry-api
+        - name: KEYCLOAK_UI_CLIENT_ID
+          value: registry-ui
+        - name: REGISTRY_ENABLE_MULTITENANCY
+          value: "false"
+        - name: REGISTRY_LOG_LEVEL
+          value: DEBUG
+        - name: LOG_LEVEL
+          value: DEBUG
+        - name: QUARKUS_PROFILE
+          value: prod
+        - name: REGISTRY_CONFIG_CACHE_ENABLED
+          value: "true"
+        - name: CORS_ALLOWED_ORIGINS
+          value: '*'
+        - name: REGISTRY_DATASOURCE_URL
+          valueFrom:
+            configMapKeyRef:
+              key: pg-ds-url
+              name: postgresql-apicurio-configmap
+        - name: REGISTRY_DATASOURCE_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              key: pg-user
+              name: postgresql-apicurio-configmap
+        - name: REGISTRY_DATASOURCE_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: pg-pwd
+              name: postgresql-apicurio-configmap
+        image: apicurio-registry:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health/live
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: apicurio-registry
+        ports:
+        - containerPort: 8080
+          name: web
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health/ready
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 300m
+            memory: 1300Mi
+          requests:
+            cpu: 100m
+            memory: 600Mi
+        terminationMessagePath: /dev/termination-log
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - apicurio-registry
+      from:
+        kind: ImageStreamTag
+        name: apicurio-registry:latest
+    type: ImageChange
+---
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: backstage
+  name: backstage
+spec:
+  replicas: 1
+  selector:
+    app: backstage
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        app: backstage
+      name: backstage
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_HOST
+          value: backstage-postgresql
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_USER
+          value: backstage
+        - name: POSTGRES_PASSWORD
+          value: pass
+        - name: APP_CONFIG_BACKEND
+          value: https://backstage-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/
+        - name: APP_CONFIG_APP
+          value: https://backstage-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/
+        - name: APICURIO_ENDPOINT
+          value: https://apicurio-registry-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/
+        image: backstage:latest
+        imagePullPolicy: Always
+        name: backstage
+        ports:
+        - containerPort: 7007
+          name: app
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 900m
+            memory: 1000Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - backstage
+      from:
+        kind: ImageStreamTag
+        name: backstage:latest
+    type: ImageChange
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: apicurio-registry
+    component: registry
+  name: apicurio-registry
+spec:
+  tags:
+  - from:
+      kind: DockerImage
+      name: quay.io/apicurio/apicurio-registry-sql-native:latest-snapshot
+    importPolicy:
+      scheduled: true
+    name: latest
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: backstage
+  name: backstage
+spec:
+  tags:
+  - from:
+      kind: DockerImage
+      name: quay.io/apicurio/backstage:latest
+    importPolicy:
+      scheduled: true
+    name: latest
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
+  labels:
+    app: apicurio-registry
+    template: apicurio-registry
+  name: apicurio-registry
+spec:
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: apicurio-registry
+    weight: 100
+  wildcardPolicy: None
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
+  labels:
+    app: backstage
+    template: backstage
+  name: backstage
+spec:
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: backstage
+    weight: 100
+  wildcardPolicy: None
