@@ -1,7 +1,9 @@
+# proxy service to access a service created in "rhaf-apicurio-designer" namespace
 apiVersion: v1
 kind: Service
 metadata:
   name: postgresql-ha-pgpool-externalname-svc
 spec:
   type: ExternalName
+  # <svc-name>.<namespace>.svc.cluster.local
   externalName: postgresql-ha-pgpool.rhaf-apicurio-designer.svc.cluster.local
