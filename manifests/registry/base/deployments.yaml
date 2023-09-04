@@ -36,15 +36,15 @@ spec:
         env:
           # enable authentication
           - name: AUTH_ENABLED
-            value: "true"
-          - name: KEYCLOAK_URL
-            value: "https://apicurio-sso-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net/auth"
-          - name: KEYCLOAK_REALM
-            value: "apicurio"
-          - name: KEYCLOAK_API_CLIENT_ID
-            value: "registry-api"
-          - name: KEYCLOAK_UI_CLIENT_ID
-            value: "registry-ui"
+            value: "false"
+          #- name: KEYCLOAK_URL
+          #  value: "https://apicurio-sso-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net/auth"
+          #- name: KEYCLOAK_REALM
+          #  value: "apicurio"
+          #- name: KEYCLOAK_API_CLIENT_ID
+          #  value: "registry-api"
+          #- name: KEYCLOAK_UI_CLIENT_ID
+          #  value: "registry-ui"
           
           - name: REGISTRY_ENABLE_MULTITENANCY
             value: "false"
@@ -58,21 +58,35 @@ spec:
             value: "true"
           - name: CORS_ALLOWED_ORIGINS
             value: "*"
-          - name: REGISTRY_DATASOURCE_URL
+
+         # Datsource Configurations
+          - name: REGISTRY_DATABASE
             valueFrom:
-              configMapKeyRef:
-                name: postgresql-apicurio-configmap
-                key: pg-ds-url
+              secretKeyRef:
+                name: rds-apicurio-credentials
+                key: database
+          - name: REGISTRY_DATASOURCE_PORT
+            valueFrom:
+              secretKeyRef:
+                name: rds-apicurio-credentials
+                key: port
+          - name: REGISTRY_DATASOURCE_HOST
+            valueFrom:
+              secretKeyRef:
+                name: rds-apicurio-credentials
+                key: host
           - name: REGISTRY_DATASOURCE_USERNAME
             valueFrom:
-              configMapKeyRef:
-                name: postgresql-apicurio-configmap
-                key: pg-user
+              secretKeyRef:
+                name: rds-apicurio-credentials
+                key: user
           - name: REGISTRY_DATASOURCE_PASSWORD
             valueFrom:
-              configMapKeyRef:
-                name: postgresql-apicurio-configmap
-                key: pg-pwd
+              secretKeyRef:
+                name: rds-apicurio-credentials
+                key: password
+          - name: REGISTRY_DATASOURCE_URL
+            value: "jdbc:postgresql://${REGISTRY_DATASOURCE_HOST}:${REGISTRY_DATASOURCE_PORT}/${REGISTRY_DATABASE}"
         resources:
           limits:
             cpu: 300m
