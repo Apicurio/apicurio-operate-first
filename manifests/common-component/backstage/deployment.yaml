@@ -30,13 +30,25 @@ spec:
         imagePullPolicy: Always
         env:
           - name: POSTGRES_HOST
-            value: "backstage-postgresql"
+            valueFrom:
+              secretKeyRef:
+                name: rds-backstage-credentials
+                key: host
           - name: POSTGRES_PORT
-            value: "5432"
+            valueFrom:
+              secretKeyRef:
+                name: rds-backstage-credentials
+                key: port
           - name: POSTGRES_USER
-            value: "backstage"
+            valueFrom:
+              secretKeyRef:
+                name: rds-backstage-credentials
+                key: user
           - name: POSTGRES_PASSWORD
-            value: "pass"
+            valueFrom:
+              secretKeyRef:
+                name: rds-backstage-credentials
+                key: password
           - name: APP_CONFIG_BACKEND
             value: "https://backstage-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/"
           - name: APP_CONFIG_APP
