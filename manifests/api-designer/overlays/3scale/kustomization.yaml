@@ -2,7 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
 - ../../base/ # Designer in-memory deployment
+- rds-external-secrets.yaml # RDS Credentials
 
 components:
 - ../../../common-component/sso
 - ../../../common-component/keycloak
+- ../../../common-component/ha-database/pg-client
