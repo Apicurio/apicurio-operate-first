@@ -55,6 +55,10 @@ spec:
             value: "https://backstage-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/"
           - name: APICURIO_ENDPOINT
             value: "https://apicurio-registry-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/"
+          - name: APP_CONFIG_backend_database_connection_ssl_require
+            value: "true"
+          - name: APP_CONFIG_backend_database_connection_ssl_rejectUnauthorized
+            value: "true"
         ports:
           - name: 'app'
             containerPort: 7007
