@@ -116,25 +116,25 @@ spec:
         - containerPort: 8080
           protocol: TCP
         livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8080
+            scheme: HTTP
           failureThreshold: 3
           initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 1
-          httpGet:
-            path: /
-            port: 8080
-            scheme: HTTP
         readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+            scheme: HTTP
           failureThreshold: 3
           initialDelaySeconds: 60
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 1
-          httpGet:
-            path: /
-            port: 8080
-            scheme: HTTP
         securityContext:
           privileged: false
   triggers:
