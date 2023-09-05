@@ -65,6 +65,45 @@ spec:
           value: edge
         - name: KC_HOSTNAME_STRICT
           value: 'false'
+        - name: KC_PROXY
+          value: edge
+        - name: KC_LOG_LEVEL
+          value: DEBUG
+
+        # Custom Env Variables
+        - name: KEYCLOAK_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: rds-keycloak-credentials
+              key: database
+        - name: KEYCLOAK_DATASOURCE_PORT
+          valueFrom:
+            secretKeyRef:
+              name: rds-keycloak-credentials
+              key: port
+        - name: KEYCLOAK_DATASOURCE_HOST
+          valueFrom:
+            secretKeyRef:
+              name: rds-keycloak-credentials
+              key: host
+
+        # Datsource Configurations
+        - name: KC_DB
+          value: postgres
+        - name: KC_DB_URL
+          value: "jdbc:postgresql://${KEYCLOAK_DATASOURCE_HOST}:${KEYCLOAK_DATASOURCE_PORT}/${KEYCLOAK_DATABASE}"
+        - name: KC_DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: rds-keycloak-credentials
+              key: user
+        - name: KC_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rds-keycloak-credentials
+              key: password
+        - name: KC_TRANSACTION_XA_ENABLED
+          value: 'true'
         image: quay.io/keycloak/keycloak:21.1.1
         livenessProbe:
           failureThreshold: 100
@@ -86,12 +125,6 @@ spec:
           initialDelaySeconds: 30
         securityContext:
           privileged: false
-        volumeMounts:
-        - mountPath: /opt/keycloak/data
-          name: empty
-      volumes:
-      - emptyDir: {}
-        name: empty
   triggers:
   - type: ConfigChange
 
