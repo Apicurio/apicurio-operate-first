@@ -69,8 +69,14 @@ spec:
           value: 'false'
         - name: KC_PROXY
           value: edge
+        
+        # Logging, Health and Metrics
         - name: KC_LOG_LEVEL
-          value: DEBUG
+          value: INFO
+        - name: KC_HEALTH_ENABLED
+          value: 'true'
+        - name: KC_METRICS_ENABLED
+          value: 'true'
 
         # Custom Env Variables
         - name: KEYCLOAK_DATABASE
