@@ -53,7 +53,9 @@ spec:
       name: keycloak
     spec:
       containers:
-      - args:
+      - name: keycloak
+        image: quay.io/keycloak/keycloak:21.1.1
+        args:
         - start
         env:
         # https://www.keycloak.org/server/all-config
@@ -104,25 +106,29 @@ spec:
               key: password
         - name: KC_TRANSACTION_XA_ENABLED
           value: 'true'
-        image: quay.io/keycloak/keycloak:21.1.1
-        livenessProbe:
-          failureThreshold: 100
-          httpGet:
-            path: /
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 60
-        name: keycloak
         ports:
         - containerPort: 8080
           protocol: TCP
-        readinessProbe:
-          failureThreshold: 300
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
           httpGet:
             path: /
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 30
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+          httpGet:
+            path: /
+            port: 8080
+            scheme: HTTP
         securityContext:
           privileged: false
   triggers:
