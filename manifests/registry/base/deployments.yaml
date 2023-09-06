@@ -40,7 +40,7 @@ spec:
           - name: KEYCLOAK_URL
             value: "https://keycloak-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net/auth"
           - name: KEYCLOAK_REALM
-            value: "apicurio"
+            value: "registry"
           - name: KEYCLOAK_API_CLIENT_ID
             value: "registry-api"
           - name: KEYCLOAK_UI_CLIENT_ID
