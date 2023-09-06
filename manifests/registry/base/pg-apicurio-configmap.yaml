@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: postgresql-apicurio-configmap
-data:
-  pg-user: apicurio
-  pg-pwd: pass
-  pg-ds-url: jdbc:postgresql://apicurio-registry-postgresql:5432/apicurio
-  pg-database-name: apicurio

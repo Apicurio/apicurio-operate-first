@@ -2,8 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 resources:
   - image-stream.yaml
-  - db-init-script-configmap.yaml
-  - postgres.yaml
   - deployment.yaml
   - service.yaml
   - route.yaml
