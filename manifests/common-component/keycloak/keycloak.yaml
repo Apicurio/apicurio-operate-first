@@ -55,8 +55,10 @@ spec:
       containers:
       - name: keycloak
         image: quay.io/keycloak/keycloak:21.1.1
-        args:
-        - start
+        args: [ "start --import-realm" ]
+        volumeMounts:
+          - name: keycloak-volume
+            mountPath: /opt/keycloak/data/import
         env:
         # https://www.keycloak.org/server/all-config
         - name: KEYCLOAK_ADMIN
@@ -143,6 +145,10 @@ spec:
           timeoutSeconds: 1
         securityContext:
           privileged: false
+      volumes:
+      - name: keycloak-volume
+        configMap:
+          name: keycloak-registry-realm-configmap
   triggers:
   - type: ConfigChange
 
