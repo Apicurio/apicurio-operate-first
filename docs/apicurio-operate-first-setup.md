@@ -1,3 +1,5 @@
+> # THIS DOCUMENT IS ARCHIVED
+
 # Apicurio Operate First set up
 
 This document describes what is the setup in operate-first to enable the deployment the manifests in this repository.

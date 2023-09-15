@@ -5,6 +5,5 @@ resources:
 - rds-external-secrets.yaml # RDS Credentials
 
 components:
-- ../../../common-component/sso
 - ../../../common-component/keycloak
 - ../../../common-component/ha-database/pg-client
