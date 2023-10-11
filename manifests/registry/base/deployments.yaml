@@ -45,7 +45,10 @@ spec:
             value: "registry-api"
           - name: KEYCLOAK_UI_CLIENT_ID
             value: "apicurio-registry"
-          
+
+          - name: QUARKUS_HTTP_HTTP2
+            value: "false"
+
           - name: REGISTRY_ENABLE_MULTITENANCY
             value: "false"
           - name: REGISTRY_LOG_LEVEL
