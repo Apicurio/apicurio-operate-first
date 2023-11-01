@@ -78,7 +78,7 @@ spec:
       - apicurio-api-designer-api
       from:
         kind: ImageStreamTag
-        name: apicurio-api-designer:latest
+        name: apicurio-api-designer-api:latest
     type: ImageChange
 
 ---
