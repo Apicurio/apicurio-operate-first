@@ -4,11 +4,32 @@ kind: Service
 metadata:
   labels:
     app: apicurio-registry
-    template: apicurio-registry
-  name: apicurio-registry
+    template: apicurio-registry-api
+  name: apicurio-registry-api
 spec:
   selector:
-    component: apicurio-registry
+    component: apicurio-registry-api
+  ports:
+    - name: web
+      port: 8080
+      protocol: TCP
+      targetPort: web # referring to target port via "name" instead that via the number
+  sessionAffinity: None
+status:
+  loadBalancer: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: apicurio-registry
+    template: apicurio-registry-ui
+  name: apicurio-registry-ui
+spec:
+  selector:
+    component: apicurio-registry-ui
   ports:
     - name: web
       port: 8080
