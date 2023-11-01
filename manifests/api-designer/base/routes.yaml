@@ -7,7 +7,7 @@ metadata:
   annotations:
     kubernetes.io/tls-acme: "true"
   labels:
-    app: apicurio-api-designer
+    app: apicurio-api-designer-api
     template: apicurio-api-designer-api
 spec:
   to:
@@ -29,7 +29,7 @@ metadata:
   annotations:
     kubernetes.io/tls-acme: "true"
   labels:
-    app: apicurio-api-designer
+    app: apicurio-api-designer-ui
     template: apicurio-api-designer-ui
 spec:
   to:

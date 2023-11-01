@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: apicurio-api-designer
+    app: apicurio-api-designer-api
     template: apicurio-api-designer-api
   name: apicurio-api-designer-api
 spec:
@@ -24,7 +24,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: apicurio-api-designer
+    app: apicurio-api-designer-ui
     template: apicurio-api-designer-ui
   name: apicurio-api-designer-ui
 spec:

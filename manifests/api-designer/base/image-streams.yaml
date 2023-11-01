@@ -2,7 +2,7 @@ apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   labels:
-    app: apicurio-api-designer
+    app: apicurio-api-designer-api
     component: apicurio-api-designer-api
   name: apicurio-api-designer-api
 spec:
@@ -20,7 +20,7 @@ apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   labels:
-    app: apicurio-api-designer
+    app: apicurio-api-designer-ui
     component: apicurio-api-designer-ui
   name: apicurio-api-designer-ui
 spec:
