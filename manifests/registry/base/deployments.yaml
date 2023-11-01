@@ -2,7 +2,7 @@ apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
   labels:
-    app: apicurio-registry
+    app: apicurio-registry-api
     component: apicurio-registry-api
   name: apicurio-registry-api
 spec:
@@ -128,7 +128,7 @@ apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
   labels:
-    app: apicurio-registry
+    app: apicurio-registry-ui
     component: apicurio-registry-ui
   name: apicurio-registry-ui
 spec:

@@ -7,7 +7,7 @@ metadata:
   annotations:
     kubernetes.io/tls-acme: "true"
   labels:
-    app: apicurio-registry
+    app: apicurio-registry-api
     template: apicurio-registry-api
 spec:
   to:
@@ -29,7 +29,7 @@ metadata:
   annotations:
     kubernetes.io/tls-acme: "true"
   labels:
-    app: apicurio-registry
+    app: apicurio-registry-ui
     template: apicurio-registry-ui
 spec:
   to:

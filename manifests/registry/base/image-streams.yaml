@@ -2,7 +2,7 @@ apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   labels:
-    app: apicurio-registry
+    app: apicurio-registry-api
     component: registry-api
   name: apicurio-registry-api
 spec:
@@ -20,7 +20,7 @@ apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
   labels:
-    app: apicurio-registry
+    app: apicurio-registry-ui
     component: registry-ui
   name: apicurio-registry-ui
 spec:
