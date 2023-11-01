@@ -4,11 +4,32 @@ kind: Service
 metadata:
   labels:
     app: apicurio-api-designer
-    template: apicurio-api-designer
-  name: apicurio-api-designer
+    template: apicurio-api-designer-api
+  name: apicurio-api-designer-api
 spec:
   selector:
-    component: apicurio-api-designer
+    component: apicurio-api-designer-api
+  ports:
+    - name: web
+      port: 8080
+      protocol: TCP
+      targetPort: web # referring to target port via "name" instead that via the number
+  sessionAffinity: None
+status:
+  loadBalancer: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: apicurio-api-designer
+    template: apicurio-api-designer-ui
+  name: apicurio-api-designer-ui
+spec:
+  selector:
+    component: apicurio-api-designer-ui
   ports:
     - name: web
       port: 8080

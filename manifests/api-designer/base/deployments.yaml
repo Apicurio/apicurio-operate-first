@@ -3,12 +3,12 @@ kind: DeploymentConfig
 metadata:
   labels:
     app: apicurio-api-designer
-    component: apicurio-api-designer
-  name: apicurio-api-designer
+    component: apicurio-api-designer-api
+  name: apicurio-api-designer-api
 spec:
   replicas: 1
   selector:
-    component: apicurio-api-designer
+    component: apicurio-api-designer-api
   strategy:
     activeDeadlineSeconds: 21600
     resources: {}
@@ -22,13 +22,13 @@ spec:
   template:
     metadata:
       labels:
-        component: apicurio-api-designer
-      name: apicurio-api-designer
+        component: apicurio-api-designer-api
+      name: apicurio-api-designer-api
     spec:
       containers:
-      - image: apicurio-api-designer:latest
+      - image: apicurio-api-designer-api:latest
         imagePullPolicy: Always
-        name: apicurio-api-designer
+        name: apicurio-api-designer-api
         ports:
           - name: web
             containerPort: 8080
@@ -75,8 +75,89 @@ spec:
   - imageChangeParams:
       automatic: true
       containerNames:
-      - apicurio-api-designer
+      - apicurio-api-designer-api
       from:
         kind: ImageStreamTag
         name: apicurio-api-designer:latest
+    type: ImageChange
+
+---
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: apicurio-api-designer
+    component: apicurio-api-designer-ui
+  name: apicurio-api-designer-ui
+spec:
+  replicas: 1
+  selector:
+    component: apicurio-api-designer-ui
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        component: apicurio-api-designer-ui
+      name: apicurio-api-designer-ui
+    spec:
+      containers:
+      - image: apicurio-api-designer-ui:latest
+        imagePullPolicy: Always
+        name: apicurio-api-designer-ui
+        ports:
+          - name: web
+            containerPort: 8080
+            protocol: TCP
+        env:
+          - name: DESIGNER_LOG_LEVEL
+            value: DEBUG
+          - name: DESIGNER_API_URL
+            value: /apis/designer/v0
+        resources:
+          limits:
+            cpu: 200m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        livenessProbe:
+          httpGet:
+            path: /config.js
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /config.js
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        terminationMessagePath: /dev/termination-log
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - apicurio-api-designer-ui
+      from:
+        kind: ImageStreamTag
+        name: apicurio-api-designer-ui:latest
     type: ImageChange
