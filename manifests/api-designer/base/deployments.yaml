@@ -119,10 +119,8 @@ spec:
             containerPort: 8080
             protocol: TCP
         env:
-          - name: DESIGNER_LOG_LEVEL
-            value: DEBUG
           - name: DESIGNER_API_URL
-            value: /apis/designer/v0
+            value: https://apicurio-api-designer-api-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net/apis/designer/v0
         resources:
           limits:
             cpu: 200m
