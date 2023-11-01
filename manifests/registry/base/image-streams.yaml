@@ -9,7 +9,7 @@ spec:
   tags:
   - from:
       kind: DockerImage
-      name: docker.io/apicurio/apicurio-registry-sql:latest-snapshot
+      name: quay.io/apicurio/apicurio-registry-sql:latest-snapshot
     importPolicy:
       scheduled: true
     name: latest
@@ -27,7 +27,7 @@ spec:
   tags:
   - from:
       kind: DockerImage
-      name: docker.io/apicurio/apicurio-registry-ui:latest-snapshot
+      name: quay.io/apicurio/apicurio-registry-ui:latest-snapshot
     importPolicy:
       scheduled: true
     name: latest
