@@ -9,7 +9,7 @@ spec:
   replicas: 1
   selector:
     matchLabels: 
-      component: apicurio-registry-api
+      app: apicurio-registry-api
   template:
     metadata:
       labels:
@@ -115,7 +115,7 @@ spec:
   replicas: 1
   selector:
     matchLabels: 
-      component: apicurio-registry-ui
+      app: apicurio-registry-ui
   template:
     metadata:
       labels:
