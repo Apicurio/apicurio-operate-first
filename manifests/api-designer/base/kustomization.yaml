@@ -1,6 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - deployments.yaml
-  - services.yaml
-  - routes.yaml
+  - deployment-api.yaml
+  - service-api.yaml
+  - route-api.yaml
+  - deployment-ui.yaml
+  - service-ui.yaml
+  - route-ui.yaml

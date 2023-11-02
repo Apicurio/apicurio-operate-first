@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: apicurio-registry-ui
+    component: apicurio-registry-ui
+  name: apicurio-registry-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: apicurio-registry-ui
+  template:
+    metadata:
+      labels:
+        app: apicurio-registry-ui
+        component: apicurio-registry-ui
+    spec:
+      containers:
+      - image: quay.io/apicurio/apicurio-registry-ui:latest-snapshot
+        name: apicurio-registry-ui
+        ports:
+          - name: web
+            containerPort: 8080
+            protocol: TCP
+        env:
+          - name: REGISTRY_API_URL
+            value: "https://apicurio-registry-api-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/apis/registry/v2"
+          # enable authentication
+          - name: REGISTRY_AUTH_TYPE
+            value: "oidc"
+          - name: REGISTRY_AUTH_URL
+            value: "https://keycloak-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net/auth/realms/registry"
+          - name: REGISTRY_AUTH_REDIRECT_URL
+            value: "https://apicurio-registry-ui-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/"
+          - name: REGISTRY_AUTH_CLIENT_ID
+            value: "apicurio-registry"
+          - name: REGISTRY_AUTH_RBAC_ENABLED
+            value: "true"
+          - name: REGISTRY_FEATURE_ROLE_MANAGEMENT
+            value: "true"
+
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1000Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        livenessProbe:
+          httpGet:
+            path: /config.js
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /config.js
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3

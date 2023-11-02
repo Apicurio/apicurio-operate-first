@@ -18,25 +18,3 @@ spec:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
   wildcardPolicy: None
-
----
-
-apiVersion: route.openshift.io/v1
-kind: Route
-metadata:
-  name: apicurio-registry-ui
-  # TODO add the annotation as an overlay patch
-  annotations:
-    kubernetes.io/tls-acme: "true"
-  labels:
-    app: apicurio-registry-ui
-    template: apicurio-registry-ui
-spec:
-  to:
-    kind: Service
-    name: apicurio-registry-ui
-    weight: 100
-  tls:
-    termination: edge
-    insecureEdgeTerminationPolicy: Redirect
-  wildcardPolicy: None

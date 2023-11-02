@@ -17,24 +17,3 @@ spec:
   sessionAffinity: None
 status:
   loadBalancer: {}
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: apicurio-api-designer-ui
-    template: apicurio-api-designer-ui
-  name: apicurio-api-designer-ui
-spec:
-  selector:
-    component: apicurio-api-designer-ui
-  ports:
-    - name: web
-      port: 8080
-      protocol: TCP
-      targetPort: web # referring to target port via "name" instead that via the number
-  sessionAffinity: None
-status:
-  loadBalancer: {}
