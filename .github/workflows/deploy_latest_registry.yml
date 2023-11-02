@@ -55,7 +55,7 @@ jobs:
                   "spec": {
                     "containers": [
                       {
-                        "image": ${{ env.REGISTRY_API_DOCKER_IMAGE }}
+                        "image": "${{ env.REGISTRY_API_DOCKER_IMAGE }}"
                       }
                     ]
                   }
