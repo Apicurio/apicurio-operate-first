@@ -1,5 +1,5 @@
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   labels:
     app: apicurio-registry-api
@@ -8,27 +8,16 @@ metadata:
 spec:
   replicas: 1
   selector:
-    component: apicurio-registry-api
-  strategy:
-    activeDeadlineSeconds: 21600
-    resources: {}
-    rollingParams:
-      intervalSeconds: 1
-      maxSurge: 25%
-      maxUnavailable: 25%
-      timeoutSeconds: 600
-      updatePeriodSeconds: 1
-    type: Rolling
+    matchLabels: 
+      app: apicurio-registry-api
   template:
     metadata:
       labels:
-        component: apicurio-registry-api
-      name: apicurio-registry
+        app: apicurio-registry-api
     spec:
       containers:
-      - image: apicurio-registry-api:latest
-        imagePullPolicy: Always
-        name: apicurio-registry
+      - image: quay.io/apicurio/apicurio-registry-sql:latest-snapshot
+        name: apicurio-registry-api
         ports:
           - name: web
             containerPort: 8080
@@ -55,7 +44,7 @@ spec:
           - name: CORS_ALLOWED_ORIGINS
             value: "*"
 
-         # Datsource Configurations
+          # Datasource Configuration
           - name: REGISTRY_DATABASE
             valueFrom:
               secretKeyRef:
@@ -83,19 +72,20 @@ spec:
                 key: password
           - name: REGISTRY_DATASOURCE_URL
             value: "jdbc:postgresql://${REGISTRY_DATASOURCE_HOST}:${REGISTRY_DATASOURCE_PORT}/${REGISTRY_DATABASE}"
+
         resources:
           limits:
-            cpu: 300m
-            memory: 1300Mi
+            cpu: 500m
+            memory: 1000Mi
           requests:
-            cpu: 100m
-            memory: 600Mi
+            cpu: 200m
+            memory: 400Mi
         livenessProbe:
           httpGet:
             path: /health/live
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 20
+          initialDelaySeconds: 10
           timeoutSeconds: 5
           periodSeconds: 10
           successThreshold: 1
@@ -105,27 +95,16 @@ spec:
             path: /health/ready
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 20
+          initialDelaySeconds: 10
           timeoutSeconds: 5
           periodSeconds: 10
           successThreshold: 1
           failureThreshold: 3
-        terminationMessagePath: /dev/termination-log
-  triggers:
-  - type: ConfigChange
-  - imageChangeParams:
-      automatic: true
-      containerNames:
-      - apicurio-registry-api
-      from:
-        kind: ImageStreamTag
-        name: apicurio-registry-api:latest
-    type: ImageChange
 
 ---
 
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   labels:
     app: apicurio-registry-ui
@@ -134,27 +113,16 @@ metadata:
 spec:
   replicas: 1
   selector:
-    component: apicurio-registry-ui
-  strategy:
-    activeDeadlineSeconds: 21600
-    resources: {}
-    rollingParams:
-      intervalSeconds: 1
-      maxSurge: 25%
-      maxUnavailable: 25%
-      timeoutSeconds: 600
-      updatePeriodSeconds: 1
-    type: Rolling
+    matchLabels: 
+      app: apicurio-registry-ui
   template:
     metadata:
       labels:
-        component: apicurio-registry-ui
-      name: apicurio-registry
+        app: apicurio-registry-ui
     spec:
       containers:
-      - image: apicurio-registry-ui:latest
-        imagePullPolicy: Always
-        name: apicurio-registry
+      - image: quay.io/apicurio/apicurio-registry-ui:latest-snapshot
+        name: apicurio-registry-ui
         ports:
           - name: web
             containerPort: 8080
@@ -171,19 +139,20 @@ spec:
             value: "https://apicurio-registry-ui-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/"
           - name: REGISTRY_AUTH_CLIENT_ID
             value: "apicurio-registry"
+
         resources:
           limits:
-            cpu: 200m
-            memory: 500Mi
+            cpu: 500m
+            memory: 1000Mi
           requests:
             cpu: 100m
-            memory: 250Mi
+            memory: 200Mi
         livenessProbe:
           httpGet:
             path: /config.js
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 5
+          initialDelaySeconds: 10
           timeoutSeconds: 5
           periodSeconds: 10
           successThreshold: 1
@@ -193,19 +162,8 @@ spec:
             path: /config.js
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 5
+          initialDelaySeconds: 10
           timeoutSeconds: 5
           periodSeconds: 10
           successThreshold: 1
           failureThreshold: 3
-        terminationMessagePath: /dev/termination-log
-  triggers:
-  - type: ConfigChange
-  - imageChangeParams:
-      automatic: true
-      containerNames:
-      - apicurio-registry-ui
-      from:
-        kind: ImageStreamTag
-        name: apicurio-registry-ui:latest
-    type: ImageChange
