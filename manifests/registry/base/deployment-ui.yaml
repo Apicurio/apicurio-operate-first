@@ -32,7 +32,7 @@ spec:
               value: oidc
             - name: REGISTRY_AUTH_URL
               value: >-
-                https://keycloak-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net/auth/realms/registry
+                https://keycloak-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net/realms/registry
             - name: REGISTRY_AUTH_REDIRECT_URL
               value: >-
                 https://apicurio-registry-ui-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/
