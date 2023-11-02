@@ -10,16 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'apicurio'
     steps:
-      - name: Get latest digest
+      - name: Get digest (API)
         run: |
           docker pull quay.io/apicurio/apicurio-registry-sql:latest-snapshot
           docker image inspect quay.io/apicurio/apicurio-registry-sql:latest-snapshot
-          REGISTRY_DOCKER_IMAGE=$(docker image inspect --format='{{index .RepoDigests 0}}' quay.io/apicurio/apicurio-registry-sql:latest-snapshot)
-          echo "REGISTRY_DOCKER_IMAGE=$REGISTRY_DOCKER_IMAGE" >> $GITHUB_ENV
+          REGISTRY_API_DOCKER_IMAGE=$(docker image inspect --format='{{index .RepoDigests 0}}' quay.io/apicurio/apicurio-registry-sql:latest-snapshot)
+          echo "REGISTRY_API_DOCKER_IMAGE=$REGISTRY_API_DOCKER_IMAGE" >> $GITHUB_ENV
 
-      - name: Echo the Docker Image
+      - name: Get digest (UI)
         run: |
-          echo "Docker Image: $REGISTRY_DOCKER_IMAGE"
+          docker pull quay.io/apicurio/apicurio-registry-ui:latest-snapshot
+          docker image inspect quay.io/apicurio/apicurio-registry-ui:latest-snapshot
+          REGISTRY_UI_DOCKER_IMAGE=$(docker image inspect --format='{{index .RepoDigests 0}}' quay.io/apicurio/apicurio-registry-ui:latest-snapshot)
+          echo "REGISTRY_UI_DOCKER_IMAGE=$REGISTRY_UI_DOCKER_IMAGE" >> $GITHUB_ENV
+
+      - name: Echo the Docker Images
+        run: |
+          echo "API image: $REGISTRY_API_DOCKER_IMAGE"
+          echo " UI image: $REGISTRY_UI_DOCKER_IMAGE"
 
       - name: Code Checkout
         run: |
@@ -34,16 +42,28 @@ jobs:
           git branch --set-upstream-to=origin/main
           git pull
 
-      - name: Update Docker Image
+      - name: Update API Docker Image
         uses: fjogeleit/yaml-update-action@v0.9.0
         with:
           valueFile: 'repo/manifests/registry/base/deployment-api.yaml'
           propertyPath: 'spec.template.spec.containers[:1].image'
-          value: ${{ env.REGISTRY_DOCKER_IMAGE }}
+          value: ${{ env.REGISTRY_API_DOCKER_IMAGE }}
+          commitChange: false
+
+      - name: Update UI Docker Image
+        uses: fjogeleit/yaml-update-action@v0.9.0
+        with:
+          valueFile: 'repo/manifests/registry/base/deployment-ui.yaml'
+          propertyPath: 'spec.template.spec.containers[:1].image'
+          value: ${{ env.REGISTRY_UI_DOCKER_IMAGE }}
           commitChange: false
 
       - name: Cat Changed Deployment
         run: |
           cd repo
-          cat manifests/registry/base/deployments.yaml
+          echo "---"
+          cat manifests/registry/base/deployment-api.yaml
+          echo "---"
+          cat manifests/registry/base/deployment-ui.yaml
+          echo "---"
           git status
