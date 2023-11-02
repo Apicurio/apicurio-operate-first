@@ -1,17 +1,17 @@
-name: Deploy Latest Registry Docker Images (3scale-dev)
+name: Deploy Latest Designer Docker Images (3scale-dev)
 
 on:
   workflow_dispatch:
 
 jobs:
 
-  deploy-latest-registry:
-    name: Deploy Latest Registry Image
+  deploy-latest-designer:
+    name: Deploy Latest Designer Image
     runs-on: ubuntu-latest
     if: github.repository_owner == 'apicurio'
     env:
-      API_IMAGE: quay.io/apicurio/apicurio-registry-sql
-      UI_IMAGE: quay.io/apicurio/apicurio-registry-ui
+      API_IMAGE: quay.io/apicurio/apicurio-designer-mem
+      UI_IMAGE: quay.io/apicurio/apicurio-designer-ui
       IMAGE_TAG: latest-snapshot
     steps:
       - uses: actions/setup-node@v3
@@ -22,20 +22,20 @@ jobs:
         run: |
           docker pull ${{ env.API_IMAGE }}:${{ env.IMAGE_TAG }}
           docker image inspect ${{ env.API_IMAGE }}:${{ env.IMAGE_TAG }}
-          REGISTRY_API_DOCKER_IMAGE=$(docker image inspect --format='{{index .RepoDigests 0}}' ${{ env.API_IMAGE }}:${{ env.IMAGE_TAG }})
-          echo "REGISTRY_API_DOCKER_IMAGE=$REGISTRY_API_DOCKER_IMAGE" >> $GITHUB_ENV
+          DESIGNER_API_DOCKER_IMAGE=$(docker image inspect --format='{{index .RepoDigests 0}}' ${{ env.API_IMAGE }}:${{ env.IMAGE_TAG }})
+          echo "DESIGNER_API_DOCKER_IMAGE=$DESIGNER_API_DOCKER_IMAGE" >> $GITHUB_ENV
 
       - name: Get digest (UI)
         run: |
-          docker pull quay.io/apicurio/apicurio-registry-ui:latest-snapshot
-          docker image inspect quay.io/apicurio/apicurio-registry-ui:latest-snapshot
-          REGISTRY_UI_DOCKER_IMAGE=$(docker image inspect --format='{{index .RepoDigests 0}}' quay.io/apicurio/apicurio-registry-ui:latest-snapshot)
-          echo "REGISTRY_UI_DOCKER_IMAGE=$REGISTRY_UI_DOCKER_IMAGE" >> $GITHUB_ENV
+          docker pull ${{ env.UI_IMAGE }}:${{ env.IMAGE_TAG }}
+          docker image inspect ${{ env.UI_IMAGE }}:${{ env.IMAGE_TAG }}
+          DESIGNER_UI_DOCKER_IMAGE=$(docker image inspect --format='{{index .RepoDigests 0}}' ${{ env.UI_IMAGE }}:${{ env.IMAGE_TAG }})
+          echo "DESIGNER_UI_DOCKER_IMAGE=$DESIGNER_UI_DOCKER_IMAGE" >> $GITHUB_ENV
 
       - name: Echo the Docker Images
         run: |
-          echo "API image: $REGISTRY_API_DOCKER_IMAGE"
-          echo " UI image: $REGISTRY_UI_DOCKER_IMAGE"
+          echo "API image: $DESIGNER_API_DOCKER_IMAGE"
+          echo " UI image: $DESIGNER_UI_DOCKER_IMAGE"
 
       - name: Code Checkout
         run: |
@@ -53,15 +53,15 @@ jobs:
       - name: Update API Docker Image
         run: |
           npm install -g yaml-cli
-          cd repo/manifests/registry/base/
-          yaml set deployment-api.yaml spec.template.spec.containers.0.image ${{ env.REGISTRY_API_DOCKER_IMAGE }} > deployment-api-NEW.yaml
+          cd repo/manifests/designer/base/
+          yaml set deployment-api.yaml spec.template.spec.containers.0.image ${{ env.DESIGNER_API_DOCKER_IMAGE }} > deployment-api-NEW.yaml
           rm deployment-api.yaml
           mv deployment-api-NEW.yaml deployment-api.yaml
 
       - name: Update UI Docker Image
         run: |
-          cd repo/manifests/registry/base/
-          yaml set deployment-ui.yaml spec.template.spec.containers.0.image ${{ env.REGISTRY_UI_DOCKER_IMAGE }} > deployment-ui-NEW.yaml
+          cd repo/manifests/designer/base/
+          yaml set deployment-ui.yaml spec.template.spec.containers.0.image ${{ env.DESIGNER_UI_DOCKER_IMAGE }} > deployment-ui-NEW.yaml
           rm deployment-ui.yaml
           mv deployment-ui-NEW.yaml deployment-ui.yaml
 
@@ -69,14 +69,14 @@ jobs:
         run: |
           cd repo
           echo "---"
-          cat manifests/registry/base/deployment-api.yaml
+          cat manifests/designer/base/deployment-api.yaml
           echo "---"
-          cat manifests/registry/base/deployment-ui.yaml
+          cat manifests/designer/base/deployment-ui.yaml
           echo "---"
 
       - name: Commit Changes
         run: |
           cd repo
           git add .
-          git commit -m 'Automatic upgrade of Registry container images.'
+          git commit -m 'Automatic upgrade of Designer container images.'
           git push origin main
