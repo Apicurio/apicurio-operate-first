@@ -2,18 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: apicurio-registry-api
+    app: apicurio-registry
     component: apicurio-registry-api
   name: apicurio-registry-api
 spec:
   replicas: 1
   selector:
     matchLabels: 
-      app: apicurio-registry-api
+      component: apicurio-registry-api
   template:
     metadata:
       labels:
-        app: apicurio-registry-api
+        app: apicurio-registry
+        component: apicurio-registry-api
     spec:
       containers:
       - image: quay.io/apicurio/apicurio-registry-sql:latest-snapshot
@@ -107,18 +108,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: apicurio-registry-ui
+    app: apicurio-registry
     component: apicurio-registry-ui
   name: apicurio-registry-ui
 spec:
   replicas: 1
   selector:
     matchLabels: 
-      app: apicurio-registry-ui
+      component: apicurio-registry-ui
   template:
     metadata:
       labels:
-        app: apicurio-registry-ui
+        app: apicurio-registry
+        component: apicurio-registry-ui
     spec:
       containers:
       - image: quay.io/apicurio/apicurio-registry-ui:latest-snapshot

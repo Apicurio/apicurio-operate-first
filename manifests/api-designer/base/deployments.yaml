@@ -2,18 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: apicurio-api-designer-api
+    app: apicurio-api-designer
     component: apicurio-api-designer-api
   name: apicurio-api-designer-api
 spec:
   replicas: 1
   selector:
     matchLabels: 
-      app: apicurio-api-designer-api
+      app: apicurio-api-designer
   template:
     metadata:
       labels:
-        app: apicurio-api-designer-api
+        app: apicurio-api-designer
+        component: apicurio-api-designer-api
     spec:
       containers:
       - image: quay.io/apicurio/apicurio-api-designer-mem:latest-snapshot
@@ -81,18 +82,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: apicurio-api-designer-ui
+    app: apicurio-api-designer
     component: apicurio-api-designer-ui
   name: apicurio-api-designer-ui
 spec:
   replicas: 1
   selector:
     matchLabels: 
-      app: apicurio-api-designer-ui
+      component: apicurio-api-designer-ui
   template:
     metadata:
       labels:
-        app: apicurio-api-designer-ui
+        app: apicurio-api-designer
+        component: apicurio-api-designer-ui
     spec:
       containers:
       - image: quay.io/apicurio/apicurio-api-designer-ui:latest-snapshot
