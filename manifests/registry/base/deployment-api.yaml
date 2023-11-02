@@ -8,7 +8,7 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabels: 
+    matchLabels:
       app: apicurio-registry-api
   template:
     metadata:
@@ -17,87 +17,86 @@ spec:
         component: apicurio-registry-api
     spec:
       containers:
-      - image: quay.io/apicurio/apicurio-registry-sql:latest-snapshot
-        name: apicurio-registry-api
-        ports:
-          - name: web
-            containerPort: 8080
-            protocol: TCP
-        env:
-          # enable authentication
-          - name: AUTH_ENABLED
-            value: "true"
-          - name: KEYCLOAK_URL
-            value: "https://keycloak-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net/"
-          - name: KEYCLOAK_REALM
-            value: "registry"
-          - name: KEYCLOAK_API_CLIENT_ID
-            value: "registry-api"
+        - image: >-
+            quay.io/apicurio/apicurio-registry-sql@sha256:f8e8f1796b5290d57044d90e2ffec60e6d34434b38180ab62c79c5b238fd09b3
+          name: apicurio-registry-api
+          ports:
+            - name: web
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: AUTH_ENABLED
+              value: 'true'
+            - name: KEYCLOAK_URL
+              value: >-
+                https://keycloak-rhaf-apicurio-designer.apps.dev-eng-ocp4-mas.dev.3sca.net/
+            - name: KEYCLOAK_REALM
+              value: registry
+            - name: KEYCLOAK_API_CLIENT_ID
+              value: registry-api
+            - name: REGISTRY_LOG_LEVEL
+              value: DEBUG
+            - name: LOG_LEVEL
+              value: DEBUG
+            - name: QUARKUS_PROFILE
+              value: prod
+            - name: REGISTRY_CONFIG_CACHE_ENABLED
+              value: 'true'
+            - name: CORS_ALLOWED_ORIGINS
+              value: '*'
+            - name: REGISTRY_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: rds-apicurio-credentials
+                  key: database
+            - name: REGISTRY_DATASOURCE_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: rds-apicurio-credentials
+                  key: port
+            - name: REGISTRY_DATASOURCE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rds-apicurio-credentials
+                  key: host
+            - name: REGISTRY_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rds-apicurio-credentials
+                  key: user
+            - name: REGISTRY_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rds-apicurio-credentials
+                  key: password
+            - name: REGISTRY_DATASOURCE_URL
+              value: >-
+                jdbc:postgresql://${REGISTRY_DATASOURCE_HOST}:${REGISTRY_DATASOURCE_PORT}/${REGISTRY_DATABASE}
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1000Mi
+            requests:
+              cpu: 200m
+              memory: 400Mi
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
 
-          - name: REGISTRY_LOG_LEVEL
-            value: DEBUG
-          - name: LOG_LEVEL
-            value: DEBUG
-          - name: QUARKUS_PROFILE
-            value: prod
-          - name: REGISTRY_CONFIG_CACHE_ENABLED
-            value: "true"
-          - name: CORS_ALLOWED_ORIGINS
-            value: "*"
-
-          # Datasource Configuration
-          - name: REGISTRY_DATABASE
-            valueFrom:
-              secretKeyRef:
-                name: rds-apicurio-credentials
-                key: database
-          - name: REGISTRY_DATASOURCE_PORT
-            valueFrom:
-              secretKeyRef:
-                name: rds-apicurio-credentials
-                key: port
-          - name: REGISTRY_DATASOURCE_HOST
-            valueFrom:
-              secretKeyRef:
-                name: rds-apicurio-credentials
-                key: host
-          - name: REGISTRY_DATASOURCE_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: rds-apicurio-credentials
-                key: user
-          - name: REGISTRY_DATASOURCE_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: rds-apicurio-credentials
-                key: password
-          - name: REGISTRY_DATASOURCE_URL
-            value: "jdbc:postgresql://${REGISTRY_DATASOURCE_HOST}:${REGISTRY_DATASOURCE_PORT}/${REGISTRY_DATABASE}"
-
-        resources:
-          limits:
-            cpu: 500m
-            memory: 1000Mi
-          requests:
-            cpu: 200m
-            memory: 400Mi
-        livenessProbe:
-          httpGet:
-            path: /health/live
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /health/ready
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 3
