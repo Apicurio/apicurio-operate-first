@@ -53,14 +53,14 @@ jobs:
       - name: Update API Docker Image
         run: |
           npm install -g yaml-cli
-          cd repo/manifests/designer/base/
+          cd repo/manifests/api-designer/base/
           yaml set deployment-api.yaml spec.template.spec.containers.0.image ${{ env.DESIGNER_API_DOCKER_IMAGE }} > deployment-api-NEW.yaml
           rm deployment-api.yaml
           mv deployment-api-NEW.yaml deployment-api.yaml
 
       - name: Update UI Docker Image
         run: |
-          cd repo/manifests/designer/base/
+          cd repo/manifests/api-designer/base/
           yaml set deployment-ui.yaml spec.template.spec.containers.0.image ${{ env.DESIGNER_UI_DOCKER_IMAGE }} > deployment-ui-NEW.yaml
           rm deployment-ui.yaml
           mv deployment-ui-NEW.yaml deployment-ui.yaml
@@ -69,9 +69,9 @@ jobs:
         run: |
           cd repo
           echo "---"
-          cat manifests/designer/base/deployment-api.yaml
+          cat manifests/api-designer/base/deployment-api.yaml
           echo "---"
-          cat manifests/designer/base/deployment-ui.yaml
+          cat manifests/api-designer/base/deployment-ui.yaml
           echo "---"
 
       - name: Commit Changes
