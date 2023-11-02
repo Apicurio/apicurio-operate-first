@@ -1,0 +1,46 @@
+name: Deploy Latest Registry (3scale-dev)
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  deploy-latest-registry:
+    name: Deploy Latest Registry Image
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'apicurio'
+    steps:
+      - name: Get latest digest
+        run: |
+          docker pull quay.io/apicurio/apicurio-registry-sql:latest-snapshot
+          REGISTRY_DOCKER_IMAGE=$(docker inspect --format='{{index .RepoDigests 0}}' quay.io/apicurio/apicurio-registry-ui:latest-snapshot)
+          echo "REGISTRY_DOCKER_IMAGE=$REGISTRY_DOCKER_IMAGE" >> $GITHUB_ENV
+
+      - name: Echo the Docker Image
+        run: |
+          echo "Docker Image: $REGISTRY_DOCKER_IMAGE"
+
+      - name: Code Checkout
+        run: |
+          mkdir repo
+          cd repo
+          git init
+          git config --global user.name "apicurio-ci"
+          git config --global user.email "apicurio.ci@gmail.com"
+          git remote add origin "https://apicurio-ci:${{ secrets.ACCESS_TOKEN }}@github.com/Apicurio/apicurio-operate-first.git"
+          git fetch
+          git checkout main
+          git branch --set-upstream-to=origin/main
+          git pull
+
+      - name: Update Docker Image
+        uses: fjogeleit/yaml-update-action@v0.9.0
+        with:
+          valueFile: 'repo/manifests/registry/base/deployments.yaml'
+          propertyPath: 'spec.template.spec.containers[:1].image'
+          value: ${{ env.REGISTRY_DOCKER_IMAGE }}
+          commitChange: false
+
+      - name: Cat Changed Deployment
+        run: |
+          cat repo/manifests/registry/base/deployments.yaml
