@@ -8,7 +8,7 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabels: 
+    matchLabels:
       app: apicurio-api-designer-api
   template:
     metadata:
@@ -17,61 +17,47 @@ spec:
         component: apicurio-api-designer-api
     spec:
       containers:
-      - image: quay.io/apicurio/apicurio-api-designer-mem:latest-snapshot
-        name: apicurio-api-designer-api
-        ports:
-          - name: web
-            containerPort: 8080
-            protocol: TCP
-        env:
-          - name: DESIGNER_LOG_LEVEL
-            value: DEBUG
-          - name: DESIGNER_ACCESS_LOG_ENABLE
-            value: "true"
-          - name: QUARKUS_PROFILE
-            value: prod
-          - name: CORS_ALLOWED_ORIGINS
-            value: "*"
+        - image: >-
+            quay.io/apicurio/apicurio-api-designer-mem@sha256:5ec20d553d5a4710e4b2ef40925c37bcb4f19d377b1b24d98b7d3879be3a029e
+          name: apicurio-api-designer-api
+          ports:
+            - name: web
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: DESIGNER_LOG_LEVEL
+              value: DEBUG
+            - name: DESIGNER_ACCESS_LOG_ENABLE
+              value: 'true'
+            - name: QUARKUS_PROFILE
+              value: prod
+            - name: CORS_ALLOWED_ORIGINS
+              value: '*'
+          resources:
+            limits:
+              cpu: 400m
+              memory: 1000Mi
+            requests:
+              cpu: 200m
+              memory: 500Mi
+          livenessProbe:
+            httpGet:
+              path: /apis/designer/v0/system/info
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /apis/designer/v0/system/info
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
 
-          # - name: AUTH_ENABLED
-          #   value: "true"
-          # - name: OIDC_TOKENT_ENDPOINT
-          #   value: http://keycloak.keycloak.svc.cluster.local:8080/realms/apicurio
-          # - name: OIDC_URL
-          #   value: http://keycloak.keycloak.svc.cluster.local:8080/realms/apicurio
-          # - name: OIDC_API_CLIENT_ID
-          #   value: designer-api
-
-          # - name: DESIGNER_STORAGE_DATASOURCE_URL
-          #   value: jdbc:postgresql://apicurio-api-designer-postgresql:5432/apicuriodb
-          # - name: DESIGNER_STORAGE_DATASOURCE_USERNAME
-          #   value: pguser
-          # - name: DESIGNER_STORAGE_DATASOURCE_PASSWORD
-          #   value: pgpass12345
-        resources:
-          limits:
-            cpu: 400m
-            memory: 1000Mi
-          requests:
-            cpu: 200m
-            memory: 500Mi
-        livenessProbe:
-          httpGet:
-            path: /apis/designer/v0/system/info
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /apis/designer/v0/system/info
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 3
