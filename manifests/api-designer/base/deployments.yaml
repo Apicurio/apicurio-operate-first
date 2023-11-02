@@ -1,33 +1,22 @@
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   labels:
-    app: apicurio-api-designer-api
+    app: apicurio-api-designer
     component: apicurio-api-designer-api
   name: apicurio-api-designer-api
 spec:
   replicas: 1
   selector:
-    component: apicurio-api-designer-api
-  strategy:
-    activeDeadlineSeconds: 21600
-    resources: {}
-    rollingParams:
-      intervalSeconds: 1
-      maxSurge: 25%
-      maxUnavailable: 25%
-      timeoutSeconds: 600
-      updatePeriodSeconds: 1
-    type: Rolling
+    matchLabels: 
+      app: apicurio-api-designer
   template:
     metadata:
       labels:
-        component: apicurio-api-designer-api
-      name: apicurio-api-designer-api
+        app: apicurio-api-designer
     spec:
       containers:
-      - image: apicurio-api-designer-api:latest
-        imagePullPolicy: Always
+      - image: quay.io/apicurio/apicurio-api-designer-mem:latest-snapshot
         name: apicurio-api-designer-api
         ports:
           - name: web
@@ -40,21 +29,37 @@ spec:
             value: "true"
           - name: QUARKUS_PROFILE
             value: prod
-          - name: DESIGNER_API_URL
-            value: /apis/designer/v0
+          - name: CORS_ALLOWED_ORIGINS
+            value: "*"
+
+          # - name: AUTH_ENABLED
+          #   value: "true"
+          # - name: OIDC_TOKENT_ENDPOINT
+          #   value: http://keycloak.keycloak.svc.cluster.local:8080/realms/apicurio
+          # - name: OIDC_URL
+          #   value: http://keycloak.keycloak.svc.cluster.local:8080/realms/apicurio
+          # - name: OIDC_API_CLIENT_ID
+          #   value: designer-api
+
+          # - name: DESIGNER_STORAGE_DATASOURCE_URL
+          #   value: jdbc:postgresql://apicurio-api-designer-postgresql:5432/apicuriodb
+          # - name: DESIGNER_STORAGE_DATASOURCE_USERNAME
+          #   value: pguser
+          # - name: DESIGNER_STORAGE_DATASOURCE_PASSWORD
+          #   value: pgpass12345
         resources:
           limits:
-            cpu: 300m
-            memory: 1300Mi
+            cpu: 400m
+            memory: 1000Mi
           requests:
-            cpu: 100m
-            memory: 600Mi
+            cpu: 200m
+            memory: 500Mi
         livenessProbe:
           httpGet:
             path: /apis/designer/v0/system/info
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 20
+          initialDelaySeconds: 10
           timeoutSeconds: 5
           periodSeconds: 10
           successThreshold: 1
@@ -64,55 +69,33 @@ spec:
             path: /apis/designer/v0/system/info
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 20
+          initialDelaySeconds: 10
           timeoutSeconds: 5
           periodSeconds: 10
           successThreshold: 1
           failureThreshold: 3
-        terminationMessagePath: /dev/termination-log
-  triggers:
-  - type: ConfigChange
-  - imageChangeParams:
-      automatic: true
-      containerNames:
-      - apicurio-api-designer-api
-      from:
-        kind: ImageStreamTag
-        name: apicurio-api-designer-api:latest
-    type: ImageChange
 
 ---
 
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   labels:
-    app: apicurio-api-designer-ui
+    app: apicurio-api-designer
     component: apicurio-api-designer-ui
   name: apicurio-api-designer-ui
 spec:
   replicas: 1
   selector:
-    component: apicurio-api-designer-ui
-  strategy:
-    activeDeadlineSeconds: 21600
-    resources: {}
-    rollingParams:
-      intervalSeconds: 1
-      maxSurge: 25%
-      maxUnavailable: 25%
-      timeoutSeconds: 600
-      updatePeriodSeconds: 1
-    type: Rolling
+    matchLabels: 
+      app: apicurio-api-designer
   template:
     metadata:
       labels:
-        component: apicurio-api-designer-ui
-      name: apicurio-api-designer-ui
+        app: apicurio-api-designer
     spec:
       containers:
-      - image: apicurio-api-designer-ui:latest
-        imagePullPolicy: Always
+      - image: quay.io/apicurio/apicurio-api-designer-ui:latest-snapshot
         name: apicurio-api-designer-ui
         ports:
           - name: web
@@ -127,13 +110,13 @@ spec:
             memory: 500Mi
           requests:
             cpu: 100m
-            memory: 200Mi
+            memory: 250Mi
         livenessProbe:
           httpGet:
             path: /config.js
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 5
+          initialDelaySeconds: 10
           timeoutSeconds: 5
           periodSeconds: 10
           successThreshold: 1
@@ -143,19 +126,8 @@ spec:
             path: /config.js
             port: 8080
             scheme: HTTP
-          initialDelaySeconds: 5
+          initialDelaySeconds: 10
           timeoutSeconds: 5
           periodSeconds: 10
           successThreshold: 1
           failureThreshold: 3
-        terminationMessagePath: /dev/termination-log
-  triggers:
-  - type: ConfigChange
-  - imageChangeParams:
-      automatic: true
-      containerNames:
-      - apicurio-api-designer-ui
-      from:
-        kind: ImageStreamTag
-        name: apicurio-api-designer-ui:latest
-    type: ImageChange
