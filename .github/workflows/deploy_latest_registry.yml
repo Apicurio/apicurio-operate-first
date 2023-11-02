@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'apicurio'
     steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
       - name: Get digest (API)
         run: |
           docker pull quay.io/apicurio/apicurio-registry-sql:latest-snapshot
@@ -43,25 +47,12 @@ jobs:
           git pull
 
       - name: Update API Docker Image
-        id: yaml-action
-        uses: teunmooij/yaml@v1.0.0
-        with:
-          from-file: 'repo/manifests/registry/base/deployment-api.yaml'
-          to-file: 'repo/manifests/registry/base/deployment-api.yaml'
-          merge: >-
-            {
-              "spec": {
-                "template": {
-                  "spec": {
-                    "containers": [
-                      {
-                        "image": "${{ env.REGISTRY_API_DOCKER_IMAGE }}"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
+        run: |
+          npm install -g yaml-cli
+          cd repo/manifests/registry/base/
+          yaml set deployment-api.yaml spec.template.spec.containers.0.image ${{ env.REGISTRY_API_DOCKER_IMAGE }} > deployment-api-NEW.yaml
+          rm deployment-api.yaml
+          mv deployment-api-NEW.yaml deployment-api.yaml
 
       # - name: Update API Docker Image
       #   uses: fjogeleit/yaml-update-action@v0.9.0
@@ -84,7 +75,5 @@ jobs:
           cd repo
           echo "---"
           cat manifests/registry/base/deployment-api.yaml
-          echo "---"
-          cat manifests/registry/base/deployment-ui.yaml
           echo "---"
           git status
