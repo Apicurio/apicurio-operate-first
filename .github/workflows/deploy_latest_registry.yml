@@ -54,26 +54,25 @@ jobs:
           rm deployment-api.yaml
           mv deployment-api-NEW.yaml deployment-api.yaml
 
-      # - name: Update API Docker Image
-      #   uses: fjogeleit/yaml-update-action@v0.9.0
-      #   with:
-      #     valueFile: 'repo/manifests/registry/base/deployment-api.yaml'
-      #     propertyPath: 'spec.template.spec.containers.0.image'
-      #     value: ${{ env.REGISTRY_API_DOCKER_IMAGE }}
-      #     commitChange: false
+      - name: Update UI Docker Image
+        run: |
+          cd repo/manifests/registry/base/
+          yaml set deployment-ui.yaml spec.template.spec.containers.0.image ${{ env.REGISTRY_UI_DOCKER_IMAGE }} > deployment-ui-NEW.yaml
+          rm deployment-ui.yaml
+          mv deployment-ui-NEW.yaml deployment-ui.yaml
 
-      # - name: Update UI Docker Image
-      #   uses: fjogeleit/yaml-update-action@v0.9.0
-      #   with:
-      #     valueFile: 'repo/manifests/registry/base/deployment-ui.yaml'
-      #     propertyPath: 'spec.template.spec.containers[:1].image'
-      #     value: ${{ env.REGISTRY_UI_DOCKER_IMAGE }}
-      #     commitChange: false
-
-      - name: Cat Changed Deployment
+      - name: Verify Changed Deployment
         run: |
           cd repo
           echo "---"
           cat manifests/registry/base/deployment-api.yaml
           echo "---"
-          git status
+          cat manifests/registry/base/deployment-ui.yaml
+          echo "---"
+
+      - name: Commit Changes
+        run: |
+          cd repo
+          git add .
+          git commit -m 'Automatic upgrade of Registry container images.'
+          git push origin main
