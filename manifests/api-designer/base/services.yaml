@@ -8,7 +8,7 @@ metadata:
   name: apicurio-api-designer-api
 spec:
   selector:
-    app: apicurio-api-designer-api
+    component: apicurio-api-designer-api
   ports:
     - name: web
       port: 8080
@@ -29,7 +29,7 @@ metadata:
   name: apicurio-api-designer-ui
 spec:
   selector:
-    app: apicurio-api-designer-ui
+    component: apicurio-api-designer-ui
   ports:
     - name: web
       port: 8080

@@ -8,7 +8,7 @@ metadata:
   name: apicurio-registry-api
 spec:
   selector:
-    app: apicurio-registry-api
+    component: apicurio-registry-api
   ports:
     - name: web
       port: 8080
@@ -29,7 +29,7 @@ metadata:
   name: apicurio-registry-ui
 spec:
   selector:
-    app: apicurio-registry-ui
+    component: apicurio-registry-ui
   ports:
     - name: web
       port: 8080
