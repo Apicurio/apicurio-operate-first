@@ -13,8 +13,8 @@ jobs:
       - name: Get latest digest
         run: |
           docker pull quay.io/apicurio/apicurio-registry-sql:latest-snapshot
-          docker image inspect quay.io/apicurio/apicurio-registry-ui:latest-snapshot
-          REGISTRY_DOCKER_IMAGE=$(docker image inspect --format='{{index .RepoDigests 0}}' quay.io/apicurio/apicurio-registry-ui:latest-snapshot)
+          docker image inspect quay.io/apicurio/apicurio-registry-sql:latest-snapshot
+          REGISTRY_DOCKER_IMAGE=$(docker image inspect --format='{{index .RepoDigests 0}}' quay.io/apicurio/apicurio-registry-sql:latest-snapshot)
           echo "REGISTRY_DOCKER_IMAGE=$REGISTRY_DOCKER_IMAGE" >> $GITHUB_ENV
 
       - name: Echo the Docker Image
