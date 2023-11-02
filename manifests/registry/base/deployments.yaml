@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: apicurio-registry
+    app: apicurio-registry-api
     component: apicurio-registry-api
   name: apicurio-registry-api
 spec:
@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        app: apicurio-registry
+        app: apicurio-registry-api
         component: apicurio-registry-api
     spec:
       containers:
@@ -108,7 +108,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: apicurio-registry
+    app: apicurio-registry-ui
     component: apicurio-registry-ui
   name: apicurio-registry-ui
 spec:
@@ -119,7 +119,7 @@ spec:
   template:
     metadata:
       labels:
-        app: apicurio-registry
+        app: apicurio-registry-ui
         component: apicurio-registry-ui
     spec:
       containers:
