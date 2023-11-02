@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'apicurio'
     env:
-      API_IMAGE: quay.io/apicurio/apicurio-designer-mem
-      UI_IMAGE: quay.io/apicurio/apicurio-designer-ui
+      API_IMAGE: quay.io/apicurio/apicurio-api-designer-mem
+      UI_IMAGE: quay.io/apicurio/apicurio-api-designer-ui
       IMAGE_TAG: latest-snapshot
     steps:
       - uses: actions/setup-node@v3
