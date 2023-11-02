@@ -141,6 +141,10 @@ spec:
             value: "https://apicurio-registry-ui-rhaf-apicurio-registry.apps.dev-eng-ocp4-mas.dev.3sca.net/"
           - name: REGISTRY_AUTH_CLIENT_ID
             value: "apicurio-registry"
+          - name: REGISTRY_AUTH_RBAC_ENABLED
+            value: "true"
+          - name: REGISTRY_FEATURE_ROLE_MANAGEMENT
+            value: "true"
 
         resources:
           limits:
