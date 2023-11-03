@@ -2,6 +2,7 @@ name: Deploy Latest Registry Docker Images (3scale-dev)
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
 
@@ -80,3 +81,11 @@ jobs:
           git add .
           git commit -m 'Automatic upgrade of Registry container images.'
           git push origin main
+
+      - name: Google Chat Notification
+        if: always()
+        uses: Co-qn/google-chat-notification@b9227d9daa4638c9782a5bd16c4abb86268127a1
+        with:
+          name: ${{ github.job }}
+          url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+          status: ${{ job.status }}
