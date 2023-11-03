@@ -3,6 +3,11 @@ name: Deploy Latest Registry Docker Images (3scale-dev)
 on:
   workflow_dispatch:
   workflow_call:
+    secrets:
+      ACCESS_TOKEN:
+        required: true
+      GOOGLE_CHAT_WEBHOOK:
+        required: true
 
 jobs:
 
