@@ -31,7 +31,7 @@ spec:
               value: 'true'
             - name: QUARKUS_PROFILE
               value: prod
-            - name: CORS_ALLOWED_ORIGINS
+            - name: DESIGNER_CORS_ALLOWED_ORIGINS
               value: '*'
           resources:
             limits:
