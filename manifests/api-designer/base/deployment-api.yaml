@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - image: >-
-            quay.io/apicurio/apicurio-api-designer-mem@sha256:5ec20d553d5a4710e4b2ef40925c37bcb4f19d377b1b24d98b7d3879be3a029e
+            quay.io/apicurio/apicurio-api-designer-mem@sha256:a3a58b5428185d4b114e98dd669d2aa5b83d3687917f7be526c432de81ca1be0
           name: apicurio-designer-api
           ports:
             - name: web
@@ -60,3 +60,4 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             failureThreshold: 3
+
