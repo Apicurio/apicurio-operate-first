@@ -1,3 +1,7 @@
+# Deprecated
+**Note**: This repository has been deprecated and replaced by https://github.com/Apicurio/apicurio-3scale-gitops
+
+
 # Table Of Contents
 - [Table Of Contents](#table-of-contents)
 - [Operate First](#operate-first)
